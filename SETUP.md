@@ -151,10 +151,10 @@ GET    /api/v1/search?q=query           # Search submissions
 
 ---
 
-## Phase 6: Frontend Redesign
+## Phase 6: Frontend Redesign & Polish
 
 ### Objective
-Replace basic Tailwind UI with SAP Fiori design using @ui5/webcomponents-react
+Replace basic Tailwind UI with SAP Fiori Launchpad design using @ui5/webcomponents-react
 
 ### New Dependencies
 ```json
@@ -164,25 +164,39 @@ Replace basic Tailwind UI with SAP Fiori design using @ui5/webcomponents-react
 "@ui5/webcomponents-fiori": "^2.0.0"
 ```
 
-### Components to Use
-- ShellBar (navigation)
-- Card (form tiles)
-- ObjectPage (form detail)
-- Table (submissions)
-- FlexBox (layouts)
+### Components Implemented
+- **ShellBar** - Navigation header with Help and Notifications icons
+- **FioriTile** - Reusable 160x160px square tiles (custom component)
+- **BusyIndicator** - Loading states
+- **MessageStrip** - Error and info messages
+- **FlexBox** - Responsive layouts
+- **HTML Table** - Submissions display (native table for better compatibility)
 
-### Files to Update
-- `frontend/package.json` - Add UI5 deps
-- `frontend/src/main.tsx` - Add ThemeProvider
-- `frontend/src/App.tsx` - Add ShellBar
-- `frontend/src/pages/*.tsx` - All pages
+### Key Features
+✅ SAP Fiori Launchpad style with square tiles
+✅ Icon at bottom, title/subtitle at top
+✅ Section grouping ("Forms", "Available Forms")
+✅ Hover effects with shadow elevation
+✅ Proper click handlers on all tiles
+✅ Help and Notifications icons in ShellBar
+✅ All TypeScript errors fixed
+
+### Files Updated
+- `frontend/src/components/FioriTile.tsx` - NEW reusable tile component
+- `frontend/src/pages/HomePage.tsx` - Fiori Launchpad style with section groups
+- `frontend/src/pages/FormsListPage.tsx` - Square tiles for forms
+- `frontend/src/pages/FormPage.tsx` - Simplified layout, removed unsupported components
+- `frontend/src/pages/SubmissionsPage.tsx` - HTML table for submissions
+- `frontend/src/pages/SearchPage.tsx` - Fixed BusyIndicator size
+- `frontend/src/App.tsx` - Added Help and Notifications icons to ShellBar
+- `frontend/src/vite-env.d.ts` - NEW TypeScript definitions for Vite
 
 ### After Changes
 ```bash
 docker compose up -d --build apex-frontend
 ```
 
-See **FRONTEND-REDESIGN.md** for full implementation spec.
+See **FRONTEND-REDESIGN.md** and **FIORI-POLISH.md** for full specs.
 
 ---
 

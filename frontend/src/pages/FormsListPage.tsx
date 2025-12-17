@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Card,
-  CardHeader,
   FlexBox,
-  Title,
-  Badge,
-  Button,
-  Icon,
-  Text,
-  BusyIndicator
+  BusyIndicator,
+  MessageStrip,
+  Text
 } from '@ui5/webcomponents-react';
 import "@ui5/webcomponents-icons/dist/document.js";
-import "@ui5/webcomponents-icons/dist/arrow-right.js";
+import FioriTile from '../components/FioriTile';
 import { formsApi } from '../services/api';
 import { Form } from '../types';
 
@@ -39,50 +34,50 @@ function FormsListPage() {
   if (loading) {
     return (
       <FlexBox justifyContent="Center" alignItems="Center" style={{ height: '200px' }}>
-        <BusyIndicator active size="Large" />
+        <BusyIndicator active size="L" />
       </FlexBox>
     );
   }
 
   return (
-    <FlexBox direction="Column" style={{ gap: '1.5rem', padding: '1rem' }}>
-      <FlexBox justifyContent="SpaceBetween" alignItems="Center">
-        <Title level="H2">Forms</Title>
-        <Badge colorScheme="8">{forms.length} forms</Badge>
-      </FlexBox>
+    <div style={{ padding: '1rem', backgroundColor: '#f7f7f7', minHeight: '100%' }}>
+      {/* Section Title */}
+      <div
+        style={{
+          fontSize: '16px',
+          fontWeight: '600',
+          color: '#32363a',
+          marginBottom: '1rem',
+        }}
+      >
+        Available Forms
+      </div>
 
-      <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
-        {forms.length === 0 ? (
-          <Card style={{ width: '100%', padding: '2rem', textAlign: 'center' }}>
-            <Text>No forms yet. Ask Claude to create one!</Text>
-          </Card>
-        ) : (
-          forms.map((form) => (
-            <Card
+      {/* Forms Grid */}
+      {forms.length === 0 ? (
+        <MessageStrip design="Information">
+          No forms yet. Ask Claude to create one!
+        </MessageStrip>
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1rem',
+          }}
+        >
+          {forms.map((form) => (
+            <FioriTile
               key={form.id}
-              style={{ width: '350px', cursor: 'pointer' }}
+              title={form.name}
+              subtitle={form.description || 'No description'}
+              icon="document"
               onClick={() => navigate(`/forms/${form.slug}`)}
-            >
-              <CardHeader
-                titleText={form.name}
-                subtitleText={form.description || 'No description'}
-                avatar={<Icon name="document" />}
-                action={
-                  <Button
-                    icon="arrow-right"
-                    design="Transparent"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/forms/${form.slug}`);
-                    }}
-                  />
-                }
-              />
-            </Card>
-          ))
-        )}
-      </FlexBox>
-    </FlexBox>
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

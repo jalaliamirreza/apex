@@ -6,11 +6,8 @@ import {
   Button,
   BusyIndicator,
   MessageStrip,
-  Table,
-  TableColumn,
-  TableRow,
-  TableCell,
-  Label
+  Label,
+  Text
 } from '@ui5/webcomponents-react';
 import "@ui5/webcomponents-icons/dist/nav-back.js";
 import { formsApi } from '../services/api';
@@ -40,7 +37,7 @@ function SubmissionsPage() {
   if (loading) {
     return (
       <FlexBox justifyContent="Center" alignItems="Center" style={{ height: '200px' }}>
-        <BusyIndicator active size="Large" />
+        <BusyIndicator active size="L" />
       </FlexBox>
     );
   }
@@ -66,27 +63,34 @@ function SubmissionsPage() {
       {submissions.length === 0 ? (
         <MessageStrip design="Information">No submissions yet</MessageStrip>
       ) : (
-        <Table>
-          <TableColumn slot="columns"><Label>ID</Label></TableColumn>
-          {columns.map((col) => (
-            <TableColumn key={col} slot="columns"><Label>{col}</Label></TableColumn>
-          ))}
-          <TableColumn slot="columns"><Label>Submitted</Label></TableColumn>
-
-          {submissions.map((sub) => (
-            <TableRow key={sub.id}>
-              <TableCell><Label>{sub.id.slice(0, 8)}...</Label></TableCell>
-              {columns.map((col) => (
-                <TableCell key={col}>
-                  <Label>{String(sub.data[col] || '-')}</Label>
-                </TableCell>
+        <div style={{ background: 'white', borderRadius: '8px', overflow: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>ID</th>
+                {columns.map((col) => (
+                  <th key={col} style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>{col}</th>
+                ))}
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {submissions.map((sub) => (
+                <tr key={sub.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                  <td style={{ padding: '1rem' }}>{sub.id.slice(0, 8)}...</td>
+                  {columns.map((col) => (
+                    <td key={col} style={{ padding: '1rem' }}>
+                      {String(sub.data[col] || '-')}
+                    </td>
+                  ))}
+                  <td style={{ padding: '1rem' }}>
+                    {new Date(sub.submittedAt).toLocaleString()}
+                  </td>
+                </tr>
               ))}
-              <TableCell>
-                <Label>{new Date(sub.submittedAt).toLocaleString()}</Label>
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table>
+            </tbody>
+          </table>
+        </div>
       )}
     </FlexBox>
   );

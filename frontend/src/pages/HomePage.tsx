@@ -1,13 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  Card,
-  CardHeader,
-  FlexBox,
-  Title,
-  Text,
-  Icon
-} from '@ui5/webcomponents-react';
-import "@ui5/webcomponents-icons/dist/add.js";
+import FioriTile from '../components/FioriTile';
 import "@ui5/webcomponents-icons/dist/list.js";
 import "@ui5/webcomponents-icons/dist/search.js";
 
@@ -15,33 +7,43 @@ function HomePage() {
   const navigate = useNavigate();
 
   const tiles = [
-    { title: 'View Forms', subtitle: 'Browse all available forms', icon: 'list', path: '/forms' },
+    { title: 'View Forms', subtitle: 'Browse all forms', icon: 'list', path: '/forms' },
     { title: 'Search', subtitle: 'Search submissions', icon: 'search', path: '/search' },
   ];
 
   return (
-    <FlexBox direction="Column" style={{ gap: '2rem', padding: '1rem' }}>
-      <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
-        <Title level="H1">Welcome to APEX</Title>
-        <Text>AI-Native Business Process Platform</Text>
-      </FlexBox>
+    <div style={{ padding: '1rem', backgroundColor: '#f7f7f7', minHeight: '100%' }}>
+      {/* Section Title */}
+      <div
+        style={{
+          fontSize: '16px',
+          fontWeight: '600',
+          color: '#32363a',
+          marginBottom: '1rem',
+        }}
+      >
+        Forms
+      </div>
 
-      <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
+      {/* Tile Grid */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}
+      >
         {tiles.map((tile) => (
-          <Card
+          <FioriTile
             key={tile.path}
-            style={{ width: '300px', cursor: 'pointer' }}
+            title={tile.title}
+            subtitle={tile.subtitle}
+            icon={tile.icon}
             onClick={() => navigate(tile.path)}
-          >
-            <CardHeader
-              titleText={tile.title}
-              subtitleText={tile.subtitle}
-              avatar={<Icon name={tile.icon} />}
-            />
-          </Card>
+          />
         ))}
-      </FlexBox>
-    </FlexBox>
+      </div>
+    </div>
   );
 }
 

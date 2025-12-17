@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  ObjectPage,
-  ObjectPageSection,
-  DynamicPageTitle,
-  DynamicPageHeader,
   FlexBox,
   Title,
   Text,
-  Badge,
+  Label,
   Button,
   BusyIndicator,
   MessageStrip
@@ -53,7 +49,7 @@ function FormPage() {
   if (loading) {
     return (
       <FlexBox justifyContent="Center" alignItems="Center" style={{ height: '300px' }}>
-        <BusyIndicator active size="Large" />
+        <BusyIndicator active size="L" />
       </FlexBox>
     );
   }
@@ -81,36 +77,26 @@ function FormPage() {
   }
 
   return (
-    <ObjectPage
-      headerTitle={
-        <DynamicPageTitle
-          header={<Title>{form.name}</Title>}
-          actions={
-            <Button
-              icon="response"
-              onClick={() => navigate(`/forms/${slug}/submissions`)}
-            >
-              View Submissions
-            </Button>
-          }
-        />
-      }
-      headerContent={
-        <DynamicPageHeader>
-          <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
-            <Text>{form.description || 'No description'}</Text>
-            <Badge colorScheme="8">{form.status}</Badge>
-          </FlexBox>
-        </DynamicPageHeader>
-      }
-      style={{ height: 'calc(100vh - 100px)' }}
-    >
-      <ObjectPageSection id="form-section" titleText="Form">
-        <div style={{ padding: '1rem', background: 'white', borderRadius: '8px' }}>
-          <FormioForm form={form.schema} onSubmit={handleSubmit} />
-        </div>
-      </ObjectPageSection>
-    </ObjectPage>
+    <FlexBox direction="Column" style={{ gap: '1.5rem', padding: '1rem' }}>
+      <FlexBox justifyContent="SpaceBetween" alignItems="Center">
+        <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
+          <Title level="H2">{form.name}</Title>
+          <Text>{form.description || 'No description'}</Text>
+          <Label>{form.status}</Label>
+        </FlexBox>
+        <Button
+          icon="response"
+          design="Emphasized"
+          onClick={() => navigate(`/forms/${slug}/submissions`)}
+        >
+          View Submissions
+        </Button>
+      </FlexBox>
+
+      <div style={{ padding: '1.5rem', background: 'white', borderRadius: '8px' }}>
+        <FormioForm form={form.schema} onSubmit={handleSubmit} />
+      </div>
+    </FlexBox>
   );
 }
 
