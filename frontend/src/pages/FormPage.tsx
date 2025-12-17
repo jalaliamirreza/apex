@@ -10,7 +10,9 @@ import {
   MessageStrip
 } from '@ui5/webcomponents-react';
 import "@ui5/webcomponents-icons/dist/response.js";
-import { Form as FormioForm } from '@formio/react';
+import "@ui5/webcomponents-icons/dist/nav-back.js";
+import { FioriFormRenderer } from '../components/FioriFormRenderer';
+import { convertFormioSchema } from '../utils/schemaConverter';
 import { formsApi } from '../services/api';
 import { Form } from '../types';
 
@@ -19,6 +21,7 @@ function FormPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState<Form | null>(null);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,12 +40,15 @@ function FormPage() {
     }
   };
 
-  const handleSubmit = async (submission: any) => {
+  const handleSubmit = async (data: Record<string, any>) => {
+    setSubmitting(true);
     try {
-      await formsApi.submit(slug!, submission.data);
+      await formsApi.submit(slug!, data);
       setSubmitted(true);
     } catch (err) {
       setError('Failed to submit form');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -56,9 +62,10 @@ function FormPage() {
 
   if (error || !form) {
     return (
-      <MessageStrip design="Negative" style={{ margin: '1rem' }}>
-        {error || 'Form not found'}
-      </MessageStrip>
+      <FlexBox direction="Column" style={{ padding: '1rem', gap: '1rem' }}>
+        <MessageStrip design="Negative">{error || 'Form not found'}</MessageStrip>
+        <Button icon="nav-back" onClick={() => navigate('/forms')}>Back to Forms</Button>
+      </FlexBox>
     );
   }
 
@@ -70,32 +77,54 @@ function FormPage() {
         justifyContent="Center"
         style={{ height: '300px', gap: '1rem' }}
       >
-        <MessageStrip design="Positive">Form submitted successfully!</MessageStrip>
-        <Button onClick={() => navigate('/forms')}>Back to Forms</Button>
+        <MessageStrip design="Positive" hideCloseButton>
+          Form submitted successfully!
+        </MessageStrip>
+        <FlexBox style={{ gap: '0.5rem' }}>
+          <Button design="Emphasized" onClick={() => navigate('/forms')}>
+            Back to Forms
+          </Button>
+          <Button design="Transparent" onClick={() => setSubmitted(false)}>
+            Submit Another
+          </Button>
+        </FlexBox>
       </FlexBox>
     );
   }
 
+  // Convert Formio schema to simple schema
+  const simpleSchema = convertFormioSchema(form.schema);
+
   return (
-    <FlexBox direction="Column" style={{ gap: '1.5rem', padding: '1rem' }}>
+    <FlexBox direction="Column" style={{ gap: '1rem', padding: '1rem' }}>
+      {/* Header */}
       <FlexBox justifyContent="SpaceBetween" alignItems="Center">
-        <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
-          <Title level="H2">{form.name}</Title>
-          <Text>{form.description || 'No description'}</Text>
-          <Label>{form.status}</Label>
+        <FlexBox alignItems="Center" style={{ gap: '1rem' }}>
+          <Button icon="nav-back" design="Transparent" onClick={() => navigate('/forms')} />
+          <FlexBox direction="Column">
+            <Title level="H2">{form.name}</Title>
+            <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
+              <Text>{form.description || 'No description'}</Text>
+              <Label>{form.status}</Label>
+            </FlexBox>
+          </FlexBox>
         </FlexBox>
         <Button
           icon="response"
-          design="Emphasized"
+          design="Transparent"
           onClick={() => navigate(`/forms/${slug}/submissions`)}
         >
           View Submissions
         </Button>
       </FlexBox>
 
-      <div style={{ padding: '1.5rem', background: 'white', borderRadius: '8px' }}>
-        <FormioForm form={form.schema} onSubmit={handleSubmit} />
-      </div>
+      {/* Form */}
+      <FioriFormRenderer
+        schema={simpleSchema}
+        onSubmit={handleSubmit}
+        onCancel={() => navigate('/forms')}
+        loading={submitting}
+      />
     </FlexBox>
   );
 }
