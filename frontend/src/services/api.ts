@@ -30,4 +30,16 @@ export async function search(query: string): Promise<{ results: SearchResult[]; 
   return data;
 }
 
+// Structured API exports for new UI5 components
+export const formsApi = {
+  list: () => getForms().then(forms => ({ forms })),
+  get: (slug: string) => getForm(slug),
+  submit: (slug: string, formData: Record<string, any>) => submitForm(slug, formData),
+  getSubmissions: (slug: string) => getSubmissions(slug)
+};
+
+export const searchApi = {
+  search: (query: string) => search(query)
+};
+
 export default api;

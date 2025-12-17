@@ -1,5 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import { ShellBar, Avatar } from '@ui5/webcomponents-react';
+import "@ui5/webcomponents-icons/dist/home.js";
+import "@ui5/webcomponents-icons/dist/list.js";
+import "@ui5/webcomponents-icons/dist/search.js";
 import HomePage from './pages/HomePage';
 import FormsListPage from './pages/FormsListPage';
 import FormPage from './pages/FormPage';
@@ -8,9 +11,15 @@ import SearchPage from './pages/SearchPage';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
-      <main className="container mx-auto px-4 py-8">
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <ShellBar
+        primaryTitle="APEX"
+        secondaryTitle="Form Management"
+        showSearchField
+        profile={<Avatar initials="U" />}
+        onLogoClick={() => window.location.href = '/'}
+      />
+      <main style={{ flex: 1, padding: '1rem', backgroundColor: '#f7f7f7', overflow: 'auto' }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/forms" element={<FormsListPage />} />
@@ -22,4 +31,5 @@ function App() {
     </div>
   );
 }
+
 export default App;

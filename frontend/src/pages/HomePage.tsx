@@ -1,15 +1,48 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {
+  Card,
+  CardHeader,
+  FlexBox,
+  Title,
+  Text,
+  Icon
+} from '@ui5/webcomponents-react';
+import "@ui5/webcomponents-icons/dist/add.js";
+import "@ui5/webcomponents-icons/dist/list.js";
+import "@ui5/webcomponents-icons/dist/search.js";
 
-export default function HomePage() {
+function HomePage() {
+  const navigate = useNavigate();
+
+  const tiles = [
+    { title: 'View Forms', subtitle: 'Browse all available forms', icon: 'list', path: '/forms' },
+    { title: 'Search', subtitle: 'Search submissions', icon: 'search', path: '/search' },
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto text-center py-12">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to APEX</h1>
-      <p className="text-xl text-gray-600 mb-8">AI-Powered Process Execution Platform</p>
-      <p className="text-gray-500 mb-8">Describe your forms in natural language. Claude will create them.</p>
-      <div className="flex justify-center gap-4">
-        <Link to="/forms" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">View Forms</Link>
-        <Link to="/search" className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Search</Link>
-      </div>
-    </div>
+    <FlexBox direction="Column" style={{ gap: '2rem', padding: '1rem' }}>
+      <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
+        <Title level="H1">Welcome to APEX</Title>
+        <Text>AI-Native Business Process Platform</Text>
+      </FlexBox>
+
+      <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
+        {tiles.map((tile) => (
+          <Card
+            key={tile.path}
+            style={{ width: '300px', cursor: 'pointer' }}
+            onClick={() => navigate(tile.path)}
+          >
+            <CardHeader
+              titleText={tile.title}
+              subtitleText={tile.subtitle}
+              avatar={<Icon name={tile.icon} />}
+            />
+          </Card>
+        ))}
+      </FlexBox>
+    </FlexBox>
   );
 }
+
+export default HomePage;

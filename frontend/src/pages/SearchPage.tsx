@@ -1,48 +1,89 @@
 import { useState } from 'react';
-import SearchBar from '../components/SearchBar';
-import { search } from '../services/api';
-import { SearchResult } from '../types';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {
+  FlexBox,
+  Title,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  Text,
+  BusyIndicator,
+  MessageStrip,
+  Icon
+} from '@ui5/webcomponents-react';
+import "@ui5/webcomponents-icons/dist/search.js";
+import "@ui5/webcomponents-icons/dist/document.js";
+import { searchApi } from '../services/api';
 
-export default function SearchPage() {
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [total, setTotal] = useState(0);
+function SearchPage() {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async () => {
+    if (!query.trim()) return;
     setLoading(true);
+    setSearched(true);
     try {
-      const data = await search(query);
-      setResults(data.results);
-      setTotal(data.total);
-      setSearched(true);
-    } catch (err) { console.error('Search error:', err); }
-    finally { setLoading(false); }
+      const data = await searchApi.search(query);
+      setResults(data.results || []);
+    } catch (error) {
+      console.error('Search failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Search Submissions</h1>
-      <SearchBar onSearch={handleSearch} isLoading={loading} />
-      {searched && (
-        <div className="mt-8">
-          <p className="text-gray-500 mb-4">Found {total} result(s)</p>
-          {results.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">No results found</div>
-          ) : (
-            <div className="space-y-4">
-              {results.map((r) => (
-                <div key={r.submissionId} className="bg-white p-6 rounded-lg shadow">
-                  <Link to={`/forms/${r.formSlug}/submissions`} className="text-lg font-semibold text-blue-600 hover:text-blue-800">{r.formName}</Link>
-                  <p className="text-sm text-gray-500 mt-1">{new Date(r.submittedAt).toLocaleString()}</p>
-                  <pre className="mt-4 text-sm bg-gray-50 p-3 rounded overflow-x-auto">{JSON.stringify(r.data, null, 2)}</pre>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+    <FlexBox direction="Column" style={{ gap: '1.5rem', padding: '1rem' }}>
+      <Title level="H2">Search Submissions</Title>
+
+      <FlexBox style={{ gap: '0.5rem' }}>
+        <Input
+          placeholder="Search..."
+          value={query}
+          onInput={(e: any) => setQuery(e.target.value)}
+          onKeyPress={(e: any) => e.key === 'Enter' && handleSearch()}
+          style={{ flex: 1 }}
+        />
+        <Button icon="search" design="Emphasized" onClick={handleSearch}>
+          Search
+        </Button>
+      </FlexBox>
+
+      {loading && (
+        <FlexBox justifyContent="Center">
+          <BusyIndicator active size="Medium" />
+        </FlexBox>
       )}
-    </div>
+
+      {!loading && searched && results.length === 0 && (
+        <MessageStrip design="Information">No results found</MessageStrip>
+      )}
+
+      {!loading && results.length > 0 && (
+        <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
+          <Text>{results.length} results found</Text>
+          {results.map((result, index) => (
+            <Card
+              key={index}
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate(`/forms/${result.formSlug}`)}
+            >
+              <CardHeader
+                titleText={result.formName}
+                subtitleText={`Submission: ${result.submissionId?.slice(0, 8)}...`}
+                avatar={<Icon name="document" />}
+              />
+            </Card>
+          ))}
+        </FlexBox>
+      )}
+    </FlexBox>
   );
 }
+
+export default SearchPage;
