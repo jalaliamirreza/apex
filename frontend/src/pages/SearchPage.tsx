@@ -56,7 +56,7 @@ function SearchPage() {
 
       {loading && (
         <FlexBox justifyContent="Center">
-          <BusyIndicator active size="Medium" />
+          <BusyIndicator active size="M" />
         </FlexBox>
       )}
 
