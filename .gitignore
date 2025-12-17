@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+*.js.map
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Docker volumes (if local)
+postgres_data/
+opensearch_data/
+minio_data/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Python (if any)
+__pycache__/
+*.pyc
+.venv/
+venv/
