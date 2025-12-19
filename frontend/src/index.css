@@ -63,6 +63,17 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Remove all text decorations and borders on hover */
+.tile-card:hover *,
+.tile-card:hover [ui5-text],
+.tile-card:hover span,
+.tile-card:hover div {
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
 /* Force remove border from tile cards - target all possible elements */
 .tile-card,
 .tile-card *,
@@ -73,6 +84,7 @@ body {
   border: none !important;
   outline: none !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+  text-decoration: none !important;
 }
 
 /* Hover state shadow override */
