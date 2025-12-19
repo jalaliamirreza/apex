@@ -534,6 +534,11 @@ function TileCard({ tile, onClick }: TileCardProps) {
       style={{
         width: '176px',
         height: '176px',
+        minWidth: '176px',
+        minHeight: '176px',
+        maxWidth: '176px',
+        maxHeight: '176px',
+        flexShrink: 0,
         cursor: 'pointer',
         borderRadius: '16px',
         boxShadow: isHovered
