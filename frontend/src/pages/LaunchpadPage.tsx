@@ -599,9 +599,9 @@ function TileCard({ tile, onClick }: TileCardProps) {
         }}
       >
         <Icon
-          name={tile.icon || 'document'}
+          name={`SAP-icons-v5/${tile.icon || 'document'}`}
+          className="tile-icon"
           style={{
-            fontSize: '4rem',
             color: '#6a6d70'
           }}
         />

@@ -69,6 +69,14 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
 
+/* Force icon size in tiles */
+.tile-icon {
+  --sapContent_IconHeight: 2rem !important;
+  --sapContent_IconWidth: 2rem !important;
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
 /* All elements inside tile show pointer cursor */
 .tile-card *,
 .tile-card [ui5-text],
