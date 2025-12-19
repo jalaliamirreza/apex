@@ -524,19 +524,26 @@ interface TileCardProps {
 }
 
 function TileCard({ tile, onClick }: TileCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <Card
       onClick={onClick}
       className="tile-card"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         width: '176px',
         height: '176px',
         cursor: 'pointer',
         borderRadius: '16px',
         border: 'none',
-        boxShadow: '0 0 0 1px rgba(0,0,0,0.06)',
-        background: '#ffffff',
-        overflow: 'hidden'
+        boxShadow: isHovered
+          ? '0 4px 12px rgba(0,0,0,0.12)'
+          : '0 0 0 1px rgba(0,0,0,0.06)',
+        background: isHovered ? '#f5f6f7' : '#ffffff',
+        overflow: 'hidden',
+        transition: 'background-color 0.15s ease, box-shadow 0.15s ease'
       }}
     >
       {/* ===== CONTENT AREA (Top) ===== */}
