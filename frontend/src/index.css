@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Font Stack - Vazirmatn for all languages */
+:root {
+  --font-family: 'Vazirmatn', 'Roboto', sans-serif;
+
+  /* UI5 WebComponents font override */
+  --sapFontFamily: 'Vazirmatn', 'Roboto', sans-serif;
+  --sapFontSize: 14px;
+  --sapFontLargeSize: 16px;
+  --sapFontSmallSize: 12px;
+  --sapFontHeaderFamily: 'Vazirmatn', 'Roboto', sans-serif;
+
+  /* SYNCRO Brand Color Palette */
+  --syncro-royal-blue: #4169E1;
+  --syncro-cyan: #06B6D4;
+  --syncro-royal-blue-dark: #2952CC;
+  --syncro-cyan-light: #22D3EE;
+
+  /* SAP Fiori Colors - Updated with SYNCRO branding */
+  --primary: var(--syncro-royal-blue);
+  --primary-hover: var(--syncro-royal-blue-dark);
+  --accent: var(--syncro-cyan);
+  --background: #f7f7f7;
+  --surface: #ffffff;
+  --text-primary: #32363a;
+  --text-secondary: #6a6d70;
+  --border: #e5e5e5;
+  --error: #bb0000;
+  --success: #107e3e;
+
+  /* UI5 Theme Overrides - SYNCRO Branding */
+  --sapBrandColor: var(--syncro-royal-blue);
+  --sapHighlightColor: var(--syncro-cyan);
+  --sapActiveColor: var(--syncro-royal-blue);
+  --sapSelectedColor: var(--syncro-royal-blue);
+  --sapLinkColor: var(--syncro-royal-blue);
+  --sapButton_Emphasized_Background: var(--syncro-royal-blue);
+  --sapButton_Emphasized_BorderColor: var(--syncro-royal-blue);
+  --sapButton_Emphasized_Hover_Background: var(--syncro-royal-blue-dark);
+}
+
+/* Base - LTR Default */
+html {
+  direction: ltr;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--background);
+  margin: 0;
+  padding: 0;
+}
+
+/* Tile styling - SAP Fiori Horizon style */
+.tile-card {
+  cursor: pointer !important;
+  background: white !important;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* SAP Fiori Horizon hover effect - light gray background + shadow */
+.tile-card:hover {
+  background-color: #f5f6f7 !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* All elements inside tile show pointer cursor */
+.tile-card *,
+.tile-card [ui5-text],
+.tile-card [ui5-icon],
+.tile-card span,
+.tile-card div {
+  cursor: pointer !important;
+}
+
+/* Remove all text decorations and borders */
+.tile-card *,
+.tile-card [ui5-text],
+.tile-card span,
+.tile-card div {
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
+/* Force remove border from tile cards - target all possible elements */
+.tile-card,
+.tile-card *,
+.tile-card::before,
+.tile-card::after,
+.tile-card::part(root),
+.tile-card::part(*) {
+  border: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+}
+
+/* Target UI5 Card element directly with all variations */
+ui5-card.tile-card,
+ui5-card.tile-card *,
+ui5-card.tile-card::before,
+ui5-card.tile-card::after,
+[ui5-card].tile-card,
+[ui5-card].tile-card * {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Disable text selection on UI elements - SAP Fiori style */
+.tile-card,
+[ui5-tab],
+[ui5-tabcontainer],
+[ui5-card],
+[ui5-title],
+[ui5-text],
+[ui5-button],
+[ui5-shellbar],
+.space-tabs,
+.shell-bar,
+.section-title {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only in form inputs */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Force font on all elements */
+* {
+  font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
+}
+
+/* Target UI5 elements specifically */
+[ui5-tab], [ui5-card], [ui5-title], [ui5-text], [ui5-label], [ui5-button], [ui5-list-item] {
+  font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
+}

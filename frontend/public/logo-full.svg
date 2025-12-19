@@ -1,0 +1,19 @@
+<svg width="160" height="40" viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4169E1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Globe icon -->
+  <g transform="translate(5, 5) scale(0.3)">
+    <circle cx="50" cy="50" r="35" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
+    <ellipse cx="50" cy="50" rx="35" ry="15" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
+    <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="url(#logoGradient)" stroke-width="3" transform="rotate(45 50 50)"/>
+    <circle cx="50" cy="50" r="5" fill="url(#logoGradient)"/>
+  </g>
+  <!-- SYNCRO text -->
+  <text x="45" y="28" font-family="Vazirmatn, sans-serif" font-size="22" font-weight="600" fill="#1F2937">
+    SYNCRO
+  </text>
+</svg>

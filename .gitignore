@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+build/
+**/dist/
+**/build/
+*.js.map
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# Testing
+coverage/
+
+# Docker volumes (if local)
+postgres_data/
+opensearch_data/
+minio_data/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Python (if any)
+__pycache__/
+*.pyc
+.venv/
+venv/
+test-form.json
