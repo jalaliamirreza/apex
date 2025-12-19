@@ -567,16 +567,11 @@ function TileCard({ tile, onClick }: TileCardProps) {
         </div>
 
         {/* Icon - Bottom Left */}
-        <div style={{
-          marginTop: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          height: '2.5rem'
-        }}>
+        <div style={{ marginTop: 'auto' }}>
           <Icon
             name={tile.icon || 'document'}
             style={{
-              fontSize: '2rem',
+              fontSize: '2.25rem',
               color: '#6a6d70'
             }}
           />
