@@ -60,11 +60,12 @@ body {
 /* Tile styling with shadow hover effect */
 .tile-card {
   cursor: pointer !important;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-/* Hover effect - only shadow change */
+/* Hover effect - shadow and upward movement */
 .tile-card:hover {
+  transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
