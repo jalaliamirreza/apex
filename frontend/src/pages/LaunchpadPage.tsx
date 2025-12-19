@@ -498,8 +498,8 @@ function TileCard({ tile, onClick }: TileCardProps) {
     <Card
       onClick={onClick}
       style={{
-        width: '180px',
-        height: '140px',
+        width: '200px',
+        height: '160px',
         cursor: 'pointer',
         transition: 'all 0.2s',
         border: 'none',
@@ -520,16 +520,18 @@ function TileCard({ tile, onClick }: TileCardProps) {
         <div style={{
           fontWeight: 600,
           fontSize: '14px',
+          color: '#1F2937',
           marginBottom: '4px'
         }}>
           {tile.name}
         </div>
 
-        {/* Subtitle - Below Title */}
+        {/* Subtitle - Below Title - SAP Blue */}
         {tile.description && (
           <div style={{
-            color: '#6B7280',
-            fontSize: '12px',
+            color: '#0070f2',
+            fontSize: '13px',
+            lineHeight: '1.4',
             flex: 1
           }}>
             {tile.description.substring(0, 40)}...
@@ -537,7 +539,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
         )}
 
         {/* Icon - Bottom Left */}
-        <div>
+        <div style={{ marginTop: 'auto' }}>
           <Icon
             name={tile.icon || 'document'}
             style={{
