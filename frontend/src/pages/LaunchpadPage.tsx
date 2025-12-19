@@ -390,6 +390,8 @@ function LaunchpadPage() {
               <Popover
                 opener={spaceDropdownRefs.current[space.id] || undefined}
                 open={openSpaceDropdown === space.id}
+                placement="Bottom"
+                horizontalAlign="Start"
               >
                 <div style={{
                   minWidth: '200px',
@@ -440,29 +442,50 @@ function LaunchpadPage() {
         padding: '1.5rem',
         background: '#f7f7f7'
       }}>
-        {activePage?.sections?.map(section => (
-          <div key={section.id} style={{ marginBottom: '2rem' }}>
-            {/* Section Title */}
-            <Title level="H4" style={{
-              marginBottom: '1rem',
-              paddingBottom: '0.5rem',
-              borderBottom: '2px solid var(--primary)'
-            }}>
-              {section.name}
-            </Title>
+        {activePage?.sections && activePage.sections.length > 0 ? (
+          activePage.sections.map(section => (
+            <div key={section.id} style={{ marginBottom: '2rem' }}>
+              {/* Section Title */}
+              <Title level="H4" style={{
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid var(--primary)'
+              }}>
+                {section.name}
+              </Title>
 
-            {/* Tiles Grid */}
-            <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
-              {section.tiles.map(tile => (
-                <TileCard
-                  key={tile.id}
-                  tile={tile}
-                  onClick={() => handleTileClick(tile)}
-                />
-              ))}
-            </FlexBox>
+              {/* Tiles Grid or Empty State */}
+              {section.tiles.length === 0 ? (
+                <div style={{
+                  padding: '2rem',
+                  color: '#6B7280',
+                  fontStyle: 'italic'
+                }}>
+                  No apps available
+                </div>
+              ) : (
+                <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
+                  {section.tiles.map(tile => (
+                    <TileCard
+                      key={tile.id}
+                      tile={tile}
+                      onClick={() => handleTileClick(tile)}
+                    />
+                  ))}
+                </FlexBox>
+              )}
+            </div>
+          ))
+        ) : (
+          <div style={{
+            padding: '2rem',
+            color: '#6B7280',
+            fontStyle: 'italic',
+            textAlign: 'center'
+          }}>
+            No apps available
           </div>
-        ))}
+        )}
       </div>
     </FlexBox>
   );
