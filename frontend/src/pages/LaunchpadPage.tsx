@@ -544,33 +544,41 @@ function TileCard({ tile, onClick }: TileCardProps) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        textAlign: 'left',
-        position: 'relative'
+        textAlign: 'left'
       }}>
-        {/* Title - Top Left */}
+        {/* AREA 1: Content Area (Top) - Title + Subtitle */}
         <div style={{
-          fontWeight: 600,
-          fontSize: '14px',
-          color: '#1F2937'
+          flex: '1 1 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0
         }}>
-          {tile.name}
+          {/* Title */}
+          <div style={{
+            fontWeight: 600,
+            fontSize: '14px',
+            color: '#1F2937'
+          }}>
+            {tile.name}
+          </div>
+
+          {/* Subtitle */}
+          <div style={{
+            color: '#6a6d70',
+            fontSize: '13px',
+            lineHeight: '1.4',
+            marginTop: '4px'
+          }}>
+            {tile.description || 'Application'}
+          </div>
         </div>
 
-        {/* Subtitle - Below Title - SAP Gray */}
+        {/* AREA 2: Icon Area (Bottom) - Fixed 48px height */}
         <div style={{
-          color: '#6a6d70',
-          fontSize: '13px',
-          lineHeight: '1.4',
-          marginTop: '4px'
-        }}>
-          {tile.description || 'Application'}
-        </div>
-
-        {/* Icon - Bottom Left - Fixed Position */}
-        <div style={{
-          position: 'absolute',
-          bottom: '1rem',
-          left: '1rem'
+          height: '48px',
+          display: 'flex',
+          alignItems: 'center',
+          flexShrink: 0
         }}>
           <Icon
             name={tile.icon || 'document'}
