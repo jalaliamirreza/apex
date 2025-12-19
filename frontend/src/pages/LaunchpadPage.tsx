@@ -527,67 +527,77 @@ function TileCard({ tile, onClick }: TileCardProps) {
   return (
     <Card
       onClick={onClick}
+      className="tile-card"
       style={{
         width: '176px',
         height: '176px',
         cursor: 'pointer',
-        transition: 'all 0.2s',
+        borderRadius: '16px',
         border: 'none',
-        outline: 'none',
-        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.08)',
-        borderRadius: '12px'
+        boxShadow: '0 0 0 1px rgba(0,0,0,0.06)',
+        background: '#ffffff',
+        overflow: 'hidden'
       }}
-      className="tile-card"
     >
-      <div style={{
-        padding: '1rem',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        textAlign: 'left'
-      }}>
-        {/* AREA 1: Content Area (Top) - Title + Subtitle */}
-        <div style={{
-          flex: '1 1 auto',
+      {/* ===== CONTENT AREA (Top) ===== */}
+      <div
+        style={{
+          padding: '16px 16px 8px 16px',
+          height: 'calc(100% - 48px)',
           display: 'flex',
           flexDirection: 'column',
-          minHeight: 0
-        }}>
-          {/* Title */}
-          <div style={{
+          textAlign: 'left'
+        }}
+      >
+        {/* Title */}
+        <div
+          style={{
             fontWeight: 600,
             fontSize: '14px',
-            color: '#1F2937'
-          }}>
-            {tile.name}
-          </div>
+            color: '#1d2d3e',
+            marginBottom: '4px',
+            lineHeight: '1.3',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical'
+          } as React.CSSProperties}
+        >
+          {tile.name}
+        </div>
 
-          {/* Subtitle */}
-          <div style={{
+        {/* Subtitle - GRAY */}
+        <div
+          style={{
             color: '#6a6d70',
             fontSize: '13px',
             lineHeight: '1.4',
-            marginTop: '4px'
-          }}>
-            {tile.description || 'Application'}
-          </div>
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical'
+          } as React.CSSProperties}
+        >
+          {tile.description || 'Application'}
         </div>
+      </div>
 
-        {/* AREA 2: Icon Area (Bottom) - Fixed 48px height */}
-        <div style={{
+      {/* ===== ICON AREA (Bottom/Footer) ===== */}
+      <div
+        style={{
+          padding: '0 16px 16px 16px',
           height: '48px',
           display: 'flex',
-          alignItems: 'center',
-          flexShrink: 0
-        }}>
-          <Icon
-            name={tile.icon || 'document'}
-            style={{
-              fontSize: '2.25rem',
-              color: '#6a6d70'
-            }}
-          />
-        </div>
+          alignItems: 'flex-end'
+        }}
+      >
+        <Icon
+          name={tile.icon || 'document'}
+          style={{
+            fontSize: '24px',
+            color: '#0064d9'
+          }}
+        />
       </div>
     </Card>
   );

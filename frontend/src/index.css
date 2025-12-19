@@ -57,18 +57,16 @@ body {
   padding: 0;
 }
 
-/* Tile styling - SAP Fiori Horizon style */
+/* SAP Fiori Tile Styling */
 .tile-card {
-  cursor: pointer !important;
-  background: white !important;
-  border-radius: 12px !important;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
+  background: #ffffff !important;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
+  user-select: none !important;
 }
 
-/* SAP Fiori Horizon hover effect - border outline */
 .tile-card:hover {
   background-color: #f5f6f7 !important;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
 
 /* All elements inside tile show pointer cursor */
@@ -115,7 +113,9 @@ ui5-card.tile-card::after,
 }
 
 /* Disable text selection on UI elements - SAP Fiori style */
+.launchpad-container,
 .tile-card,
+.section-title,
 [ui5-tab],
 [ui5-tabcontainer],
 [ui5-card],
@@ -124,12 +124,11 @@ ui5-card.tile-card::after,
 [ui5-button],
 [ui5-shellbar],
 .space-tabs,
-.shell-bar,
-.section-title {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.shell-bar {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
 }
 
 /* Allow text selection only in form inputs */
