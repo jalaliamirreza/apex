@@ -46,6 +46,20 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
+/* Force remove border from tile cards */
+.tile-card,
+.tile-card::part(root) {
+  border: none !important;
+  outline: none !important;
+}
+
+/* Target UI5 Card element directly */
+ui5-card.tile-card,
+[ui5-card].tile-card {
+  border: none !important;
+  outline: none !important;
+}
+
 /* Force font on all elements */
 * {
   font-family: 'Vazirmatn', 'Roboto', sans-serif !important;

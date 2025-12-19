@@ -293,7 +293,9 @@ function TileCard({ tile, onClick }: TileCardProps) {
         cursor: 'pointer',
         transition: 'all 0.2s',
         border: 'none',
-        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.08)'
+        outline: 'none',
+        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.08)',
+        borderRadius: '8px'
       }}
       className="tile-card"
     >
