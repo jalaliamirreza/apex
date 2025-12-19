@@ -65,10 +65,10 @@ body {
   transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-/* SAP Fiori Horizon hover effect - light gray background + subtle shadow */
+/* SAP Fiori Horizon hover effect - border outline */
 .tile-card:hover {
   background-color: #f5f6f7 !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* All elements inside tile show pointer cursor */
