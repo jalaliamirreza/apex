@@ -498,7 +498,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
     <Card
       onClick={onClick}
       style={{
-        width: '160px',
+        width: '180px',
         height: '140px',
         cursor: 'pointer',
         transition: 'all 0.2s',
@@ -513,14 +513,14 @@ function TileCard({ tile, onClick }: TileCardProps) {
         padding: '1rem',
         height: '100%',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        textAlign: 'left'
       }}>
         {/* Title - Top Left */}
         <div style={{
           fontWeight: 600,
           fontSize: '14px',
-          lineHeight: '1.3',
-          marginBottom: '0.25rem'
+          marginBottom: '4px'
         }}>
           {tile.name}
         </div>
@@ -530,14 +530,14 @@ function TileCard({ tile, onClick }: TileCardProps) {
           <div style={{
             color: '#6B7280',
             fontSize: '12px',
-            lineHeight: '1.3'
+            flex: 1
           }}>
             {tile.description.substring(0, 40)}...
           </div>
         )}
 
         {/* Icon - Bottom Left */}
-        <div style={{ marginTop: 'auto' }}>
+        <div>
           <Icon
             name={tile.icon || 'document'}
             style={{

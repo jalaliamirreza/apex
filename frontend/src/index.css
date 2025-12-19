@@ -60,14 +60,13 @@ body {
 /* Tile styling - SAP Fiori style */
 .tile-card {
   cursor: pointer !important;
-  transition: all 0.2s ease;
+  border-left: 3px solid transparent !important;
+  transition: border-color 0.2s ease !important;
 }
 
 /* SAP Fiori hover effect - left blue border only */
 .tile-card:hover {
   border-left: 3px solid #0070f2 !important;
-  box-shadow: none !important;
-  transform: none !important;
 }
 
 /* All elements inside tile show pointer cursor */
