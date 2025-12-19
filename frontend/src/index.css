@@ -57,17 +57,16 @@ body {
   padding: 0;
 }
 
-/* Tile hover effect for Launchpad */
-.tile-card:hover {
-  transform: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* Tile styling - NO hover effect */
+.tile-card {
+  cursor: pointer;
 }
 
-/* Remove all text decorations and borders on hover */
-.tile-card:hover *,
-.tile-card:hover [ui5-text],
-.tile-card:hover span,
-.tile-card:hover div {
+/* Remove all text decorations and borders */
+.tile-card *,
+.tile-card [ui5-text],
+.tile-card span,
+.tile-card div {
   text-decoration: none !important;
   border: none !important;
   border-bottom: none !important;
@@ -85,12 +84,6 @@ body {
   outline: none !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
   text-decoration: none !important;
-}
-
-/* Hover state shadow override */
-.tile-card:hover,
-.tile-card:hover * {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Target UI5 Card element directly with all variations */
