@@ -113,6 +113,34 @@ ui5-card.tile-card::after,
   outline: none !important;
 }
 
+/* Disable text selection on UI elements - SAP Fiori style */
+.tile-card,
+[ui5-tab],
+[ui5-tabcontainer],
+[ui5-card],
+[ui5-title],
+[ui5-text],
+[ui5-button],
+[ui5-shellbar],
+.space-tabs,
+.shell-bar,
+.section-title {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only in form inputs */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 /* Force font on all elements */
 * {
   font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
