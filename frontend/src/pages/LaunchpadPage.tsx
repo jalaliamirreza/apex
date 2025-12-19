@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ShellBar,
+  ShellBarItem,
   FlexBox,
   Title,
   BusyIndicator,
@@ -150,8 +151,36 @@ function LaunchpadPage() {
           </div>
         </div>
 
-        {/* Right Side: Notifications and Profile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        {/* Right Side: Search, Help, Notifications and Profile */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {/* Search */}
+          <div
+            style={{
+              cursor: 'pointer',
+              padding: '0.5rem',
+              borderRadius: '50%',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <Icon name="search" style={{ color: 'white', fontSize: '1.25rem' }} />
+          </div>
+
+          {/* Help */}
+          <div
+            style={{
+              cursor: 'pointer',
+              padding: '0.5rem',
+              borderRadius: '50%',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <Icon name="sys-help" style={{ color: 'white', fontSize: '1.25rem' }} />
+          </div>
+
           {/* Notifications */}
           <div
             ref={notificationsButtonRef}
@@ -333,16 +362,17 @@ function LaunchpadPage() {
           <div key={space.id} style={{ position: 'relative' }}>
             <div
               ref={el => spaceDropdownRefs.current[space.id] = el}
+              className={activeSpace?.id === space.id ? 'space-tab active' : 'space-tab'}
               style={{
-                padding: '1rem 1.5rem',
-                borderBottom: activeSpace?.id === space.id ? '3px solid var(--primary)' : '3px solid transparent',
-                background: activeSpace?.id === space.id ? '#f7f7f7' : 'transparent',
+                padding: '0.75rem 1rem',
+                borderBottom: activeSpace?.id === space.id ? '3px solid #0070f2' : '3px solid transparent',
+                background: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
                 transition: 'all 0.2s',
                 fontWeight: activeSpace?.id === space.id ? 600 : 400,
-                color: activeSpace?.id === space.id ? 'var(--primary)' : '#32363a'
+                color: activeSpace?.id === space.id ? '#0070f2' : '#32363a'
               }}
               onMouseEnter={(e) => {
                 if (activeSpace?.id !== space.id) {
@@ -448,7 +478,7 @@ function LaunchpadPage() {
           activePage.sections.map(section => (
             <div key={section.id} style={{ marginBottom: '2rem' }}>
               {/* Section Title */}
-              <Title level="H4" style={{
+              <Title level="H4" className="section-title" style={{
                 marginBottom: '1rem',
                 fontWeight: 600
               }}>
@@ -498,14 +528,14 @@ function TileCard({ tile, onClick }: TileCardProps) {
     <Card
       onClick={onClick}
       style={{
-        width: '200px',
-        height: '160px',
+        width: '176px',
+        height: '176px',
         cursor: 'pointer',
         transition: 'all 0.2s',
         border: 'none',
         outline: 'none',
         boxShadow: '0 1px 4px rgba(0, 0, 0, 0.08)',
-        borderRadius: '8px'
+        borderRadius: '12px'
       }}
       className="tile-card"
     >
@@ -520,23 +550,21 @@ function TileCard({ tile, onClick }: TileCardProps) {
         <div style={{
           fontWeight: 600,
           fontSize: '14px',
-          color: '#1F2937',
-          marginBottom: '4px'
+          color: '#1F2937'
         }}>
           {tile.name}
         </div>
 
         {/* Subtitle - Below Title - SAP Blue */}
-        {tile.description && (
-          <div style={{
-            color: '#0070f2',
-            fontSize: '13px',
-            lineHeight: '1.4',
-            flex: 1
-          }}>
-            {tile.description.substring(0, 40)}...
-          </div>
-        )}
+        <div style={{
+          color: '#0070f2',
+          fontSize: '13px',
+          lineHeight: '1.4',
+          marginTop: '4px',
+          flex: 1
+        }}>
+          {tile.description || 'Application'}
+        </div>
 
         {/* Icon - Bottom Left */}
         <div style={{ marginTop: 'auto' }}>

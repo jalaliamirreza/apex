@@ -61,13 +61,14 @@ body {
 .tile-card {
   cursor: pointer !important;
   background: white !important;
+  border-radius: 12px !important;
   transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-/* SAP Fiori Horizon hover effect - light gray background + shadow */
+/* SAP Fiori Horizon hover effect - light gray background + subtle shadow */
 .tile-card:hover {
   background-color: #f5f6f7 !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* All elements inside tile show pointer cursor */
@@ -149,4 +150,28 @@ textarea,
 /* Target UI5 elements specifically */
 [ui5-tab], [ui5-card], [ui5-title], [ui5-text], [ui5-label], [ui5-button], [ui5-list-item] {
   font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
+}
+
+/* Section Title - SAP Fiori style (no underline) */
+.section-title,
+[ui5-title].section-title {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #1F2937 !important;
+  border-bottom: none !important;
+  margin-bottom: 1rem !important;
+  text-decoration: none !important;
+}
+
+/* Space tabs - SAP Fiori style with blue underline on active */
+.space-tab {
+  padding: 0.75rem 1rem;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.space-tab.active,
+.space-tab[aria-selected="true"] {
+  color: #0070f2 !important;
+  border-bottom: 3px solid #0070f2 !important;
 }
