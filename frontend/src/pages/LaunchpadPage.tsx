@@ -8,11 +8,13 @@ import {
   Card,
   Icon,
   Text,
-  Popover
+  Popover,
+  IllustratedMessage
 } from '@ui5/webcomponents-react';
 import { launchpadApi } from '../services/api';
 import { Space, Page, Section, Tile } from '../types/launchpad';
 import '@ui5/webcomponents-icons/dist/AllIcons';
+import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js";
 
 function LaunchpadPage() {
   const navigate = useNavigate();
@@ -456,13 +458,11 @@ function LaunchpadPage() {
 
               {/* Tiles Grid or Empty State */}
               {section.tiles.length === 0 ? (
-                <div style={{
-                  padding: '2rem',
-                  color: '#6B7280',
-                  fontStyle: 'italic'
-                }}>
-                  No apps available
-                </div>
+                <IllustratedMessage
+                  name="NoData"
+                  titleText="No apps available"
+                  subtitleText="No applications in this section"
+                />
               ) : (
                 <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
                   {section.tiles.map(tile => (
@@ -477,14 +477,11 @@ function LaunchpadPage() {
             </div>
           ))
         ) : (
-          <div style={{
-            padding: '2rem',
-            color: '#6B7280',
-            fontStyle: 'italic',
-            textAlign: 'center'
-          }}>
-            No apps available
-          </div>
+          <IllustratedMessage
+            name="NoData"
+            titleText="No apps available"
+            subtitleText="No applications on this page"
+          />
         )}
       </div>
     </FlexBox>
