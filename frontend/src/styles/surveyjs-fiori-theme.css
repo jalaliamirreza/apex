@@ -12,13 +12,8 @@
   --success: #107e3e;
   --warning: #e9730c;
 
-  --font-family: var(--font-english);
+  --font-family: 'Vazirmatn', 'Roboto', sans-serif;
   --font-size: 14px;
-}
-
-/* RTL specific font */
-[dir="rtl"] .sd-root-modern {
-  --font-family: var(--font-persian);
 }
 
 /* Input fields - Fiori style */

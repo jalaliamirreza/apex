@@ -66,7 +66,7 @@ export function SurveyFormRenderer({
     <div
       dir={direction}
       style={{
-        fontFamily: direction === 'rtl' ? 'var(--font-persian)' : 'var(--font-english)',
+        fontFamily: 'var(--font-family)',
         background: 'white',
         borderRadius: '8px',
         padding: '1rem'

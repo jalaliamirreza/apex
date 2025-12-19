@@ -110,7 +110,7 @@ function LaunchpadPage() {
   }
 
   return (
-    <FlexBox direction="Column" style={{ height: '100vh' }}>
+    <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
       {/* Shell Bar */}
       <ShellBar
         primaryTitle="APEX Enterprise"

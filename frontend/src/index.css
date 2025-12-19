@@ -2,11 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global Font Stack */
+/* Global Font Stack - Vazirmatn for all languages */
 :root {
-  --font-english: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-persian: 'Vazir', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-family: var(--font-english);
+  --font-family: 'Vazirmatn', 'Roboto', sans-serif;
 
   /* SAP Fiori Colors */
   --primary: #0a6ed1;
@@ -26,26 +24,13 @@ html {
 }
 
 body {
-  font-family: var(--font-english);
+  font-family: var(--font-family);
   font-size: 14px;
   line-height: 1.5;
   color: var(--text-primary);
   background: var(--background);
   margin: 0;
   padding: 0;
-}
-
-/* Persian/RTL Content */
-[dir="rtl"],
-.rtl,
-.persian-text {
-  font-family: var(--font-persian);
-  direction: rtl;
-}
-
-/* Mixed content - detect Persian characters */
-.mixed-text {
-  font-family: var(--font-persian);
 }
 
 /* Tile hover effect for Launchpad */
