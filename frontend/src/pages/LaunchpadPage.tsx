@@ -588,14 +588,14 @@ function TileCard({ tile, onClick }: TileCardProps) {
           padding: '0 16px 16px 16px',
           height: '48px',
           display: 'flex',
-          alignItems: 'flex-end'
+          alignItems: 'flex-start'
         }}
       >
         <Icon
           name={tile.icon || 'document'}
           style={{
-            fontSize: '24px',
-            color: '#0064d9'
+            fontSize: '32px',
+            color: '#6a6d70'
           }}
         />
       </div>
