@@ -59,7 +59,16 @@ body {
 
 /* Tile styling - NO hover effect */
 .tile-card {
-  cursor: pointer;
+  cursor: pointer !important;
+}
+
+/* All elements inside tile show pointer cursor */
+.tile-card *,
+.tile-card [ui5-text],
+.tile-card [ui5-icon],
+.tile-card span,
+.tile-card div {
+  cursor: pointer !important;
 }
 
 /* Remove all text decorations and borders */
