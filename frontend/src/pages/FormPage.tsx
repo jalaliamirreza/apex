@@ -5,6 +5,7 @@ import {
   Title,
   Text,
   Label,
+  Tag,
   Button,
   BusyIndicator,
   MessageStrip
@@ -34,7 +35,7 @@ function FormPage() {
       const data = await formsApi.get(slug!);
       setForm(data);
     } catch (err) {
-      setError('فرم یافت نشد');
+      setError('Failed to load form');
     } finally {
       setLoading(false);
     }
@@ -46,7 +47,7 @@ function FormPage() {
       await formsApi.submit(slug!, data);
       setSubmitted(true);
     } catch (err) {
-      setError('خطا در ثبت فرم');
+      setError('Failed to submit form');
     } finally {
       setSubmitting(false);
     }
@@ -63,8 +64,8 @@ function FormPage() {
   if (error || !form) {
     return (
       <FlexBox direction="Column" style={{ padding: '1rem', gap: '1rem' }}>
-        <MessageStrip design="Negative">{error || 'فرم یافت نشد'}</MessageStrip>
-        <Button icon="nav-back" onClick={() => navigate('/forms')}>بازگشت</Button>
+        <MessageStrip design="Negative">{error || 'Form not found'}</MessageStrip>
+        <Button icon="nav-back" onClick={() => navigate('/forms')}>Back to Forms</Button>
       </FlexBox>
     );
   }
@@ -78,14 +79,14 @@ function FormPage() {
         style={{ height: '300px', gap: '1rem' }}
       >
         <MessageStrip design="Positive" hideCloseButton>
-          فرم با موفقیت ثبت شد!
+          Form submitted successfully!
         </MessageStrip>
         <FlexBox style={{ gap: '0.5rem' }}>
           <Button design="Emphasized" onClick={() => navigate('/forms')}>
-            بازگشت به فرم‌ها
+            Back to Forms
           </Button>
           <Button design="Transparent" onClick={() => setSubmitted(false)}>
-            ثبت مجدد
+            Submit Another
           </Button>
         </FlexBox>
       </FlexBox>
@@ -99,7 +100,7 @@ function FormPage() {
 
   return (
     <FlexBox direction="Column" style={{ gap: '1rem', padding: '1rem' }}>
-      {/* Header */}
+      {/* Header - Always LTR */}
       <FlexBox justifyContent="SpaceBetween" alignItems="Center">
         <FlexBox alignItems="Center" style={{ gap: '1rem' }}>
           <Button icon="nav-back" design="Transparent" onClick={() => navigate('/forms')} />
@@ -107,6 +108,9 @@ function FormPage() {
             <Title level="H2">{form.name}</Title>
             <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
               <Text>{form.description || ''}</Text>
+              <Tag colorScheme={form.direction === 'rtl' ? '6' : '8'}>
+                {form.direction === 'rtl' ? 'فارسی' : 'English'}
+              </Tag>
               <Label>{form.status}</Label>
             </FlexBox>
           </FlexBox>
@@ -116,16 +120,17 @@ function FormPage() {
           design="Transparent"
           onClick={() => navigate(`/forms/${slug}/submissions`)}
         >
-          مشاهده ثبت‌ها
+          View Submissions
         </Button>
       </FlexBox>
 
-      {/* Form */}
+      {/* Form Content - Respects form direction */}
       <SurveyFormRenderer
         schema={surveySchema}
         onSubmit={handleSubmit}
         onCancel={() => navigate('/forms')}
         loading={submitting}
+        direction={form.direction || 'ltr'}
       />
     </FlexBox>
   );

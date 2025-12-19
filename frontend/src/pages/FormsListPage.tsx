@@ -72,6 +72,7 @@ function FormsListPage() {
               title={form.name}
               subtitle={form.description || 'No description'}
               icon="document"
+              direction={form.direction || 'ltr'}
               onClick={() => navigate(`/forms/${form.slug}`)}
             />
           ))}

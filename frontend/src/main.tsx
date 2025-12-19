@@ -6,9 +6,9 @@ import '@ui5/webcomponents-react/dist/Assets.js';
 import App from './App';
 import './index.css';
 
-// Set RTL direction for Persian/Arabic support
-document.documentElement.dir = 'rtl';
-document.documentElement.lang = 'fa';
+// LTR by default - individual forms control their own direction
+document.documentElement.dir = 'ltr';
+document.documentElement.lang = 'en';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

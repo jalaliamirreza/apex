@@ -12,8 +12,13 @@
   --success: #107e3e;
   --warning: #e9730c;
 
-  --font-family: "72", "72full", Arial, Helvetica, sans-serif;
+  --font-family: var(--font-english);
   --font-size: 14px;
+}
+
+/* RTL specific font */
+[dir="rtl"] .sd-root-modern {
+  --font-family: var(--font-persian);
 }
 
 /* Input fields - Fiori style */
@@ -117,13 +122,22 @@
   margin-top: 0.25rem;
 }
 
-/* RTL specific */
+/* RTL specific alignment */
 [dir="rtl"] .sd-question__title {
   text-align: right;
 }
 
 [dir="rtl"] .sd-input {
   text-align: right;
+}
+
+/* LTR specific alignment */
+[dir="ltr"] .sd-question__title {
+  text-align: left;
+}
+
+[dir="ltr"] .sd-input {
+  text-align: left;
 }
 
 /* Date picker */

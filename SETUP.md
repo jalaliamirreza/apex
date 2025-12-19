@@ -259,6 +259,101 @@ See **PHASE8-STEP1-SURVEYJS.md** for full implementation details.
 
 ---
 
+## Enterprise Fonts & Bidirectional Text (Phase 8 Step 2)
+
+### Objective
+Implement professional typography and smart RTL/LTR direction support for multilingual forms.
+
+### Typography Stack
+- **English Forms**: Inter font family (Google Fonts CDN)
+- **Persian Forms**: Vazir font family (optimized for Persian/Farsi)
+- **Auto-Detection**: Backend automatically detects direction from form content
+
+### Fonts Loaded
+```html
+<!-- Inter (English) - 300, 400, 500, 600, 700 weights -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Vazir (Persian) - v30.1.0 -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+```
+
+### CSS Custom Properties
+```css
+:root {
+  --font-english: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-persian: 'Vazir', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+```
+
+### Direction Detection Logic
+The backend auto-detects text direction based on Unicode ranges:
+- **Persian/Arabic**: `\u0600-\u06FF`, `\u0750-\u077F`, `\uFB50-\uFDFF`, `\uFE70-\uFEFF`
+- **Analyzes**: Form name, description, and field labels
+- **Default**: LTR (English) for forms without Persian/Arabic characters
+
+### Database Changes
+```sql
+-- New column added to forms table
+ALTER TABLE forms
+ADD COLUMN direction VARCHAR(3) DEFAULT 'ltr';
+
+-- Constraint ensures only 'ltr' or 'rtl' values
+ALTER TABLE forms
+ADD CONSTRAINT direction_check CHECK (direction IN ('ltr', 'rtl'));
+```
+
+### Frontend Features
+- ✅ **LTR by Default**: Application uses left-to-right layout
+- ✅ **Per-Form Direction**: Each form can have its own direction
+- ✅ **Visual Tags**: Forms show 'فارسی' (Persian) or 'English' tags
+- ✅ **Font Switching**: Automatic font family change based on direction
+- ✅ **SurveyJS Locale**: Switches between 'fa' and 'en' locales
+- ✅ **Bidirectional CSS**: Theme supports both LTR and RTL layouts
+
+### Files Modified
+**Frontend (9 files):**
+- `frontend/index.html` - Added Google Fonts imports
+- `frontend/src/index.css` - Font variables and bidirectional styles
+- `frontend/src/main.tsx` - Changed to LTR default
+- `frontend/src/styles/surveyjs-fiori-theme.css` - Bidirectional support
+- `frontend/src/components/SurveyFormRenderer.tsx` - Direction prop
+- `frontend/src/types/index.ts` - Added direction field
+- `frontend/src/pages/FormPage.tsx` - Direction tag display
+- `frontend/src/components/FioriTile.tsx` - Direction tag on tiles
+- `frontend/src/pages/FormsListPage.tsx` - Pass direction to tiles
+
+**Backend (3 files):**
+- `backend/src/models/form.model.ts` - Added direction field to Form interface
+- `backend/src/services/form.service.ts` - Direction detection function
+- `backend/init.sql` - Added direction column
+
+**Migration:**
+- `backend/migrations/001_add_direction_column.sql` - Migration for existing databases
+
+### Usage Example
+```typescript
+// Creating a form automatically detects direction
+const form = {
+  name: "فرم ثبت‌نام کاربر",  // Persian text
+  description: "لطفا اطلاعات خود را وارد کنید",
+  fields: [...]
+};
+// → direction: 'rtl' (auto-detected)
+
+// English form
+const form = {
+  name: "User Registration Form",
+  description: "Please enter your information",
+  fields: [...]
+};
+// → direction: 'ltr' (auto-detected)
+```
+
+See **PHASE8-STEP2-FONTS-DIRECTION.md** for full implementation details.
+
+---
+
 ## Troubleshooting
 
 ### Docker not connecting
@@ -291,5 +386,5 @@ docker compose logs -f frontend
 
 ---
 
-**Last Updated:** 2025-12-17
-**Status:** Phase 6 (Frontend Redesign) COMPLETED - All features implemented
+**Last Updated:** 2025-12-19
+**Status:** Phase 8 Step 2 (Enterprise Fonts & Bidirectional Text) COMPLETED

@@ -26,6 +26,7 @@ export interface Form {
   description?: string;
   schema: FormSchema;
   status: 'active' | 'archived';
+  direction: 'ltr' | 'rtl';
   createdBy?: string;
   createdAt: Date;
   updatedAt: Date;

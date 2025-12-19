@@ -5,6 +5,7 @@ export interface Form {
   description?: string;
   schema: { components: any[] };
   status: string;
+  direction: 'ltr' | 'rtl';
   createdAt: string;
   updatedAt: string;
 }

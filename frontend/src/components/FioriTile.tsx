@@ -1,13 +1,14 @@
-import { Icon } from '@ui5/webcomponents-react';
+import { Icon, Tag } from '@ui5/webcomponents-react';
 
 interface FioriTileProps {
   title: string;
   subtitle?: string;
   icon: string;
   onClick: () => void;
+  direction?: 'ltr' | 'rtl';
 }
 
-function FioriTile({ title, subtitle, icon, onClick }: FioriTileProps) {
+function FioriTile({ title, subtitle, icon, onClick, direction }: FioriTileProps) {
   return (
     <div
       onClick={onClick}
@@ -46,6 +47,13 @@ function FioriTile({ title, subtitle, icon, onClick }: FioriTileProps) {
         >
           {title}
         </div>
+        {direction && (
+          <div style={{ marginBottom: '0.25rem' }}>
+            <Tag colorScheme={direction === 'rtl' ? '6' : '8'} style={{ fontSize: '10px' }}>
+              {direction === 'rtl' ? 'فارسی' : 'EN'}
+            </Tag>
+          </div>
+        )}
         {subtitle && (
           <div
             style={{

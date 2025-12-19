@@ -19,8 +19,6 @@ surveyLocalization.locales['fa'] = {
   emptyMessage: 'داده‌ای موجود نیست',
 };
 
-surveyLocalization.currentLocale = 'fa';
-
 interface SurveyFormRendererProps {
   schema: any;
   onSubmit: (data: Record<string, any>) => void;
@@ -28,6 +26,7 @@ interface SurveyFormRendererProps {
   loading?: boolean;
   readOnly?: boolean;
   initialData?: Record<string, any>;
+  direction?: 'ltr' | 'rtl';  // NEW: Direction prop
 }
 
 export function SurveyFormRenderer({
@@ -37,11 +36,12 @@ export function SurveyFormRenderer({
   loading,
   readOnly,
   initialData,
+  direction = 'ltr',  // Default LTR
 }: SurveyFormRendererProps) {
   const survey = new Model(schema);
 
-  // Set RTL
-  survey.locale = 'fa';
+  // Set locale based on direction
+  survey.locale = direction === 'rtl' ? 'fa' : 'en';
 
   // Apply initial data if provided
   if (initialData) {
@@ -63,10 +63,18 @@ export function SurveyFormRenderer({
   survey.onComplete.add(handleComplete);
 
   return (
-    <div dir="rtl" style={{ background: 'white', borderRadius: '8px', padding: '1rem' }}>
+    <div
+      dir={direction}
+      style={{
+        fontFamily: direction === 'rtl' ? 'var(--font-persian)' : 'var(--font-english)',
+        background: 'white',
+        borderRadius: '8px',
+        padding: '1rem'
+      }}
+    >
       <Survey model={survey} />
       {onCancel && (
-        <div style={{ marginTop: '1rem', textAlign: 'left' }}>
+        <div style={{ marginTop: '1rem', textAlign: direction === 'rtl' ? 'right' : 'left' }}>
           <button
             onClick={onCancel}
             style={{
@@ -77,7 +85,7 @@ export function SurveyFormRenderer({
               cursor: 'pointer',
             }}
           >
-            انصراف
+            {direction === 'rtl' ? 'انصراف' : 'Cancel'}
           </button>
         </div>
       )}
