@@ -57,9 +57,15 @@ body {
   padding: 0;
 }
 
-/* Tile styling - NO hover effect */
+/* Tile styling with shadow hover effect */
 .tile-card {
   cursor: pointer !important;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Hover effect - only shadow change */
+.tile-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* All elements inside tile show pointer cursor */
