@@ -200,52 +200,62 @@ See **FRONTEND-REDESIGN.md** and **FIORI-POLISH.md** for full specs.
 
 ---
 
-## Native SAP UI5 Form Renderer
+## SurveyJS Form Renderer (Phase 8)
 
 ### Objective
-Replace Formio.js renderer with native SAP UI5 components for professional form styling.
+Replace Form.io and custom renderers with SurveyJS for better RTL/Persian support and enterprise features.
 
-### Problem Solved
-- ❌ Formio.js had no input borders, looked unprofessional
-- ❌ Dropdowns always expanded, poor UX
-- ❌ Inconsistent styling with rest of app
-- ✅ Now uses native UI5 Input, Select, DatePicker, CheckBox components
-- ✅ Professional Fiori styling throughout
-- ✅ Validation states with red error messages
-- ✅ Responsive grid layout
+### Why SurveyJS
+- ✅ **Native RTL Support**: Built-in right-to-left layout for Persian/Arabic
+- ✅ **Enterprise Ready**: MIT license, free for commercial use
+- ✅ **Easy Theming**: Custom SAP Fiori theme via CSS
+- ✅ **Better React Integration**: Official React wrapper
+- ✅ **Rich Features**: Validation, conditional logic, multi-page forms
+- ✅ **Mature Library**: Well-documented, actively maintained
 
-### New Components
-- **FioriFormRenderer** (`frontend/src/components/FioriFormRenderer.tsx`)
-  - Native UI5 form fields (Input, TextArea, Select, DatePicker, CheckBox)
-  - Client-side validation with error states
-  - Submit/Cancel buttons
-  - Loading states during submission
-  - Responsive 2-column grid layout
+### Components Implemented
+- **SurveyFormRenderer** (`frontend/src/components/SurveyFormRenderer.tsx`)
+  - SurveyJS Model wrapper with Persian locale
+  - RTL direction support
+  - Custom Fiori theme integration
+  - Submit/Cancel handlers
+  - Read-only mode support
+
+- **Fiori Theme** (`frontend/src/styles/surveyjs-fiori-theme.css`)
+  - SAP Fiori color palette (#0a6ed1 primary)
+  - Bordered inputs with focus states
+  - Proper dropdown styling
+  - Error states with red borders
+  - RTL-specific overrides
 
 - **Schema Converter** (`frontend/src/utils/schemaConverter.ts`)
-  - Converts Formio schema format to simplified format
-  - Maps field types (textfield→text, datetime→date, etc.)
-  - Preserves validation rules and options
+  - Converts Formio schema to SurveyJS format
+  - Maps field types (textfield→text, select→dropdown, etc.)
+  - Preserves validation rules
+  - Persian error messages
 
-### Benefits
-- **Smaller Bundle**: 1.26MB (down from 3.27MB) - 61% reduction
-- **Consistent UI**: Matches SAP Fiori design system
-- **Better UX**: Proper borders, collapsed dropdowns, calendar pickers
-- **Type Safe**: Full TypeScript support
-- **Maintainable**: Simple schema format, easy to extend
+### Key Features
+- **RTL/Persian**: Full right-to-left layout, Persian translations
+- **SAP Fiori Styling**: Custom theme matching Fiori design system
+- **Form Types**: text, textarea, number, email, date, dropdown, boolean, file
+- **Validation**: Required fields, regex patterns, min/max length
+- **Multi-page**: Wizard-style forms with progress bar
+- **Responsive**: Mobile-friendly layouts
 
-### Form Field Types Supported
-| Type | UI5 Component | Features |
-|------|---------------|----------|
-| text | Input | Placeholder, validation |
-| email | Input type="Email" | Email validation |
-| number | Input type="Number" | Number input |
-| textarea | TextArea | Multi-line input |
-| date | DatePicker | Calendar picker |
-| select | Select + Option | Dropdown with options |
-| checkbox | CheckBox | Boolean input |
+### Bundle Size
+- **Current**: 2.37MB (includes SurveyJS core + React UI)
+- **Previous**: 3.27MB (with Formio.js)
+- **Reduction**: 28% smaller than Formio
 
-See **FORM-RENDERER-SPEC.md** for full implementation details.
+### Persian Translations
+Complete Persian UI:
+- Submit button: "ثبت"
+- Previous/Next: "قبلی" / "بعدی"
+- Required error: "این فیلد الزامی است"
+- File upload: "انتخاب فایل"
+- Cancel: "انصراف"
+
+See **PHASE8-STEP1-SURVEYJS.md** for full implementation details.
 
 ---
 

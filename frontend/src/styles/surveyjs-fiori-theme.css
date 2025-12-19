@@ -1,0 +1,159 @@
+/* SurveyJS SAP Fiori Theme */
+.sd-root-modern {
+  --primary: #0a6ed1;
+  --primary-light: rgba(10, 110, 209, 0.1);
+  --background: #ffffff;
+  --background-dim: #f7f7f7;
+  --foreground: #32363a;
+  --foreground-light: #6a6d70;
+  --border: #e5e5e5;
+  --border-light: #ededed;
+  --error: #bb0000;
+  --success: #107e3e;
+  --warning: #e9730c;
+
+  --font-family: "72", "72full", Arial, Helvetica, sans-serif;
+  --font-size: 14px;
+}
+
+/* Input fields - Fiori style */
+.sd-input {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: var(--font-size);
+  font-family: var(--font-family);
+  transition: border-color 0.2s;
+}
+
+.sd-input:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.sd-input:hover {
+  border-color: var(--primary);
+}
+
+/* Labels */
+.sd-question__title {
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.sd-question__required-text {
+  color: var(--error);
+}
+
+/* Panels/Sections */
+.sd-panel {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sd-panel__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Dropdown/Select */
+.sd-dropdown {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  background: var(--background);
+  cursor: pointer;
+}
+
+.sd-dropdown:hover {
+  border-color: var(--primary);
+}
+
+/* Buttons */
+.sd-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sd-btn--action {
+  background: var(--primary);
+  color: white;
+  border: none;
+}
+
+.sd-btn--action:hover {
+  background: #085cad;
+}
+
+.sd-navigation__complete-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* Error state */
+.sd-question--error .sd-input {
+  border-color: var(--error);
+}
+
+.sd-question__erbox {
+  color: var(--error);
+  font-size: 12px;
+  margin-top: 0.25rem;
+}
+
+/* RTL specific */
+[dir="rtl"] .sd-question__title {
+  text-align: right;
+}
+
+[dir="rtl"] .sd-input {
+  text-align: right;
+}
+
+/* Date picker */
+.sd-input[type="date"] {
+  padding: 0.5rem 0.75rem;
+}
+
+/* Checkbox & Radio */
+.sd-selectbase__item {
+  padding: 0.25rem 0;
+}
+
+.sd-item__control-label {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] .sd-item__control-label {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Page/Wizard navigation */
+.sd-progress {
+  background: var(--background-dim);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.sd-progress__bar {
+  background: var(--primary);
+  border-radius: 4px;
+}

@@ -11,8 +11,8 @@ import {
 } from '@ui5/webcomponents-react';
 import "@ui5/webcomponents-icons/dist/response.js";
 import "@ui5/webcomponents-icons/dist/nav-back.js";
-import { FioriFormRenderer } from '../components/FioriFormRenderer';
-import { convertFormioSchema } from '../utils/schemaConverter';
+import { SurveyFormRenderer } from '../components/SurveyFormRenderer';
+import { convertFormioToSurveyJS } from '../utils/schemaConverter';
 import { formsApi } from '../services/api';
 import { Form } from '../types';
 
@@ -34,7 +34,7 @@ function FormPage() {
       const data = await formsApi.get(slug!);
       setForm(data);
     } catch (err) {
-      setError('Failed to load form');
+      setError('فرم یافت نشد');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ function FormPage() {
       await formsApi.submit(slug!, data);
       setSubmitted(true);
     } catch (err) {
-      setError('Failed to submit form');
+      setError('خطا در ثبت فرم');
     } finally {
       setSubmitting(false);
     }
@@ -63,8 +63,8 @@ function FormPage() {
   if (error || !form) {
     return (
       <FlexBox direction="Column" style={{ padding: '1rem', gap: '1rem' }}>
-        <MessageStrip design="Negative">{error || 'Form not found'}</MessageStrip>
-        <Button icon="nav-back" onClick={() => navigate('/forms')}>Back to Forms</Button>
+        <MessageStrip design="Negative">{error || 'فرم یافت نشد'}</MessageStrip>
+        <Button icon="nav-back" onClick={() => navigate('/forms')}>بازگشت</Button>
       </FlexBox>
     );
   }
@@ -78,22 +78,24 @@ function FormPage() {
         style={{ height: '300px', gap: '1rem' }}
       >
         <MessageStrip design="Positive" hideCloseButton>
-          Form submitted successfully!
+          فرم با موفقیت ثبت شد!
         </MessageStrip>
         <FlexBox style={{ gap: '0.5rem' }}>
           <Button design="Emphasized" onClick={() => navigate('/forms')}>
-            Back to Forms
+            بازگشت به فرم‌ها
           </Button>
           <Button design="Transparent" onClick={() => setSubmitted(false)}>
-            Submit Another
+            ثبت مجدد
           </Button>
         </FlexBox>
       </FlexBox>
     );
   }
 
-  // Convert Formio schema to simple schema
-  const simpleSchema = convertFormioSchema(form.schema);
+  // Convert Formio schema to SurveyJS
+  const surveySchema = convertFormioToSurveyJS(form.schema);
+  surveySchema.title = form.name;
+  surveySchema.description = form.description;
 
   return (
     <FlexBox direction="Column" style={{ gap: '1rem', padding: '1rem' }}>
@@ -104,7 +106,7 @@ function FormPage() {
           <FlexBox direction="Column">
             <Title level="H2">{form.name}</Title>
             <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
-              <Text>{form.description || 'No description'}</Text>
+              <Text>{form.description || ''}</Text>
               <Label>{form.status}</Label>
             </FlexBox>
           </FlexBox>
@@ -114,13 +116,13 @@ function FormPage() {
           design="Transparent"
           onClick={() => navigate(`/forms/${slug}/submissions`)}
         >
-          View Submissions
+          مشاهده ثبت‌ها
         </Button>
       </FlexBox>
 
       {/* Form */}
-      <FioriFormRenderer
-        schema={simpleSchema}
+      <SurveyFormRenderer
+        schema={surveySchema}
         onSubmit={handleSubmit}
         onCancel={() => navigate('/forms')}
         loading={submitting}

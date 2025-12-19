@@ -6,6 +6,10 @@ import '@ui5/webcomponents-react/dist/Assets.js';
 import App from './App';
 import './index.css';
 
+// Set RTL direction for Persian/Arabic support
+document.documentElement.dir = 'rtl';
+document.documentElement.lang = 'fa';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
