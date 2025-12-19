@@ -47,3 +47,10 @@ body {
 .mixed-text {
   font-family: var(--font-persian);
 }
+
+/* Tile hover effect for Launchpad */
+.tile-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #0a6ed1 !important;
+}

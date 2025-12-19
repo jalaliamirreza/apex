@@ -354,6 +354,127 @@ See **PHASE8-STEP2-FONTS-DIRECTION.md** for full implementation details.
 
 ---
 
+## SAP Fiori Launchpad (Phase 9)
+
+### Objective
+Implement SAP Fiori 3 style Launchpad with Spaces, Pages, Sections, and Tiles for the User Portal.
+
+### Architecture
+The launchpad uses a hierarchical structure:
+- **Spaces** → Top-level tabs (Finance, HR, IT, etc.)
+- **Pages** → Dropdown under each space (Loans, Leaves, etc.)
+- **Sections** → Groups of tiles on a page (Personal Loans, etc.)
+- **Tiles** → Individual forms displayed as cards
+
+### Database Schema
+```sql
+-- Spaces (Top level navigation tabs)
+CREATE TABLE spaces (
+  id UUID PRIMARY KEY,
+  name VARCHAR(255),           -- "مالی و اعتبارات"
+  name_en VARCHAR(255),         -- "Finance & Credit"
+  icon VARCHAR(50),             -- SAP UI5 icon name
+  color VARCHAR(20),
+  order_index INT,
+  direction VARCHAR(3),
+  is_active BOOLEAN
+);
+
+-- Pages (Under each space)
+CREATE TABLE pages (
+  id UUID PRIMARY KEY,
+  space_id UUID REFERENCES spaces(id),
+  name VARCHAR(255),
+  icon VARCHAR(50),
+  order_index INT,
+  is_default BOOLEAN,
+  is_active BOOLEAN
+);
+
+-- Sections (Groups of tiles on a page)
+CREATE TABLE sections (
+  id UUID PRIMARY KEY,
+  page_id UUID REFERENCES pages(id),
+  name VARCHAR(255),
+  order_index INT,
+  is_active BOOLEAN
+);
+
+-- Forms linked to sections
+ALTER TABLE forms
+  ADD COLUMN section_id UUID REFERENCES sections(id),
+  ADD COLUMN icon VARCHAR(50),
+  ADD COLUMN color VARCHAR(20),
+  ADD COLUMN order_index INT;
+```
+
+### Sample Spaces
+1. **مالی و اعتبارات** (Finance & Credit)
+   - وام‌ها (Loans)
+   - اعتبارات (Credits)
+
+2. **منابع انسانی** (Human Resources)
+   - مرخصی‌ها (Leaves)
+   - اطلاعات پرسنلی (Personnel Info)
+
+3. **فناوری اطلاعات** (Information Technology)
+   - درخواست‌های IT (IT Requests)
+
+4. **درخواست‌های من** (My Requests)
+   - همه درخواست‌ها (All Requests)
+   - در انتظار تایید (Pending)
+   - تایید شده (Approved)
+
+### Backend API
+**GET /api/v1/launchpad/spaces** - Get all spaces with pages
+**GET /api/v1/launchpad/pages/:pageId** - Get page content with sections and tiles
+**GET /api/v1/launchpad/spaces/:spaceId/default-page** - Get default page ID
+
+### Frontend Features
+- ✅ **Space Tabs**: Top-level navigation tabs
+- ✅ **Page Dropdown**: Multiple pages per space
+- ✅ **Section Groups**: Organized tile groups
+- ✅ **Tile Cards**: 160x160px cards with icons
+- ✅ **Hover Effects**: Elevation and border highlight
+- ✅ **RTL Support**: Proper direction for Persian content
+- ✅ **Navigation**: Click tile → opens form
+- ✅ **ShellBar**: APEX branding with notifications
+
+### Files Created/Modified
+**Backend (6 files):**
+- `backend/migrations/002_add_launchpad_schema.sql` - Database schema
+- `backend/src/models/launchpad.model.ts` - TypeScript models
+- `backend/src/services/launchpad.service.ts` - Business logic
+- `backend/src/routes/launchpad.routes.ts` - API routes
+- `backend/src/routes/index.ts` - Routes registration
+
+**Frontend (5 files):**
+- `frontend/src/types/launchpad.ts` - TypeScript types
+- `frontend/src/services/api.ts` - API client
+- `frontend/src/pages/LaunchpadPage.tsx` - Main launchpad component
+- `frontend/src/index.css` - Tile hover styles
+- `frontend/src/App.tsx` - Router configuration
+
+### Routing
+- `/` → Redirects to `/launchpad`
+- `/launchpad` → Shows first space
+- `/launchpad/:spaceId/:pageId` → Shows specific page
+- `/forms/:slug` → Opens form
+- `/forms` → Redirects to `/launchpad`
+
+### Usage
+```bash
+# Access launchpad
+http://localhost:3000
+
+# Direct to specific page
+http://localhost:3000/launchpad/11111111-1111-1111-1111-111111111111/aaaa1111-1111-1111-1111-111111111111
+```
+
+See **PHASE9-USER-PORTAL-LAUNCHPAD.md** for full implementation details.
+
+---
+
 ## Troubleshooting
 
 ### Docker not connecting
@@ -387,4 +508,4 @@ docker compose logs -f frontend
 ---
 
 **Last Updated:** 2025-12-19
-**Status:** Phase 8 Step 2 (Enterprise Fonts & Bidirectional Text) COMPLETED
+**Status:** Phase 9 (SAP Fiori Launchpad) COMPLETED

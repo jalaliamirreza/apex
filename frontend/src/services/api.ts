@@ -42,4 +42,21 @@ export const searchApi = {
   search: (query: string) => search(query)
 };
 
+export const launchpadApi = {
+  getSpaces: async () => {
+    const { data } = await api.get('/launchpad/spaces');
+    return data;
+  },
+
+  getPageContent: async (pageId: string) => {
+    const { data } = await api.get(`/launchpad/pages/${pageId}`);
+    return data;
+  },
+
+  getDefaultPage: async (spaceId: string) => {
+    const { data } = await api.get(`/launchpad/spaces/${spaceId}/default-page`);
+    return data;
+  }
+};
+
 export default api;
