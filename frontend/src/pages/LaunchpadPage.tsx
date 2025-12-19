@@ -79,17 +79,18 @@ function LaunchpadPage() {
     }
   };
 
-  const handleSpaceClick = (space: Space, e: React.MouseEvent) => {
+  const handleSpaceNameClick = (space: Space, e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // If space has only 1 page, navigate directly
-    if (space.pages.length === 1) {
-      const page = space.pages[0];
-      navigate(`/launchpad/${space.id}/${page.id}`);
-      return;
-    }
+    // Navigate to default page of the space
+    const defaultPage = space.pages.find(p => p.isDefault) || space.pages[0];
+    navigate(`/launchpad/${space.id}/${defaultPage.id}`);
+  };
 
-    // If space has multiple pages, toggle dropdown
+  const handleArrowClick = (space: Space, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // Toggle dropdown
     if (openSpaceDropdown === space.id) {
       setOpenSpaceDropdown(null);
     } else {
@@ -139,10 +140,8 @@ function LaunchpadPage() {
           <div key={space.id} style={{ position: 'relative' }}>
             <div
               ref={el => spaceDropdownRefs.current[space.id] = el}
-              onClick={(e) => handleSpaceClick(space, e)}
               style={{
                 padding: '1rem 1.5rem',
-                cursor: 'pointer',
                 borderBottom: activeSpace?.id === space.id ? '3px solid #0a6ed1' : '3px solid transparent',
                 background: activeSpace?.id === space.id ? '#f7f7f7' : 'transparent',
                 display: 'flex',
@@ -163,13 +162,35 @@ function LaunchpadPage() {
                 }
               }}
             >
-              <Icon name={space.icon} style={{ fontSize: '1rem' }} />
-              <span>{space.name}</span>
+              {/* Space Name - Click to navigate to default page */}
+              <div
+                onClick={(e) => handleSpaceNameClick(space, e)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  cursor: 'pointer'
+                }}
+              >
+                <Icon name={space.icon} style={{ fontSize: '1rem' }} />
+                <span>{space.name}</span>
+              </div>
+
+              {/* Arrow Dropdown - Click to open page list */}
               {space.pages.length > 1 && (
-                <>
-                  <span style={{ color: '#6a6d70', margin: '0 0.25rem' }}>|</span>
+                <div
+                  onClick={(e) => handleArrowClick(space, e)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                    cursor: 'pointer',
+                    padding: '0.25rem'
+                  }}
+                >
+                  <span style={{ color: '#6a6d70' }}>|</span>
                   <Icon name="navigation-down-arrow" style={{ fontSize: '0.875rem', color: '#0a6ed1' }} />
-                </>
+                </div>
               )}
             </div>
 
