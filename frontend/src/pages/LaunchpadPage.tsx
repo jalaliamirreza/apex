@@ -527,9 +527,8 @@ function TileCard({ tile, onClick }: TileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Card
+    <div
       onClick={onClick}
-      className="tile-card"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
@@ -537,23 +536,20 @@ function TileCard({ tile, onClick }: TileCardProps) {
         height: '176px',
         cursor: 'pointer',
         borderRadius: '16px',
-        border: 'none',
         boxShadow: isHovered
-          ? '0 4px 12px rgba(0,0,0,0.12)'
-          : '0 0 0 1px rgba(0,0,0,0.06)',
-        background: isHovered ? '#f5f6f7' : '#ffffff',
+          ? '0 4px 12px rgba(0,0,0,0.15)'
+          : '0 1px 4px rgba(0,0,0,0.08)',
+        background: isHovered ? '#f0f0f0' : '#ffffff',
         overflow: 'hidden',
-        transition: 'background-color 0.15s ease, box-shadow 0.15s ease'
+        transition: 'all 0.2s ease',
+        position: 'relative'
       }}
     >
       {/* ===== CONTENT AREA (Top) ===== */}
       <div
         style={{
-          padding: '16px 16px 8px 16px',
-          height: 'calc(100% - 48px)',
-          display: 'flex',
-          flexDirection: 'column',
-          textAlign: 'left'
+          padding: '16px',
+          paddingBottom: '56px'
         }}
       >
         {/* Title */}
@@ -562,8 +558,8 @@ function TileCard({ tile, onClick }: TileCardProps) {
             fontWeight: 600,
             fontSize: '14px',
             color: '#1d2d3e',
-            marginBottom: '4px',
-            lineHeight: '1.3',
+            marginBottom: '6px',
+            lineHeight: '1.4',
             overflow: 'hidden',
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -577,7 +573,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
         <div
           style={{
             color: '#6a6d70',
-            fontSize: '13px',
+            fontSize: '12px',
             lineHeight: '1.4',
             overflow: 'hidden',
             display: '-webkit-box',
@@ -585,28 +581,27 @@ function TileCard({ tile, onClick }: TileCardProps) {
             WebkitBoxOrient: 'vertical'
           } as React.CSSProperties}
         >
-          {tile.description || 'Application'}
+          {tile.description || ''}
         </div>
       </div>
 
-      {/* ===== ICON AREA (Bottom/Footer) ===== */}
+      {/* ===== ICON (Absolute positioned at bottom-left) ===== */}
       <div
         style={{
-          padding: '0 16px 16px 16px',
-          height: '48px',
-          display: 'flex',
-          alignItems: 'flex-start'
+          position: 'absolute',
+          bottom: '16px',
+          left: '16px'
         }}
       >
         <Icon
           name={tile.icon || 'document'}
           style={{
-            fontSize: '32px',
+            fontSize: '2rem',
             color: '#6a6d70'
           }}
         />
       </div>
-    </Card>
+    </div>
   );
 }
 
