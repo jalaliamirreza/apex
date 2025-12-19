@@ -544,7 +544,8 @@ function TileCard({ tile, onClick }: TileCardProps) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        textAlign: 'left'
+        textAlign: 'left',
+        position: 'relative'
       }}>
         {/* Title - Top Left */}
         <div style={{
@@ -560,14 +561,17 @@ function TileCard({ tile, onClick }: TileCardProps) {
           color: '#6a6d70',
           fontSize: '13px',
           lineHeight: '1.4',
-          marginTop: '4px',
-          flex: 1
+          marginTop: '4px'
         }}>
           {tile.description || 'Application'}
         </div>
 
-        {/* Icon - Bottom Left */}
-        <div style={{ marginTop: 'auto' }}>
+        {/* Icon - Bottom Left - Fixed Position */}
+        <div style={{
+          position: 'absolute',
+          bottom: '1rem',
+          left: '1rem'
+        }}>
           <Icon
             name={tile.icon || 'document'}
             style={{
