@@ -46,16 +46,31 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Force remove border from tile cards */
+/* Force remove border from tile cards - target all possible elements */
 .tile-card,
-.tile-card::part(root) {
+.tile-card *,
+.tile-card::before,
+.tile-card::after,
+.tile-card::part(root),
+.tile-card::part(*) {
   border: none !important;
   outline: none !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Target UI5 Card element directly */
+/* Hover state shadow override */
+.tile-card:hover,
+.tile-card:hover * {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Target UI5 Card element directly with all variations */
 ui5-card.tile-card,
-[ui5-card].tile-card {
+ui5-card.tile-card *,
+ui5-card.tile-card::before,
+ui5-card.tile-card::after,
+[ui5-card].tile-card,
+[ui5-card].tile-card * {
   border: none !important;
   outline: none !important;
 }
