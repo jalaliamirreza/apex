@@ -555,9 +555,9 @@ function TileCard({ tile, onClick }: TileCardProps) {
           {tile.name}
         </div>
 
-        {/* Subtitle - Below Title - SAP Blue */}
+        {/* Subtitle - Below Title - SAP Gray */}
         <div style={{
-          color: '#0070f2',
+          color: '#6a6d70',
           fontSize: '13px',
           lineHeight: '1.4',
           marginTop: '4px',
@@ -572,7 +572,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
             name={tile.icon || 'document'}
             style={{
               fontSize: '1.5rem',
-              color: '#0070f2'
+              color: '#6a6d70'
             }}
           />
         </div>
