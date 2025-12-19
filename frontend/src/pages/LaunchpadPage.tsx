@@ -450,8 +450,7 @@ function LaunchpadPage() {
               {/* Section Title */}
               <Title level="H4" style={{
                 marginBottom: '1rem',
-                paddingBottom: '0.5rem',
-                borderBottom: '2px solid var(--primary)'
+                fontWeight: 600
               }}>
                 {section.name}
               </Title>
@@ -500,7 +499,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
       onClick={onClick}
       style={{
         width: '160px',
-        height: '160px',
+        height: '140px',
         cursor: 'pointer',
         transition: 'all 0.2s',
         border: 'none',
@@ -510,42 +509,44 @@ function TileCard({ tile, onClick }: TileCardProps) {
       }}
       className="tile-card"
     >
-      <FlexBox
-        direction="Column"
-        alignItems="Center"
-        justifyContent="Center"
-        style={{
-          height: '100%',
-          padding: '1rem',
-          textAlign: 'center',
-          direction: tile.direction || 'rtl'
-        }}
-      >
-        <Icon
-          name={tile.icon || 'document'}
-          style={{
-            fontSize: '2.5rem',
-            color: tile.color || 'var(--primary)',
-            marginBottom: '0.75rem'
-          }}
-        />
-        <Text style={{
+      <div style={{
+        padding: '1rem',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* Title - Top Left */}
+        <div style={{
           fontWeight: 600,
           fontSize: '14px',
-          lineHeight: '1.3'
+          lineHeight: '1.3',
+          marginBottom: '0.25rem'
         }}>
           {tile.name}
-        </Text>
+        </div>
+
+        {/* Subtitle - Below Title */}
         {tile.description && (
-          <Text style={{
+          <div style={{
+            color: '#6B7280',
             fontSize: '12px',
-            color: '#6a6d70',
-            marginTop: '0.25rem'
+            lineHeight: '1.3'
           }}>
             {tile.description.substring(0, 40)}...
-          </Text>
+          </div>
         )}
-      </FlexBox>
+
+        {/* Icon - Bottom Left */}
+        <div style={{ marginTop: 'auto' }}>
+          <Icon
+            name={tile.icon || 'document'}
+            style={{
+              fontSize: '1.5rem',
+              color: '#0070f2'
+            }}
+          />
+        </div>
+      </div>
     </Card>
   );
 }

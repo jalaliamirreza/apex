@@ -57,16 +57,17 @@ body {
   padding: 0;
 }
 
-/* Tile styling with shadow hover effect */
+/* Tile styling - SAP Fiori style */
 .tile-card {
   cursor: pointer !important;
   transition: all 0.2s ease;
 }
 
-/* Hover effect - shadow and upward movement */
+/* SAP Fiori hover effect - left blue border only */
 .tile-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-left: 3px solid #0070f2 !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* All elements inside tile show pointer cursor */
