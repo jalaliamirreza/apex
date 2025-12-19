@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ShellBar,
   FlexBox,
   TabContainer,
   Tab,
-  Select,
-  Option,
   Title,
   BusyIndicator,
   Card,
   Icon,
-  Text
+  Text,
+  Popover,
+  List
 } from '@ui5/webcomponents-react';
 import { launchpadApi } from '../services/api';
 import { Space, Page, Section, Tile } from '../types/launchpad';
@@ -25,6 +25,8 @@ function LaunchpadPage() {
   const [activeSpace, setActiveSpace] = useState<Space | null>(null);
   const [activePage, setActivePage] = useState<Page | null>(null);
   const [loading, setLoading] = useState(true);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const pageButtonRef = useRef<HTMLDivElement>(null);
 
   // Load spaces on mount
   useEffect(() => {
@@ -151,19 +153,74 @@ function LaunchpadPage() {
           padding: '0.5rem 1rem',
           borderBottom: '1px solid #e5e5e5'
         }}>
-          <Select
-            onChange={(e) => {
-              const selectedPageId = (e.detail.selectedOption as any).dataset.pageId;
-              if (selectedPageId) handlePageChange(selectedPageId);
+          <div
+            ref={pageButtonRef}
+            onClick={() => setPopoverOpen(!popoverOpen)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              cursor: 'pointer',
+              padding: '0.25rem 0.5rem',
+              borderRadius: '4px',
+              transition: 'background 0.2s'
             }}
-            style={{ minWidth: '200px' }}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#e5e5e5'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            {activeSpace.pages.map(page => (
-              <Option key={page.id} data-page-id={page.id} selected={page.id === pageId}>
-                {page.name}
-              </Option>
-            ))}
-          </Select>
+            <span style={{
+              color: '#0a6ed1',
+              fontWeight: 600,
+              fontSize: '1.25rem'
+            }}>
+              {activePage?.name || activeSpace.pages.find(p => p.id === pageId)?.name}
+            </span>
+            <span style={{ color: '#6a6d70', fontSize: '1.25rem' }}>|</span>
+            <Icon name="navigation-down-arrow" style={{ color: '#0a6ed1', fontSize: '1rem' }} />
+          </div>
+
+          <Popover
+            opener={pageButtonRef.current || undefined}
+            open={popoverOpen}
+          >
+            <div style={{
+              minWidth: '200px',
+              maxHeight: '300px',
+              overflow: 'auto'
+            }}>
+              {activeSpace.pages.map(page => (
+                <div
+                  key={page.id}
+                  data-page-id={page.id}
+                  onClick={() => {
+                    handlePageChange(page.id);
+                    setPopoverOpen(false);
+                  }}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    cursor: 'pointer',
+                    background: page.id === pageId ? '#e5f1fa' : 'transparent',
+                    borderBottom: '1px solid #e5e5e5',
+                    fontWeight: page.id === pageId ? 600 : 400,
+                    color: page.id === pageId ? '#0a6ed1' : '#32363a',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (page.id !== pageId) {
+                      e.currentTarget.style.background = '#f7f7f7';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (page.id !== pageId) {
+                      e.currentTarget.style.background = 'transparent';
+                    }
+                  }}
+                >
+                  {page.name}
+                </div>
+              ))}
+            </div>
+          </Popover>
         </div>
       )}
 
