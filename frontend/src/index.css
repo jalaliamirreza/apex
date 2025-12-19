@@ -57,16 +57,17 @@ body {
   padding: 0;
 }
 
-/* Tile styling - SAP Fiori style */
+/* Tile styling - SAP Fiori Horizon style */
 .tile-card {
   cursor: pointer !important;
-  border-left: 3px solid transparent !important;
-  transition: border-color 0.2s ease !important;
+  background: white !important;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-/* SAP Fiori hover effect - left blue border only */
+/* SAP Fiori Horizon hover effect - light gray background + shadow */
 .tile-card:hover {
-  border-left: 3px solid #0070f2 !important;
+  background-color: #f5f6f7 !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* All elements inside tile show pointer cursor */
@@ -98,7 +99,6 @@ body {
 .tile-card::part(*) {
   border: none !important;
   outline: none !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
   text-decoration: none !important;
 }
 
