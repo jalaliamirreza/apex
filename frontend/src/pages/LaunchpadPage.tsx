@@ -596,7 +596,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
         <Icon
           name={tile.icon || 'document'}
           style={{
-            fontSize: '2rem',
+            fontSize: '4rem',
             color: '#6a6d70'
           }}
         />
