@@ -13,9 +13,16 @@
   --sapFontSmallSize: 12px;
   --sapFontHeaderFamily: 'Vazirmatn', 'Roboto', sans-serif;
 
-  /* SAP Fiori Colors */
-  --primary: #0a6ed1;
-  --primary-hover: #085cad;
+  /* SYNCRO Brand Color Palette */
+  --syncro-royal-blue: #4169E1;
+  --syncro-cyan: #06B6D4;
+  --syncro-royal-blue-dark: #2952CC;
+  --syncro-cyan-light: #22D3EE;
+
+  /* SAP Fiori Colors - Updated with SYNCRO branding */
+  --primary: var(--syncro-royal-blue);
+  --primary-hover: var(--syncro-royal-blue-dark);
+  --accent: var(--syncro-cyan);
   --background: #f7f7f7;
   --surface: #ffffff;
   --text-primary: #32363a;
@@ -23,6 +30,16 @@
   --border: #e5e5e5;
   --error: #bb0000;
   --success: #107e3e;
+
+  /* UI5 Theme Overrides - SYNCRO Branding */
+  --sapBrandColor: var(--syncro-royal-blue);
+  --sapHighlightColor: var(--syncro-cyan);
+  --sapActiveColor: var(--syncro-royal-blue);
+  --sapSelectedColor: var(--syncro-royal-blue);
+  --sapLinkColor: var(--syncro-royal-blue);
+  --sapButton_Emphasized_Background: var(--syncro-royal-blue);
+  --sapButton_Emphasized_BorderColor: var(--syncro-royal-blue);
+  --sapButton_Emphasized_Hover_Background: var(--syncro-royal-blue-dark);
 }
 
 /* Base - LTR Default */

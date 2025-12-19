@@ -23,7 +23,11 @@ function LaunchpadPage() {
   const [activePage, setActivePage] = useState<Page | null>(null);
   const [loading, setLoading] = useState(true);
   const [openSpaceDropdown, setOpenSpaceDropdown] = useState<string | null>(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const spaceDropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const profileButtonRef = useRef<HTMLDivElement | null>(null);
+  const notificationsButtonRef = useRef<HTMLDivElement | null>(null);
 
   // Load spaces on mount
   useEffect(() => {
@@ -120,14 +124,201 @@ function LaunchpadPage() {
 
   return (
     <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
-      {/* Shell Bar */}
-      <ShellBar
-        primaryTitle="APEX Enterprise"
-        secondaryTitle="Business Process Platform"
-        showNotifications
-        notificationsCount="3"
-        onLogoClick={() => navigate('/launchpad')}
-      />
+      {/* SYNCRO Shell Bar with Gradient */}
+      <div style={{
+        background: 'linear-gradient(135deg, #4169E1 0%, #06B6D4 100%)',
+        padding: '0 1rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '48px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+      }}>
+        {/* Logo and Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}
+             onClick={() => navigate('/launchpad')}>
+          <img src="/logo-original.png" alt="SYNCRO" style={{ height: '32px' }} />
+          <div>
+            <div style={{ color: 'white', fontSize: '1.125rem', fontWeight: 700, letterSpacing: '0.5px' }}>
+              SYNCRO
+            </div>
+            <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.75rem' }}>
+              Business Process Platform
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: Notifications and Profile */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {/* Notifications */}
+          <div
+            ref={notificationsButtonRef}
+            onClick={() => setNotificationsOpen(!notificationsOpen)}
+            style={{
+              position: 'relative',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              borderRadius: '50%',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <Icon name="bell" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <div style={{
+              position: 'absolute',
+              top: '4px',
+              right: '4px',
+              background: '#EF4444',
+              borderRadius: '50%',
+              width: '16px',
+              height: '16px',
+              fontSize: '0.625rem',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 600
+            }}>3</div>
+          </div>
+
+          {/* Profile */}
+          <div
+            ref={profileButtonRef}
+            onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              cursor: 'pointer',
+              padding: '0.25rem 0.75rem',
+              borderRadius: '24px',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <span style={{ color: 'white', fontWeight: 500, fontSize: '0.875rem' }}>Ali Ahmadi</span>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Icon name="person-placeholder" style={{ color: 'white', fontSize: '1.125rem' }} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Notifications Popover */}
+      <Popover
+        opener={notificationsButtonRef.current || undefined}
+        open={notificationsOpen}
+        placement="Bottom"
+      >
+        <div style={{ width: '320px', maxHeight: '400px', overflow: 'auto' }}>
+          <div style={{ padding: '1rem', borderBottom: '1px solid #e5e5e5' }}>
+            <Text style={{ fontWeight: 600, fontSize: '1rem' }}>Notifications</Text>
+          </div>
+          <div style={{ padding: '0.5rem' }}>
+            {[
+              { icon: 'document', title: 'Leave Request Approved', message: 'Your leave request for Dec 25-27 has been approved', time: '5 min ago', unread: true },
+              { icon: 'accept', title: 'Performance Review Completed', message: 'Your Q4 performance review is now available', time: '2 hours ago', unread: true },
+              { icon: 'message-information', title: 'New Company Policy', message: 'Updated remote work policy has been published', time: '1 day ago', unread: true },
+              { icon: 'calendar', title: 'Upcoming Event', message: 'Team building event on Friday', time: '2 days ago', unread: false }
+            ].map((notif, idx) => (
+              <div
+                key={idx}
+                onClick={() => setNotificationsOpen(false)}
+                style={{
+                  padding: '0.75rem',
+                  cursor: 'pointer',
+                  background: notif.unread ? '#f0f9ff' : 'transparent',
+                  borderRadius: '8px',
+                  marginBottom: '0.25rem',
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  if (!notif.unread) e.currentTarget.style.background = '#f7f7f7';
+                }}
+                onMouseLeave={(e) => {
+                  if (!notif.unread) e.currentTarget.style.background = 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    background: '#e0f2fe',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    <Icon name={notif.icon} style={{ color: '#0284c7', fontSize: '1rem' }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.25rem' }}>
+                      {notif.title}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#6a6d70', marginBottom: '0.25rem' }}>
+                      {notif.message}
+                    </div>
+                    <div style={{ fontSize: '0.625rem', color: '#9ca3af' }}>
+                      {notif.time}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Popover>
+
+      {/* Profile Menu Popover */}
+      <Popover
+        opener={profileButtonRef.current || undefined}
+        open={profileMenuOpen}
+        placement="Bottom"
+      >
+        <div style={{ width: '200px' }}>
+          {[
+            { icon: 'person-placeholder', label: 'Profile' },
+            { icon: 'action-settings', label: 'Settings' },
+            { icon: 'hint', label: 'About' },
+            { icon: 'log', label: 'Sign Out', color: '#EF4444' }
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              onClick={() => {
+                setProfileMenuOpen(false);
+                if (item.label === 'Sign Out') {
+                  navigate('/login');
+                }
+              }}
+              style={{
+                padding: '0.75rem 1rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'background 0.2s',
+                borderBottom: idx < 3 ? '1px solid #e5e5e5' : 'none'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            >
+              <Icon name={item.icon} style={{ color: item.color || '#6a6d70', fontSize: '1rem' }} />
+              <span style={{ color: item.color || '#32363a', fontSize: '0.875rem' }}>{item.label}</span>
+            </div>
+          ))}
+        </div>
+      </Popover>
 
       {/* Space Tabs with integrated Page Dropdowns */}
       <div style={{
@@ -142,14 +333,14 @@ function LaunchpadPage() {
               ref={el => spaceDropdownRefs.current[space.id] = el}
               style={{
                 padding: '1rem 1.5rem',
-                borderBottom: activeSpace?.id === space.id ? '3px solid #0a6ed1' : '3px solid transparent',
+                borderBottom: activeSpace?.id === space.id ? '3px solid var(--primary)' : '3px solid transparent',
                 background: activeSpace?.id === space.id ? '#f7f7f7' : 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
                 transition: 'all 0.2s',
                 fontWeight: activeSpace?.id === space.id ? 600 : 400,
-                color: activeSpace?.id === space.id ? '#0a6ed1' : '#32363a'
+                color: activeSpace?.id === space.id ? 'var(--primary)' : '#32363a'
               }}
               onMouseEnter={(e) => {
                 if (activeSpace?.id !== space.id) {
@@ -189,7 +380,7 @@ function LaunchpadPage() {
                   }}
                 >
                   <span style={{ color: '#6a6d70' }}>|</span>
-                  <Icon name="navigation-down-arrow" style={{ fontSize: '0.875rem', color: '#0a6ed1' }} />
+                  <Icon name="navigation-down-arrow" style={{ fontSize: '0.875rem', color: 'var(--primary)' }} />
                 </div>
               )}
             </div>
@@ -218,7 +409,7 @@ function LaunchpadPage() {
                         background: page.id === pageId && activeSpace?.id === space.id ? '#e5f1fa' : 'transparent',
                         borderBottom: '1px solid #e5e5e5',
                         fontWeight: page.id === pageId && activeSpace?.id === space.id ? 600 : 400,
-                        color: page.id === pageId && activeSpace?.id === space.id ? '#0a6ed1' : '#32363a',
+                        color: page.id === pageId && activeSpace?.id === space.id ? 'var(--primary)' : '#32363a',
                         transition: 'background 0.2s'
                       }}
                       onMouseEnter={(e) => {
@@ -255,7 +446,7 @@ function LaunchpadPage() {
             <Title level="H4" style={{
               marginBottom: '1rem',
               paddingBottom: '0.5rem',
-              borderBottom: '2px solid #0a6ed1'
+              borderBottom: '2px solid var(--primary)'
             }}>
               {section.name}
             </Title>
@@ -314,7 +505,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
           name={tile.icon || 'document'}
           style={{
             fontSize: '2.5rem',
-            color: tile.color || '#0a6ed1',
+            color: tile.color || 'var(--primary)',
             marginBottom: '0.75rem'
           }}
         />
