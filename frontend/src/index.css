@@ -6,6 +6,13 @@
 :root {
   --font-family: 'Vazirmatn', 'Roboto', sans-serif;
 
+  /* UI5 WebComponents font override */
+  --sapFontFamily: 'Vazirmatn', 'Roboto', sans-serif;
+  --sapFontSize: 14px;
+  --sapFontLargeSize: 16px;
+  --sapFontSmallSize: 12px;
+  --sapFontHeaderFamily: 'Vazirmatn', 'Roboto', sans-serif;
+
   /* SAP Fiori Colors */
   --primary: #0a6ed1;
   --primary-hover: #085cad;
@@ -38,4 +45,14 @@ body {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-color: #0a6ed1 !important;
+}
+
+/* Force font on all elements */
+* {
+  font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
+}
+
+/* Target UI5 elements specifically */
+[ui5-tab], [ui5-card], [ui5-title], [ui5-text], [ui5-label], [ui5-button], [ui5-list-item] {
+  font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
 }
