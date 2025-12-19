@@ -3,15 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   ShellBar,
   FlexBox,
-  TabContainer,
-  Tab,
   Title,
   BusyIndicator,
   Card,
   Icon,
   Text,
-  Popover,
-  List
+  Popover
 } from '@ui5/webcomponents-react';
 import { launchpadApi } from '../services/api';
 import { Space, Page, Section, Tile } from '../types/launchpad';
@@ -25,8 +22,8 @@ function LaunchpadPage() {
   const [activeSpace, setActiveSpace] = useState<Space | null>(null);
   const [activePage, setActivePage] = useState<Page | null>(null);
   const [loading, setLoading] = useState(true);
-  const [popoverOpen, setPopoverOpen] = useState(false);
-  const pageButtonRef = useRef<HTMLDivElement>(null);
+  const [openSpaceDropdown, setOpenSpaceDropdown] = useState<string | null>(null);
+  const spaceDropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // Load spaces on mount
   useEffect(() => {
@@ -82,10 +79,21 @@ function LaunchpadPage() {
     }
   };
 
-  const handleSpaceChange = (space: Space) => {
-    const defaultPage = space.pages.find(p => p.isDefault) || space.pages[0];
-    if (defaultPage) {
-      navigate(`/launchpad/${space.id}/${defaultPage.id}`);
+  const handleSpaceClick = (space: Space, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // If space has only 1 page, navigate directly
+    if (space.pages.length === 1) {
+      const page = space.pages[0];
+      navigate(`/launchpad/${space.id}/${page.id}`);
+      return;
+    }
+
+    // If space has multiple pages, toggle dropdown
+    if (openSpaceDropdown === space.id) {
+      setOpenSpaceDropdown(null);
+    } else {
+      setOpenSpaceDropdown(space.id);
     }
   };
 
@@ -120,109 +128,98 @@ function LaunchpadPage() {
         onLogoClick={() => navigate('/launchpad')}
       />
 
-      {/* Space Tabs */}
+      {/* Space Tabs with integrated Page Dropdowns */}
       <div style={{
         background: 'white',
         borderBottom: '1px solid #e5e5e5',
-        padding: '0 1rem'
+        padding: '0',
+        display: 'flex'
       }}>
-        <TabContainer
-          collapsed={false}
-          onTabSelect={(e) => {
-            const selectedSpaceId = (e.detail.tab as any).dataset.spaceId;
-            const space = spaces.find(s => s.id === selectedSpaceId);
-            if (space) handleSpaceChange(space);
-          }}
-        >
-          {spaces.map(space => (
-            <Tab
-              key={space.id}
-              text={space.name}
-              icon={space.icon}
-              selected={activeSpace?.id === space.id}
-              data-space-id={space.id}
-            />
-          ))}
-        </TabContainer>
-      </div>
-
-      {/* Page Selector (if multiple pages) */}
-      {activeSpace && activeSpace.pages.length > 1 && (
-        <div style={{
-          background: '#f7f7f7',
-          padding: '0.5rem 1rem',
-          borderBottom: '1px solid #e5e5e5'
-        }}>
-          <div
-            ref={pageButtonRef}
-            onClick={() => setPopoverOpen(!popoverOpen)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              cursor: 'pointer',
-              padding: '0.25rem 0.5rem',
-              borderRadius: '4px',
-              transition: 'background 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#e5e5e5'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            <span style={{
-              color: '#0a6ed1',
-              fontWeight: 600,
-              fontSize: '1.25rem'
-            }}>
-              {activePage?.name || activeSpace.pages.find(p => p.id === pageId)?.name}
-            </span>
-            <span style={{ color: '#6a6d70', fontSize: '1.25rem' }}>|</span>
-            <Icon name="navigation-down-arrow" style={{ color: '#0a6ed1', fontSize: '1rem' }} />
-          </div>
-
-          <Popover
-            opener={pageButtonRef.current || undefined}
-            open={popoverOpen}
-          >
-            <div style={{
-              minWidth: '200px',
-              maxHeight: '300px',
-              overflow: 'auto'
-            }}>
-              {activeSpace.pages.map(page => (
-                <div
-                  key={page.id}
-                  data-page-id={page.id}
-                  onClick={() => {
-                    handlePageChange(page.id);
-                    setPopoverOpen(false);
-                  }}
-                  style={{
-                    padding: '0.75rem 1rem',
-                    cursor: 'pointer',
-                    background: page.id === pageId ? '#e5f1fa' : 'transparent',
-                    borderBottom: '1px solid #e5e5e5',
-                    fontWeight: page.id === pageId ? 600 : 400,
-                    color: page.id === pageId ? '#0a6ed1' : '#32363a',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (page.id !== pageId) {
-                      e.currentTarget.style.background = '#f7f7f7';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (page.id !== pageId) {
-                      e.currentTarget.style.background = 'transparent';
-                    }
-                  }}
-                >
-                  {page.name}
-                </div>
-              ))}
+        {spaces.map(space => (
+          <div key={space.id} style={{ position: 'relative' }}>
+            <div
+              ref={el => spaceDropdownRefs.current[space.id] = el}
+              onClick={(e) => handleSpaceClick(space, e)}
+              style={{
+                padding: '1rem 1.5rem',
+                cursor: 'pointer',
+                borderBottom: activeSpace?.id === space.id ? '3px solid #0a6ed1' : '3px solid transparent',
+                background: activeSpace?.id === space.id ? '#f7f7f7' : 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s',
+                fontWeight: activeSpace?.id === space.id ? 600 : 400,
+                color: activeSpace?.id === space.id ? '#0a6ed1' : '#32363a'
+              }}
+              onMouseEnter={(e) => {
+                if (activeSpace?.id !== space.id) {
+                  e.currentTarget.style.background = '#f7f7f7';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeSpace?.id !== space.id) {
+                  e.currentTarget.style.background = 'transparent';
+                }
+              }}
+            >
+              <Icon name={space.icon} style={{ fontSize: '1rem' }} />
+              <span>{space.name}</span>
+              {space.pages.length > 1 && (
+                <>
+                  <span style={{ color: '#6a6d70', margin: '0 0.25rem' }}>|</span>
+                  <Icon name="navigation-down-arrow" style={{ fontSize: '0.875rem', color: '#0a6ed1' }} />
+                </>
+              )}
             </div>
-          </Popover>
-        </div>
-      )}
+
+            {/* Popover for pages */}
+            {space.pages.length > 1 && (
+              <Popover
+                opener={spaceDropdownRefs.current[space.id] || undefined}
+                open={openSpaceDropdown === space.id}
+              >
+                <div style={{
+                  minWidth: '200px',
+                  maxHeight: '300px',
+                  overflow: 'auto'
+                }}>
+                  {space.pages.map(page => (
+                    <div
+                      key={page.id}
+                      onClick={() => {
+                        navigate(`/launchpad/${space.id}/${page.id}`);
+                        setOpenSpaceDropdown(null);
+                      }}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        cursor: 'pointer',
+                        background: page.id === pageId && activeSpace?.id === space.id ? '#e5f1fa' : 'transparent',
+                        borderBottom: '1px solid #e5e5e5',
+                        fontWeight: page.id === pageId && activeSpace?.id === space.id ? 600 : 400,
+                        color: page.id === pageId && activeSpace?.id === space.id ? '#0a6ed1' : '#32363a',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!(page.id === pageId && activeSpace?.id === space.id)) {
+                          e.currentTarget.style.background = '#f7f7f7';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!(page.id === pageId && activeSpace?.id === space.id)) {
+                          e.currentTarget.style.background = 'transparent';
+                        }
+                      }}
+                    >
+                      {page.name}
+                    </div>
+                  ))}
+                </div>
+              </Popover>
+            )}
+          </div>
+        ))}
+      </div>
 
       {/* Page Content */}
       <div style={{
