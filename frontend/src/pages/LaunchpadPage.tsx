@@ -367,24 +367,27 @@ function LaunchpadPage() {
               style={{
                 padding: '0.75rem 1rem',
                 borderBottom: activeSpace?.id === space.id ? '3px solid #0070f2' : '3px solid transparent',
-                background: activeSpace?.id === space.id ? 'transparent' : 'transparent',
+                background: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                transition: 'background 0.2s',
+                transition: 'color 0.2s, border-bottom 0.2s',
                 fontWeight: activeSpace?.id === space.id ? 600 : 400,
                 color: activeSpace?.id === space.id ? '#0070f2' : '#32363a',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap'
               }}
               onMouseEnter={(e) => {
-                if (activeSpace?.id !== space.id) {
-                  e.currentTarget.style.background = '#f7f7f7';
-                }
+                e.currentTarget.style.color = '#0070f2';
+                e.currentTarget.style.borderBottom = '3px solid #0070f2';
               }}
               onMouseLeave={(e) => {
                 if (activeSpace?.id !== space.id) {
-                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = '#32363a';
+                  e.currentTarget.style.borderBottom = '3px solid transparent';
+                } else {
+                  e.currentTarget.style.color = '#0070f2';
+                  e.currentTarget.style.borderBottom = '3px solid #0070f2';
                 }
               }}
             >
