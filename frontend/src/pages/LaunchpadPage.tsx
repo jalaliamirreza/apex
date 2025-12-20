@@ -126,8 +126,21 @@ function LaunchpadPage() {
   }
 
   return (
-    <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
-      {/* SYNCRO Shell Bar */}
+    <>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+      <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
+        {/* SYNCRO Shell Bar */}
       <div style={{
         background: 'white',
         padding: '0 1rem',
@@ -471,12 +484,16 @@ function LaunchpadPage() {
       </div>
 
       {/* Page Content */}
-      <div style={{
-        flex: 1,
-        overflow: 'auto',
-        padding: '1.5rem',
-        background: '#f7f7f7'
-      }}>
+      <div
+        key={pageId}
+        style={{
+          flex: 1,
+          overflow: 'auto',
+          padding: '1.5rem',
+          background: '#f7f7f7',
+          animation: 'fadeIn 0.3s ease-in-out'
+        }}
+      >
         {activePage?.sections && activePage.sections.length > 0 ? (
           activePage.sections.map(section => (
             <div key={section.id} style={{ marginBottom: '2rem' }}>
@@ -490,18 +507,11 @@ function LaunchpadPage() {
 
               {/* Tiles Grid or Empty State */}
               {section.tiles.length === 0 ? (
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  minHeight: '300px'
-                }}>
-                  <IllustratedMessage
-                    name="NoData"
-                    titleText="No apps available"
-                    subtitleText="No applications in this section"
-                  />
-                </div>
+                <IllustratedMessage
+                  name="NoData"
+                  titleText="No apps available"
+                  subtitleText="No applications in this section"
+                />
               ) : (
                 <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
                   {section.tiles.map(tile => (
@@ -531,6 +541,7 @@ function LaunchpadPage() {
         )}
       </div>
     </FlexBox>
+    </>
   );
 }
 
