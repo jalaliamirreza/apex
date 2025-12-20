@@ -140,7 +140,7 @@ function LaunchpadPage() {
         {/* Logo and Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}
              onClick={() => navigate('/launchpad')}>
-          <img src="/logo.svg" alt="SYNCRO" style={{ height: '96px' }} />
+          <img src="/logo.svg" alt="SYNCRO" style={{ height: '56px' }} />
           <div>
             <div style={{ color: '#32363a', fontSize: '1.125rem', fontWeight: 700, letterSpacing: '0.5px' }}>
               SYNCRO
