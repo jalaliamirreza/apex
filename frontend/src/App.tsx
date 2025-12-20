@@ -5,6 +5,10 @@ import SubmissionsPage from './pages/SubmissionsPage';
 import SearchPage from './pages/SearchPage';
 import AdminAppPage from './pages/AdminAppPage';
 import LoginPage from './pages/LoginPage';
+import ManageSpacesPage from './pages/admin/ManageSpacesPage';
+import ManagePagesPage from './pages/admin/ManagePagesPage';
+import ManageSectionsPage from './pages/admin/ManageSectionsPage';
+import ManageTilesPage from './pages/admin/ManageTilesPage';
 
 function App() {
   return (
@@ -25,14 +29,17 @@ function App() {
       {/* Search */}
       <Route path="/search" element={<SearchPage />} />
 
-      {/* Admin Apps */}
+      {/* Admin Management Pages */}
+      <Route path="/app/manage-spaces" element={<ManageSpacesPage />} />
+      <Route path="/app/manage-pages" element={<ManagePagesPage />} />
+      <Route path="/app/manage-sections" element={<ManageSectionsPage />} />
+      <Route path="/app/manage-tiles" element={<ManageTilesPage />} />
+
+      {/* Admin Apps (fallback for other apps) */}
       <Route path="/app/:slug" element={<AdminAppPage />} />
 
       {/* Legacy routes (redirect to launchpad) */}
       <Route path="/forms" element={<Navigate to="/launchpad" replace />} />
-
-      {/* Admin Portal (future) */}
-      {/* <Route path="/admin/*" element={<AdminLayout />} /> */}
     </Routes>
   );
 }

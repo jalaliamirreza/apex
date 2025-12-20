@@ -36,6 +36,7 @@ export interface Section {
 
 export interface Tile {
   id: string;
+  sectionId?: string;
   name: string;        // English
   nameFa?: string;     // Persian (Farsi)
   description?: string;
@@ -46,4 +47,5 @@ export interface Tile {
   orderIndex: number;
   direction?: 'ltr' | 'rtl';
   config?: Record<string, any>;
+  isActive?: boolean;
 }
