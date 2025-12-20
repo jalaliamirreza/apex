@@ -71,33 +71,50 @@ function LoginPage() {
     }}>
       {/* CSS Animations */}
       <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
+        @keyframes typing {
+          0% {
+            width: 0;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          40% {
+            width: 100%;
+          }
+          60% {
+            width: 100%;
+          }
+          100% {
+            width: 0;
           }
         }
 
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
+        @keyframes blink-caret {
+          from, to {
+            border-color: transparent;
           }
           50% {
-            opacity: 0.7;
+            border-color: #4169E1;
           }
         }
 
-        .animated-text {
-          animation: fadeInUp 1.5s ease-out, pulse 3s ease-in-out infinite;
+        .typing-text {
+          overflow: hidden;
+          border-right: 3px solid #4169E1;
+          white-space: nowrap;
+          margin: 0 auto;
+          letter-spacing: 1px;
+          animation:
+            typing 15s steps(30, end) infinite,
+            blink-caret 0.75s step-end infinite;
+        }
+
+        .dotted-background {
+          background-image: radial-gradient(circle, #e0e0e0 1px, transparent 1px);
+          background-size: 20px 20px;
+          background-position: 0 0, 10px 10px;
         }
       `}</style>
 
       {/* Left Section - Branding */}
-      <div style={{
+      <div className="dotted-background" style={{
         flex: 1,
         backgroundColor: 'white',
         display: 'flex',
@@ -119,14 +136,13 @@ function LoginPage() {
           }}
         />
 
-        {/* Animated Subtitle */}
+        {/* Typing Animation Subtitle */}
         <div
-          className="animated-text"
+          className="typing-text"
           style={{
             fontSize: '28px',
             fontWeight: '300',
             color: '#4169E1',
-            letterSpacing: '1px',
             textAlign: 'center'
           }}
         >
