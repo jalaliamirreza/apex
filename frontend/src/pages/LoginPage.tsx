@@ -3,14 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import {
   FlexBox,
   Input,
-  Button
+  Button,
+  Icon
 } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-icons/dist/AllIcons';
+import '@ui5/webcomponents-icons/dist/show.js';
+import '@ui5/webcomponents-icons/dist/hide.js';
 
 function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleLogin = () => {
@@ -226,13 +230,26 @@ function LoginPage() {
               </div>
 
               {/* Password Input */}
-              <div style={{ width: '100%' }}>
+              <div style={{ width: '100%', position: 'relative' }}>
                 <Input
-                  type="Password"
+                  type={showPassword ? 'Text' : 'Password'}
                   placeholder="Password"
                   value={password}
                   onInput={(e: any) => setPassword(e.target.value)}
                   style={{ width: '100%' }}
+                />
+                <Icon
+                  name={showPassword ? 'hide' : 'show'}
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    color: '#666'
+                  }}
                 />
               </div>
 
@@ -245,8 +262,27 @@ function LoginPage() {
                   marginTop: '8px'
                 }}
               >
-                Login
+                Log On
               </Button>
+
+              {/* Having Trouble Link */}
+              <div style={{
+                textAlign: 'center',
+                marginTop: '8px'
+              }}>
+                <a
+                  href="#"
+                  style={{
+                    fontSize: '14px',
+                    color: '#4169E1',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={(e: any) => e.target.style.textDecoration = 'underline'}
+                  onMouseLeave={(e: any) => e.target.style.textDecoration = 'none'}
+                >
+                  Having trouble?
+                </a>
+              </div>
             </FlexBox>
           </FlexBox>
         </div>
