@@ -490,11 +490,18 @@ function LaunchpadPage() {
 
               {/* Tiles Grid or Empty State */}
               {section.tiles.length === 0 ? (
-                <IllustratedMessage
-                  name="NoData"
-                  titleText="No apps available"
-                  subtitleText="No applications in this section"
-                />
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minHeight: '300px'
+                }}>
+                  <IllustratedMessage
+                    name="NoData"
+                    titleText="No apps available"
+                    subtitleText="No applications in this section"
+                  />
+                </div>
               ) : (
                 <FlexBox wrap="Wrap" style={{ gap: '1rem' }}>
                   {section.tiles.map(tile => (
@@ -509,11 +516,18 @@ function LaunchpadPage() {
             </div>
           ))
         ) : (
-          <IllustratedMessage
-            name="NoData"
-            titleText="No apps available"
-            subtitleText="No applications on this page"
-          />
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '300px'
+          }}>
+            <IllustratedMessage
+              name="NoData"
+              titleText="No apps available"
+              subtitleText="No applications on this page"
+            />
+          </div>
         )}
       </div>
     </FlexBox>
