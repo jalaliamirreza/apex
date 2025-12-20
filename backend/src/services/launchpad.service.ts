@@ -47,24 +47,62 @@ export async function getPageContent(pageId: string): Promise<Page | null> {
 
   const page = pageResult.rows[0];
 
-  // Get sections with tiles (forms)
+  // Get sections with tiles (both forms and tiles table)
   const sectionsResult = await query(`
     SELECT sec.*,
       COALESCE(json_agg(
         json_build_object(
-          'id', f.id,
-          'name', f.name,
-          'description', f.description,
-          'icon', COALESCE(f.icon, 'document'),
-          'color', COALESCE(f.color, '#0a6ed1'),
-          'slug', f.slug,
-          'type', 'form',
-          'orderIndex', COALESCE(f.order_index, 0),
-          'direction', f.direction
-        ) ORDER BY f.order_index
-      ) FILTER (WHERE f.id IS NOT NULL), '[]') as tiles
+          'id', combined.id,
+          'name', combined.name,
+          'nameEn', combined.name_en,
+          'description', combined.description,
+          'icon', combined.icon,
+          'color', combined.color,
+          'slug', combined.slug,
+          'type', combined.type,
+          'orderIndex', combined.order_index,
+          'direction', combined.direction,
+          'config', combined.config
+        ) ORDER BY combined.order_index
+      ) FILTER (WHERE combined.id IS NOT NULL), '[]') as tiles
     FROM sections sec
-    LEFT JOIN forms f ON f.section_id = sec.id AND f.status = 'active'
+    LEFT JOIN (
+      -- Forms from forms table
+      SELECT
+        f.id,
+        f.name,
+        NULL as name_en,
+        f.description,
+        COALESCE(f.icon, 'document') as icon,
+        COALESCE(f.color, '#0a6ed1') as color,
+        f.slug,
+        'form' as type,
+        COALESCE(f.order_index, 0) as order_index,
+        f.direction,
+        f.section_id,
+        NULL as config
+      FROM forms f
+      WHERE f.status = 'active'
+
+      UNION ALL
+
+      -- Tiles from tiles table
+      SELECT
+        t.id,
+        t.name,
+        t.name_en,
+        t.description,
+        COALESCE(t.icon, 'document') as icon,
+        COALESCE(t.color, '#0a6ed1') as color,
+        t.slug,
+        t.type,
+        COALESCE(t.order_index, 0) as order_index,
+        t.direction,
+        t.section_id,
+        t.config
+      FROM tiles t
+      WHERE t.is_active = true
+    ) combined ON combined.section_id = sec.id
     WHERE sec.page_id = $1 AND sec.is_active = true
     GROUP BY sec.id
     ORDER BY sec.order_index
