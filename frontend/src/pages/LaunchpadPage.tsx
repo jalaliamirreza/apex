@@ -114,6 +114,10 @@ function LaunchpadPage() {
   const handleTileClick = (tile: Tile) => {
     if (tile.type === 'form') {
       navigate(`/forms/${tile.slug}`);
+    } else if (tile.type === 'app') {
+      // Use route from config if available, otherwise fallback to /app/:slug
+      const route = tile.config?.route || `/app/${tile.slug}`;
+      navigate(route);
     }
   };
 

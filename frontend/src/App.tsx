@@ -3,6 +3,7 @@ import LaunchpadPage from './pages/LaunchpadPage';
 import FormPage from './pages/FormPage';
 import SubmissionsPage from './pages/SubmissionsPage';
 import SearchPage from './pages/SearchPage';
+import AdminAppPage from './pages/AdminAppPage';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
 
       {/* Search */}
       <Route path="/search" element={<SearchPage />} />
+
+      {/* Admin Apps */}
+      <Route path="/app/:slug" element={<AdminAppPage />} />
 
       {/* Legacy routes (redirect to launchpad) */}
       <Route path="/forms" element={<Navigate to="/launchpad" replace />} />

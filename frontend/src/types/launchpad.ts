@@ -40,7 +40,12 @@ export interface Tile {
   icon: string;
   color: string;
   slug: string;
-  type: 'form' | 'link' | 'kpi';
+  type: 'form' | 'link' | 'kpi' | 'app';
   orderIndex: number;
   direction?: 'ltr' | 'rtl';
+  config?: {
+    route?: string;
+    permissions?: string[];
+    [key: string]: any;
+  };
 }
