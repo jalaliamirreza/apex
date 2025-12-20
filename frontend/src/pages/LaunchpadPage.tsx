@@ -379,15 +379,10 @@ function LaunchpadPage() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#0070f2';
-                e.currentTarget.style.borderBottom = '3px solid #0070f2';
               }}
               onMouseLeave={(e) => {
                 if (activeSpace?.id !== space.id) {
                   e.currentTarget.style.color = '#32363a';
-                  e.currentTarget.style.borderBottom = '3px solid transparent';
-                } else {
-                  e.currentTarget.style.color = '#0070f2';
-                  e.currentTarget.style.borderBottom = '3px solid #0070f2';
                 }
               }}
             >
