@@ -3,10 +3,6 @@ import {
   FlexBox,
   Button,
   Icon,
-  Table,
-  TableColumn,
-  TableRow,
-  TableCell,
   Dialog,
   Bar,
   Input,
@@ -239,78 +235,65 @@ function ManagePagesPage() {
             <BusyIndicator active size="M" />
           </FlexBox>
         ) : (
-          <Table>
-            <TableColumn style={{ width: '80px' }}>
-              <Label>Order</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Space</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '60px' }}>
-              <Label>Icon</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Name (EN)</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Name (FA)</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Slug</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '80px' }}>
-              <Label>Default</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '80px' }}>
-              <Label>Active</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '120px' }}>
-              <Label>Actions</Label>
-            </TableColumn>
-
-            {pages.map(page => (
-              <TableRow key={page.id}>
-                <TableCell>{page.order_index}</TableCell>
-                <TableCell>{getSpaceName(page.space_id)}</TableCell>
-                <TableCell>
-                  <Icon name={page.icon} style={{ fontSize: '1.25rem', color: '#0070f2' }} />
-                </TableCell>
-                <TableCell>{page.name}</TableCell>
-                <TableCell>{page.name_fa}</TableCell>
-                <TableCell>
-                  <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{page.slug}</code>
-                </TableCell>
-                <TableCell>
-                  {page.is_default ? (
-                    <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
-                  ) : (
-                    <span style={{ color: '#6a6d70' }}>-</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  {page.is_active ? (
-                    <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
-                  ) : (
-                    <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <FlexBox style={{ gap: '0.25rem' }}>
-                    <Button
-                      icon="edit"
-                      design="Transparent"
-                      onClick={() => handleOpenDialog(page)}
-                    />
-                    <Button
-                      icon="delete"
-                      design="Transparent"
-                      onClick={() => openDeleteDialog(page)}
-                    />
-                  </FlexBox>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #e5e5e5' }}>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Order</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Space</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '60px' }}>Icon</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (EN)</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (FA)</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Slug</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Default</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Active</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pages.map(page => (
+                <tr key={page.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                  <td style={{ padding: '1rem' }}>{page.order_index}</td>
+                  <td style={{ padding: '1rem' }}>{getSpaceName(page.space_id)}</td>
+                  <td style={{ padding: '1rem' }}>
+                    <Icon name={page.icon} style={{ fontSize: '1.25rem', color: '#0070f2' }} />
+                  </td>
+                  <td style={{ padding: '1rem' }}>{page.name}</td>
+                  <td style={{ padding: '1rem' }}>{page.name_fa}</td>
+                  <td style={{ padding: '1rem' }}>
+                    <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{page.slug}</code>
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    {page.is_default ? (
+                      <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
+                    ) : (
+                      <span style={{ color: '#6a6d70' }}>-</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    {page.is_active ? (
+                      <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
+                    ) : (
+                      <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    <FlexBox style={{ gap: '0.25rem' }}>
+                      <Button
+                        icon="edit"
+                        design="Transparent"
+                        onClick={() => handleOpenDialog(page)}
+                      />
+                      <Button
+                        icon="delete"
+                        design="Transparent"
+                        onClick={() => openDeleteDialog(page)}
+                      />
+                    </FlexBox>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
