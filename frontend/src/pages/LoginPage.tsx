@@ -72,17 +72,11 @@ function LoginPage() {
       {/* CSS Animations */}
       <style>{`
         @keyframes typing {
-          0% {
+          from {
             width: 0;
           }
-          40% {
+          to {
             width: 100%;
-          }
-          60% {
-            width: 100%;
-          }
-          100% {
-            width: 0;
           }
         }
 
@@ -102,7 +96,7 @@ function LoginPage() {
           margin: 0 auto;
           letter-spacing: 1px;
           animation:
-            typing 15s steps(30, end) infinite,
+            typing 3s steps(30, end) forwards,
             blink-caret 0.75s step-end infinite;
         }
 
@@ -141,7 +135,7 @@ function LoginPage() {
           className="typing-text"
           style={{
             fontSize: '28px',
-            fontWeight: '300',
+            fontWeight: 'bold',
             color: '#4169E1',
             textAlign: 'center'
           }}
