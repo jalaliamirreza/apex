@@ -19,7 +19,7 @@ import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js";
 
 function LaunchpadPage() {
   const navigate = useNavigate();
-  const { spaceId, pageId } = useParams();
+  const { spaceSlug, pageSlug } = useParams();
 
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [activeSpace, setActiveSpace] = useState<Space | null>(null);
@@ -37,27 +37,27 @@ function LaunchpadPage() {
     loadSpaces();
   }, []);
 
-  // When spaceId changes, update active space
+  // When spaceSlug changes, update active space
   useEffect(() => {
-    if (spaces.length > 0 && spaceId) {
-      const space = spaces.find(s => s.id === spaceId);
+    if (spaces.length > 0 && spaceSlug) {
+      const space = spaces.find(s => s.slug === spaceSlug);
       if (space) {
         setActiveSpace(space);
-        // Load default page if no pageId
-        if (!pageId && space.pages.length > 0) {
+        // Load default page if no pageSlug
+        if (!pageSlug && space.pages.length > 0) {
           const defaultPage = space.pages.find(p => p.isDefault) || space.pages[0];
-          navigate(`/launchpad/${spaceId}/${defaultPage.id}`, { replace: true });
+          navigate(`/launchpad/${space.slug}/${defaultPage.slug}`, { replace: true });
         }
       }
     }
-  }, [spaces, spaceId, pageId, navigate]);
+  }, [spaces, spaceSlug, pageSlug, navigate]);
 
-  // When pageId changes, load page content
+  // When pageSlug changes, load page content
   useEffect(() => {
-    if (pageId) {
-      loadPageContent(pageId);
+    if (spaceSlug && pageSlug) {
+      loadPageContent(spaceSlug, pageSlug);
     }
-  }, [pageId]);
+  }, [spaceSlug, pageSlug]);
 
   const loadSpaces = async () => {
     try {
@@ -65,10 +65,10 @@ function LaunchpadPage() {
       setSpaces(data.spaces);
 
       // Navigate to first space if none selected
-      if (!spaceId && data.spaces.length > 0) {
+      if (!spaceSlug && data.spaces.length > 0) {
         const firstSpace = data.spaces[0];
         const defaultPage = firstSpace.pages.find((p: Page) => p.isDefault) || firstSpace.pages[0];
-        navigate(`/launchpad/${firstSpace.id}/${defaultPage.id}`, { replace: true });
+        navigate(`/launchpad/${firstSpace.slug}/${defaultPage.slug}`, { replace: true });
       }
     } catch (error) {
       console.error('Failed to load spaces:', error);
@@ -77,9 +77,9 @@ function LaunchpadPage() {
     }
   };
 
-  const loadPageContent = async (id: string) => {
+  const loadPageContent = async (spaceSlug: string, pageSlug: string) => {
     try {
-      const page = await launchpadApi.getPageContent(id);
+      const page = await launchpadApi.getPageContentBySlug(spaceSlug, pageSlug);
       setActivePage(page);
     } catch (error) {
       console.error('Failed to load page:', error);
@@ -91,29 +91,33 @@ function LaunchpadPage() {
 
     // Navigate to default page of the space
     const defaultPage = space.pages.find(p => p.isDefault) || space.pages[0];
-    navigate(`/launchpad/${space.id}/${defaultPage.id}`);
+    navigate(`/launchpad/${space.slug}/${defaultPage.slug}`);
   };
 
   const handleArrowClick = (space: Space, e: React.MouseEvent) => {
     e.stopPropagation();
 
     // Toggle dropdown
-    if (openSpaceDropdown === space.id) {
+    if (openSpaceDropdown === space.slug) {
       setOpenSpaceDropdown(null);
     } else {
-      setOpenSpaceDropdown(space.id);
+      setOpenSpaceDropdown(space.slug);
     }
   };
 
-  const handlePageChange = (pageId: string) => {
+  const handlePageChange = (page: Page) => {
     if (activeSpace) {
-      navigate(`/launchpad/${activeSpace.id}/${pageId}`);
+      navigate(`/launchpad/${activeSpace.slug}/${page.slug}`);
     }
   };
 
   const handleTileClick = (tile: Tile) => {
     if (tile.type === 'form') {
       navigate(`/forms/${tile.slug}`);
+    } else if (tile.type === 'app') {
+      // Use route from config if available, otherwise fallback to /app/:slug
+      const route = tile.config?.route || `/app/${tile.slug}`;
+      navigate(route);
     }
   };
 
@@ -373,20 +377,20 @@ function LaunchpadPage() {
         alignItems: 'stretch'
       }}>
         {spaces.map(space => (
-          <div key={space.id} style={{ position: 'relative', display: 'flex' }}>
+          <div key={space.slug} style={{ position: 'relative', display: 'flex' }}>
             <div
-              ref={el => spaceDropdownRefs.current[space.id] = el}
-              className={activeSpace?.id === space.id ? 'space-tab active' : 'space-tab'}
+              ref={el => spaceDropdownRefs.current[space.slug] = el}
+              className={activeSpace?.slug === space.slug ? 'space-tab active' : 'space-tab'}
               style={{
                 padding: '0.75rem 1rem',
-                borderBottom: activeSpace?.id === space.id ? '3px solid #0070f2' : '3px solid transparent',
+                borderBottom: activeSpace?.slug === space.slug ? '3px solid #0070f2' : '3px solid transparent',
                 background: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
                 transition: 'color 0.2s',
-                fontWeight: activeSpace?.id === space.id ? 600 : 400,
-                color: activeSpace?.id === space.id ? '#0070f2' : '#32363a',
+                fontWeight: activeSpace?.slug === space.slug ? 600 : 400,
+                color: activeSpace?.slug === space.slug ? '#0070f2' : '#32363a',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 minHeight: '48px',
@@ -396,7 +400,7 @@ function LaunchpadPage() {
                 e.currentTarget.style.color = '#0070f2';
               }}
               onMouseLeave={(e) => {
-                if (activeSpace?.id !== space.id) {
+                if (activeSpace?.slug !== space.slug) {
                   e.currentTarget.style.color = '#32363a';
                 }
               }}
@@ -412,7 +416,7 @@ function LaunchpadPage() {
                 }}
               >
                 <Icon name={space.icon} style={{ fontSize: '1rem' }} />
-                <span>{space.name}</span>
+                <span>{space.nameFa || space.name}</span>
               </div>
 
               {/* Arrow Dropdown - Click to open page list */}
@@ -436,8 +440,8 @@ function LaunchpadPage() {
             {/* Popover for pages */}
             {space.pages.length > 1 && (
               <Popover
-                opener={spaceDropdownRefs.current[space.id] || undefined}
-                open={openSpaceDropdown === space.id}
+                opener={spaceDropdownRefs.current[space.slug] || undefined}
+                open={openSpaceDropdown === space.slug}
                 placement="Bottom"
                 horizontalAlign="Start"
               >
@@ -448,32 +452,32 @@ function LaunchpadPage() {
                 }}>
                   {space.pages.map(page => (
                     <div
-                      key={page.id}
+                      key={page.slug}
                       onClick={() => {
-                        navigate(`/launchpad/${space.id}/${page.id}`);
+                        navigate(`/launchpad/${space.slug}/${page.slug}`);
                         setOpenSpaceDropdown(null);
                       }}
                       style={{
                         padding: '0.75rem 1rem',
                         cursor: 'pointer',
-                        background: page.id === pageId && activeSpace?.id === space.id ? '#e5f1fa' : 'transparent',
+                        background: page.slug === pageSlug && activeSpace?.slug === space.slug ? '#e5f1fa' : 'transparent',
                         borderBottom: '1px solid #e5e5e5',
-                        fontWeight: page.id === pageId && activeSpace?.id === space.id ? 600 : 400,
-                        color: page.id === pageId && activeSpace?.id === space.id ? 'var(--primary)' : '#32363a',
+                        fontWeight: page.slug === pageSlug && activeSpace?.slug === space.slug ? 600 : 400,
+                        color: page.slug === pageSlug && activeSpace?.slug === space.slug ? 'var(--primary)' : '#32363a',
                         transition: 'background 0.2s'
                       }}
                       onMouseEnter={(e) => {
-                        if (!(page.id === pageId && activeSpace?.id === space.id)) {
+                        if (!(page.slug === pageSlug && activeSpace?.slug === space.slug)) {
                           e.currentTarget.style.background = '#f7f7f7';
                         }
                       }}
                       onMouseLeave={(e) => {
-                        if (!(page.id === pageId && activeSpace?.id === space.id)) {
+                        if (!(page.slug === pageSlug && activeSpace?.slug === space.slug)) {
                           e.currentTarget.style.background = 'transparent';
                         }
                       }}
                     >
-                      {page.name}
+                      {page.nameFa || page.name}
                     </div>
                   ))}
                 </div>
@@ -485,7 +489,7 @@ function LaunchpadPage() {
 
       {/* Page Content */}
       <div
-        key={pageId}
+        key={pageSlug}
         style={{
           flex: 1,
           overflow: 'auto',
@@ -502,7 +506,7 @@ function LaunchpadPage() {
                 marginBottom: '1rem',
                 fontWeight: 600
               }}>
-                {section.name}
+                {section.nameFa || section.name}
               </Title>
 
               {/* Tiles Grid or Empty State */}
@@ -599,7 +603,7 @@ function TileCard({ tile, onClick }: TileCardProps) {
             WebkitBoxOrient: 'vertical'
           } as React.CSSProperties}
         >
-          {tile.name}
+          {tile.nameFa || tile.name}
         </div>
 
         {/* Subtitle - GRAY */}

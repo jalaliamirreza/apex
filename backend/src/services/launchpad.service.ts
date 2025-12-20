@@ -9,7 +9,8 @@ export async function getSpaces(): Promise<Space[]> {
         json_build_object(
           'id', p.id,
           'name', p.name,
-          'nameEn', p.name_en,
+          'nameFa', p.name_fa,
+          'slug', p.slug,
           'icon', p.icon,
           'orderIndex', p.order_index,
           'isDefault', p.is_default
@@ -25,7 +26,8 @@ export async function getSpaces(): Promise<Space[]> {
   return result.rows.map((row: any) => ({
     id: row.id,
     name: row.name,
-    nameEn: row.name_en,
+    nameFa: row.name_fa,
+    slug: row.slug,
     icon: row.icon,
     color: row.color,
     orderIndex: row.order_index,
@@ -35,7 +37,26 @@ export async function getSpaces(): Promise<Space[]> {
   }));
 }
 
-// Get page content with sections and tiles
+// Get space by slug
+export async function getSpaceBySlug(slug: string) {
+  const result = await query(
+    'SELECT * FROM spaces WHERE slug = $1 AND is_active = true',
+    [slug]
+  );
+  return result.rows[0] || null;
+}
+
+// Get page by space slug and page slug
+export async function getPageBySlug(spaceSlug: string, pageSlug: string) {
+  const result = await query(`
+    SELECT p.* FROM pages p
+    JOIN spaces s ON s.id = p.space_id
+    WHERE s.slug = $1 AND p.slug = $2 AND p.is_active = true
+  `, [spaceSlug, pageSlug]);
+  return result.rows[0] || null;
+}
+
+// Get page content with sections and tiles (FORMS + TILES)
 export async function getPageContent(pageId: string): Promise<Page | null> {
   // Get page
   const pageResult = await query(
@@ -44,29 +65,51 @@ export async function getPageContent(pageId: string): Promise<Page | null> {
   );
 
   if (pageResult.rows.length === 0) return null;
-
   const page = pageResult.rows[0];
 
-  // Get sections with tiles (forms)
+  // Get sections with BOTH forms AND tiles
   const sectionsResult = await query(`
     SELECT sec.*,
-      COALESCE(json_agg(
-        json_build_object(
-          'id', f.id,
-          'name', f.name,
-          'description', f.description,
-          'icon', COALESCE(f.icon, 'document'),
-          'color', COALESCE(f.color, '#0a6ed1'),
-          'slug', f.slug,
-          'type', 'form',
-          'orderIndex', COALESCE(f.order_index, 0),
-          'direction', f.direction
-        ) ORDER BY f.order_index
-      ) FILTER (WHERE f.id IS NOT NULL), '[]') as tiles
+      COALESCE((
+        SELECT json_agg(t ORDER BY t.order_index)
+        FROM (
+          -- Forms
+          SELECT
+            f.id,
+            f.name,
+            f.name_fa as "nameFa",
+            f.description,
+            COALESCE(f.icon, 'document') as icon,
+            COALESCE(f.color, '#0a6ed1') as color,
+            f.slug,
+            'form' as type,
+            COALESCE(f.order_index, 0) as order_index,
+            f.direction,
+            NULL as config
+          FROM forms f
+          WHERE f.section_id = sec.id AND f.status = 'active'
+
+          UNION ALL
+
+          -- Tiles
+          SELECT
+            t.id,
+            t.name,
+            t.name_fa as "nameFa",
+            t.description,
+            COALESCE(t.icon, 'document') as icon,
+            COALESCE(t.color, '#0a6ed1') as color,
+            t.slug,
+            t.type,
+            COALESCE(t.order_index, 0) as order_index,
+            t.direction,
+            t.config
+          FROM tiles t
+          WHERE t.section_id = sec.id AND t.is_active = true
+        ) t
+      ), '[]') as tiles
     FROM sections sec
-    LEFT JOIN forms f ON f.section_id = sec.id AND f.status = 'active'
     WHERE sec.page_id = $1 AND sec.is_active = true
-    GROUP BY sec.id
     ORDER BY sec.order_index
   `, [pageId]);
 
@@ -74,7 +117,8 @@ export async function getPageContent(pageId: string): Promise<Page | null> {
     id: page.id,
     spaceId: page.space_id,
     name: page.name,
-    nameEn: page.name_en,
+    nameFa: page.name_fa,
+    slug: page.slug,
     icon: page.icon,
     orderIndex: page.order_index,
     isDefault: page.is_default,
@@ -83,7 +127,7 @@ export async function getPageContent(pageId: string): Promise<Page | null> {
       id: row.id,
       pageId: row.page_id,
       name: row.name,
-      nameEn: row.name_en,
+      nameFa: row.name_fa,
       orderIndex: row.order_index,
       isActive: row.is_active,
       tiles: row.tiles
@@ -91,7 +135,18 @@ export async function getPageContent(pageId: string): Promise<Page | null> {
   };
 }
 
-// Get default page for a space
+// Get default page slug for a space
+export async function getDefaultPageSlug(spaceSlug: string) {
+  const result = await query(`
+    SELECT p.slug FROM pages p
+    JOIN spaces s ON s.id = p.space_id
+    WHERE s.slug = $1 AND p.is_default = true AND p.is_active = true
+    LIMIT 1
+  `, [spaceSlug]);
+  return result.rows[0]?.slug || null;
+}
+
+// Get default page for a space (legacy - keep for compatibility)
 export async function getDefaultPage(spaceId: string): Promise<string | null> {
   const result = await query(
     'SELECT id FROM pages WHERE space_id = $1 AND is_default = true AND is_active = true LIMIT 1',

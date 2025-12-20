@@ -1,7 +1,8 @@
 export interface Space {
   id: string;
-  name: string;
-  nameEn?: string;
+  name: string;        // English
+  nameFa?: string;     // Persian (Farsi)
+  slug: string;        // URL slug
   icon: string;
   color: string;
   orderIndex: number;
@@ -13,8 +14,9 @@ export interface Space {
 export interface Page {
   id: string;
   spaceId: string;
-  name: string;
-  nameEn?: string;
+  name: string;        // English
+  nameFa?: string;     // Persian (Farsi)
+  slug: string;        // URL slug
   icon: string;
   orderIndex: number;
   isDefault: boolean;
@@ -25,8 +27,8 @@ export interface Page {
 export interface Section {
   id: string;
   pageId: string;
-  name: string;
-  nameEn?: string;
+  name: string;        // English
+  nameFa?: string;     // Persian (Farsi)
   orderIndex: number;
   isActive: boolean;
   tiles?: Tile[];
@@ -34,13 +36,14 @@ export interface Section {
 
 export interface Tile {
   id: string;
-  name: string;
-  nameEn?: string;
+  name: string;        // English
+  nameFa?: string;     // Persian (Farsi)
   description?: string;
   icon: string;
   color: string;
   slug: string;
-  type: 'form' | 'link' | 'kpi';
+  type: 'form' | 'link' | 'kpi' | 'app';
   orderIndex: number;
   direction?: 'ltr' | 'rtl';
+  config?: Record<string, any>;
 }
