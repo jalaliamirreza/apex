@@ -129,7 +129,7 @@ function LaunchpadPage() {
     <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
       {/* SYNCRO Shell Bar with Gradient */}
       <div style={{
-        background: 'linear-gradient(135deg, #4169E1 0%, #06B6D4 100%)',
+        background: 'linear-gradient(90deg, #67E8F9 0%, #06B6D4 30%, #4169E1 100%)',
         padding: '0 1rem',
         display: 'flex',
         alignItems: 'center',
