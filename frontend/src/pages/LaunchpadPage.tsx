@@ -126,26 +126,39 @@ function LaunchpadPage() {
   }
 
   return (
-    <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
-      {/* SYNCRO Shell Bar with Gradient */}
+    <>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+      <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
+        {/* SYNCRO Shell Bar */}
       <div style={{
-        background: 'linear-gradient(135deg, #4169E1 0%, #06B6D4 100%)',
+        background: 'white',
         padding: '0 1rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '48px',
+        height: '72px',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
       }}>
         {/* Logo and Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}
              onClick={() => navigate('/launchpad')}>
-          <img src="/logo.svg" alt="SYNCRO" style={{ height: '32px', width: '32px' }} />
+          <img src="/logo.svg" alt="SYNCRO" style={{ height: '56px' }} />
           <div>
-            <div style={{ color: 'white', fontSize: '1.125rem', fontWeight: 700, letterSpacing: '0.5px' }}>
+            <div style={{ color: '#32363a', fontSize: '1.125rem', fontWeight: 700, letterSpacing: '0.5px' }}>
               SYNCRO
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.75rem' }}>
+            <div style={{ color: '#6a6d70', fontSize: '0.75rem' }}>
               Business Process Platform
             </div>
           </div>
@@ -161,10 +174,10 @@ function LaunchpadPage() {
               borderRadius: '50%',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Icon name="search" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <Icon name="search" style={{ color: '#32363a', fontSize: '1.25rem' }} />
           </div>
 
           {/* Help */}
@@ -175,10 +188,10 @@ function LaunchpadPage() {
               borderRadius: '50%',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Icon name="sys-help" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <Icon name="sys-help" style={{ color: '#32363a', fontSize: '1.25rem' }} />
           </div>
 
           {/* Notifications */}
@@ -192,10 +205,10 @@ function LaunchpadPage() {
               borderRadius: '50%',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Icon name="bell" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <Icon name="bell" style={{ color: '#32363a', fontSize: '1.25rem' }} />
             <div style={{
               position: 'absolute',
               top: '4px',
@@ -226,20 +239,20 @@ function LaunchpadPage() {
               borderRadius: '24px',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <span style={{ color: 'white', fontWeight: 500, fontSize: '0.875rem' }}>Ali Ahmadi</span>
+            <span style={{ color: '#32363a', fontWeight: 500, fontSize: '0.875rem' }}>Ali Ahmadi</span>
             <div style={{
               width: '32px',
               height: '32px',
               borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.2)',
+              background: '#e5e5e5',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <Icon name="person-placeholder" style={{ color: 'white', fontSize: '1.125rem' }} />
+              <Icon name="person-placeholder" style={{ color: '#6a6d70', fontSize: '1.125rem' }} />
             </div>
           </div>
         </div>
@@ -356,10 +369,11 @@ function LaunchpadPage() {
         background: 'white',
         borderBottom: '1px solid #e5e5e5',
         padding: '0',
-        display: 'flex'
+        display: 'flex',
+        alignItems: 'stretch'
       }}>
         {spaces.map(space => (
-          <div key={space.id} style={{ position: 'relative' }}>
+          <div key={space.id} style={{ position: 'relative', display: 'flex' }}>
             <div
               ref={el => spaceDropdownRefs.current[space.id] = el}
               className={activeSpace?.id === space.id ? 'space-tab active' : 'space-tab'}
@@ -370,18 +384,20 @@ function LaunchpadPage() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                transition: 'all 0.2s',
+                transition: 'color 0.2s',
                 fontWeight: activeSpace?.id === space.id ? 600 : 400,
-                color: activeSpace?.id === space.id ? '#0070f2' : '#32363a'
+                color: activeSpace?.id === space.id ? '#0070f2' : '#32363a',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                minHeight: '48px',
+                boxSizing: 'border-box'
               }}
               onMouseEnter={(e) => {
-                if (activeSpace?.id !== space.id) {
-                  e.currentTarget.style.background = '#f7f7f7';
-                }
+                e.currentTarget.style.color = '#0070f2';
               }}
               onMouseLeave={(e) => {
                 if (activeSpace?.id !== space.id) {
-                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = '#32363a';
                 }
               }}
             >
@@ -468,12 +484,16 @@ function LaunchpadPage() {
       </div>
 
       {/* Page Content */}
-      <div style={{
-        flex: 1,
-        overflow: 'auto',
-        padding: '1.5rem',
-        background: '#f7f7f7'
-      }}>
+      <div
+        key={pageId}
+        style={{
+          flex: 1,
+          overflow: 'auto',
+          padding: '1.5rem',
+          background: '#f7f7f7',
+          animation: 'fadeIn 0.3s ease-in-out'
+        }}
+      >
         {activePage?.sections && activePage.sections.length > 0 ? (
           activePage.sections.map(section => (
             <div key={section.id} style={{ marginBottom: '2rem' }}>
@@ -506,14 +526,22 @@ function LaunchpadPage() {
             </div>
           ))
         ) : (
-          <IllustratedMessage
-            name="NoData"
-            titleText="No apps available"
-            subtitleText="No applications on this page"
-          />
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '300px'
+          }}>
+            <IllustratedMessage
+              name="NoData"
+              titleText="No apps available"
+              subtitleText="No applications on this page"
+            />
+          </div>
         )}
       </div>
     </FlexBox>
+    </>
   );
 }
 
