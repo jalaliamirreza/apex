@@ -102,13 +102,13 @@ export async function getAllSpaces(): Promise<Space[]> {
   return result.rows.map((row: any) => ({
     id: row.id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
     color: row.color,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
-    isActive: row.is_active
+    is_active: row.is_active
   }));
 }
 
@@ -121,13 +121,13 @@ export async function getSpaceById(id: string): Promise<Space | null> {
   return {
     id: row.id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
     color: row.color,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
-    isActive: row.is_active
+    is_active: row.is_active
   };
 }
 
@@ -151,13 +151,13 @@ export async function createSpace(data: CreateSpaceDto): Promise<Space> {
   return {
     id: row.id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
     color: row.color,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
-    isActive: row.is_active
+    is_active: row.is_active
   };
 }
 
@@ -216,13 +216,13 @@ export async function updateSpace(id: string, data: UpdateSpaceDto): Promise<Spa
   return {
     id: row.id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
     color: row.color,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
-    isActive: row.is_active
+    is_active: row.is_active
   };
 }
 
@@ -247,14 +247,14 @@ export async function getAllPages(spaceId?: string): Promise<Page[]> {
 
   return result.rows.map((row: any) => ({
     id: row.id,
-    spaceId: row.space_id,
+    space_id: row.space_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
-    orderIndex: row.order_index,
-    isDefault: row.is_default,
-    isActive: row.is_active
+    order_index: row.order_index,
+    is_default: row.is_default,
+    is_active: row.is_active
   }));
 }
 
@@ -266,14 +266,14 @@ export async function getPageById(id: string): Promise<Page | null> {
   const row = result.rows[0];
   return {
     id: row.id,
-    spaceId: row.space_id,
+    space_id: row.space_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
-    orderIndex: row.order_index,
-    isDefault: row.is_default,
-    isActive: row.is_active
+    order_index: row.order_index,
+    is_default: row.is_default,
+    is_active: row.is_active
   };
 }
 
@@ -296,14 +296,14 @@ export async function createPage(data: CreatePageDto): Promise<Page> {
   const row = result.rows[0];
   return {
     id: row.id,
-    spaceId: row.space_id,
+    space_id: row.space_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
-    orderIndex: row.order_index,
-    isDefault: row.is_default,
-    isActive: row.is_active
+    order_index: row.order_index,
+    is_default: row.is_default,
+    is_active: row.is_active
   };
 }
 
@@ -361,14 +361,14 @@ export async function updatePage(id: string, data: UpdatePageDto): Promise<Page 
   const row = result.rows[0];
   return {
     id: row.id,
-    spaceId: row.space_id,
+    space_id: row.space_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     slug: row.slug,
     icon: row.icon,
-    orderIndex: row.order_index,
-    isDefault: row.is_default,
-    isActive: row.is_active
+    order_index: row.order_index,
+    is_default: row.is_default,
+    is_active: row.is_active
   };
 }
 
@@ -393,11 +393,11 @@ export async function getAllSections(pageId?: string): Promise<Section[]> {
 
   return result.rows.map((row: any) => ({
     id: row.id,
-    pageId: row.page_id,
+    page_id: row.page_id,
     name: row.name,
-    nameFa: row.name_fa,
-    orderIndex: row.order_index,
-    isActive: row.is_active
+    name_fa: row.name_fa,
+    order_index: row.order_index,
+    is_active: row.is_active
   }));
 }
 
@@ -409,11 +409,11 @@ export async function getSectionById(id: string): Promise<Section | null> {
   const row = result.rows[0];
   return {
     id: row.id,
-    pageId: row.page_id,
+    page_id: row.page_id,
     name: row.name,
-    nameFa: row.name_fa,
-    orderIndex: row.order_index,
-    isActive: row.is_active
+    name_fa: row.name_fa,
+    order_index: row.order_index,
+    is_active: row.is_active
   };
 }
 
@@ -433,11 +433,11 @@ export async function createSection(data: CreateSectionDto): Promise<Section> {
   const row = result.rows[0];
   return {
     id: row.id,
-    pageId: row.page_id,
+    page_id: row.page_id,
     name: row.name,
-    nameFa: row.name_fa,
-    orderIndex: row.order_index,
-    isActive: row.is_active
+    name_fa: row.name_fa,
+    order_index: row.order_index,
+    is_active: row.is_active
   };
 }
 
@@ -483,11 +483,11 @@ export async function updateSection(id: string, data: UpdateSectionDto): Promise
   const row = result.rows[0];
   return {
     id: row.id,
-    pageId: row.page_id,
+    page_id: row.page_id,
     name: row.name,
-    nameFa: row.name_fa,
-    orderIndex: row.order_index,
-    isActive: row.is_active
+    name_fa: row.name_fa,
+    order_index: row.order_index,
+    is_active: row.is_active
   };
 }
 
@@ -512,18 +512,18 @@ export async function getAllTiles(sectionId?: string): Promise<Tile[]> {
 
   return result.rows.map((row: any) => ({
     id: row.id,
-    sectionId: row.section_id,
+    section_id: row.section_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     description: row.description,
     icon: row.icon,
     color: row.color,
     slug: row.slug,
     type: row.type,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
     config: row.config,
-    isActive: row.is_active
+    is_active: row.is_active
   }));
 }
 
@@ -535,18 +535,18 @@ export async function getTileById(id: string): Promise<Tile | null> {
   const row = result.rows[0];
   return {
     id: row.id,
-    sectionId: row.section_id,
+    section_id: row.section_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     description: row.description,
     icon: row.icon,
     color: row.color,
     slug: row.slug,
     type: row.type,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
     config: row.config,
-    isActive: row.is_active
+    is_active: row.is_active
   };
 }
 
@@ -573,18 +573,18 @@ export async function createTile(data: CreateTileDto): Promise<Tile> {
   const row = result.rows[0];
   return {
     id: row.id,
-    sectionId: row.section_id,
+    section_id: row.section_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     description: row.description,
     icon: row.icon,
     color: row.color,
     slug: row.slug,
     type: row.type,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
     config: row.config,
-    isActive: row.is_active
+    is_active: row.is_active
   };
 }
 
@@ -658,18 +658,18 @@ export async function updateTile(id: string, data: UpdateTileDto): Promise<Tile 
   const row = result.rows[0];
   return {
     id: row.id,
-    sectionId: row.section_id,
+    section_id: row.section_id,
     name: row.name,
-    nameFa: row.name_fa,
+    name_fa: row.name_fa,
     description: row.description,
     icon: row.icon,
     color: row.color,
     slug: row.slug,
     type: row.type,
-    orderIndex: row.order_index,
+    order_index: row.order_index,
     direction: row.direction,
     config: row.config,
-    isActive: row.is_active
+    is_active: row.is_active
   };
 }
 
