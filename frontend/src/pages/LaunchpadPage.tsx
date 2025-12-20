@@ -127,9 +127,9 @@ function LaunchpadPage() {
 
   return (
     <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
-      {/* SYNCRO Shell Bar with Gradient */}
+      {/* SYNCRO Shell Bar */}
       <div style={{
-        background: 'linear-gradient(90deg, #67E8F9 0%, #06B6D4 30%, #4169E1 100%)',
+        background: 'white',
         padding: '0 1rem',
         display: 'flex',
         alignItems: 'center',
@@ -140,12 +140,12 @@ function LaunchpadPage() {
         {/* Logo and Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}
              onClick={() => navigate('/launchpad')}>
-          <img src="/syncro_logo.svg" alt="SYNCRO" style={{ height: '64px' }} />
+          <img src="/logo.svg" alt="SYNCRO" style={{ height: '96px' }} />
           <div>
-            <div style={{ color: 'white', fontSize: '1.125rem', fontWeight: 700, letterSpacing: '0.5px' }}>
+            <div style={{ color: '#32363a', fontSize: '1.125rem', fontWeight: 700, letterSpacing: '0.5px' }}>
               SYNCRO
             </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.75rem' }}>
+            <div style={{ color: '#6a6d70', fontSize: '0.75rem' }}>
               Business Process Platform
             </div>
           </div>
@@ -161,10 +161,10 @@ function LaunchpadPage() {
               borderRadius: '50%',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Icon name="search" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <Icon name="search" style={{ color: '#32363a', fontSize: '1.25rem' }} />
           </div>
 
           {/* Help */}
@@ -175,10 +175,10 @@ function LaunchpadPage() {
               borderRadius: '50%',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Icon name="sys-help" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <Icon name="sys-help" style={{ color: '#32363a', fontSize: '1.25rem' }} />
           </div>
 
           {/* Notifications */}
@@ -192,10 +192,10 @@ function LaunchpadPage() {
               borderRadius: '50%',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Icon name="bell" style={{ color: 'white', fontSize: '1.25rem' }} />
+            <Icon name="bell" style={{ color: '#32363a', fontSize: '1.25rem' }} />
             <div style={{
               position: 'absolute',
               top: '4px',
@@ -226,20 +226,20 @@ function LaunchpadPage() {
               borderRadius: '24px',
               transition: 'background 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <span style={{ color: 'white', fontWeight: 500, fontSize: '0.875rem' }}>Ali Ahmadi</span>
+            <span style={{ color: '#32363a', fontWeight: 500, fontSize: '0.875rem' }}>Ali Ahmadi</span>
             <div style={{
               width: '32px',
               height: '32px',
               borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.2)',
+              background: '#e5e5e5',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <Icon name="person-placeholder" style={{ color: 'white', fontSize: '1.125rem' }} />
+              <Icon name="person-placeholder" style={{ color: '#6a6d70', fontSize: '1.125rem' }} />
             </div>
           </div>
         </div>
