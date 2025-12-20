@@ -3,10 +3,6 @@ import {
   FlexBox,
   Button,
   Icon,
-  Table,
-  TableColumn,
-  TableRow,
-  TableCell,
   Dialog,
   Bar,
   Input,
@@ -201,86 +197,73 @@ function ManageSpacesPage() {
       )}
 
       {/* Table */}
-      <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden' }}>
-        <Table>
-          <TableColumn style={{ width: '80px' }}>
-            <Label>Order</Label>
-          </TableColumn>
-          <TableColumn style={{ width: '60px' }}>
-            <Label>Icon</Label>
-          </TableColumn>
-          <TableColumn>
-            <Label>Name (EN)</Label>
-          </TableColumn>
-          <TableColumn>
-            <Label>Name (FA)</Label>
-          </TableColumn>
-          <TableColumn>
-            <Label>Slug</Label>
-          </TableColumn>
-          <TableColumn style={{ width: '100px' }}>
-            <Label>Color</Label>
-          </TableColumn>
-          <TableColumn style={{ width: '100px' }}>
-            <Label>Direction</Label>
-          </TableColumn>
-          <TableColumn style={{ width: '80px' }}>
-            <Label>Active</Label>
-          </TableColumn>
-          <TableColumn style={{ width: '120px' }}>
-            <Label>Actions</Label>
-          </TableColumn>
-
-          {spaces.map(space => (
-            <TableRow key={space.id}>
-              <TableCell>{space.order_index}</TableCell>
-              <TableCell>
-                <Icon name={space.icon} style={{ color: space.color, fontSize: '1.25rem' }} />
-              </TableCell>
-              <TableCell>{space.name}</TableCell>
-              <TableCell>{space.name_fa}</TableCell>
-              <TableCell>
-                <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{space.slug}</code>
-              </TableCell>
-              <TableCell>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <div
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      borderRadius: '4px',
-                      background: space.color,
-                      border: '1px solid #e5e5e5'
-                    }}
-                  />
-                  <span style={{ fontSize: '0.75rem', color: '#6a6d70' }}>{space.color}</span>
-                </div>
-              </TableCell>
-              <TableCell>{space.direction.toUpperCase()}</TableCell>
-              <TableCell>
-                {space.is_active ? (
-                  <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
-                ) : (
-                  <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
-                )}
-              </TableCell>
-              <TableCell>
-                <FlexBox style={{ gap: '0.25rem' }}>
-                  <Button
-                    icon="edit"
-                    design="Transparent"
-                    onClick={() => handleOpenDialog(space)}
-                  />
-                  <Button
-                    icon="delete"
-                    design="Transparent"
-                    onClick={() => openDeleteDialog(space)}
-                  />
-                </FlexBox>
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table>
+      <div style={{ background: 'white', borderRadius: '8px', overflow: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ borderBottom: '2px solid #e5e5e5' }}>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Order</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '60px' }}>Icon</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (EN)</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (FA)</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Slug</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '100px' }}>Color</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '100px' }}>Direction</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Active</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {spaces.map(space => (
+              <tr key={space.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                <td style={{ padding: '1rem' }}>{space.order_index}</td>
+                <td style={{ padding: '1rem' }}>
+                  <Icon name={space.icon} style={{ color: space.color, fontSize: '1.25rem' }} />
+                </td>
+                <td style={{ padding: '1rem' }}>{space.name}</td>
+                <td style={{ padding: '1rem' }}>{space.name_fa}</td>
+                <td style={{ padding: '1rem' }}>
+                  <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{space.slug}</code>
+                </td>
+                <td style={{ padding: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '4px',
+                        background: space.color,
+                        border: '1px solid #e5e5e5'
+                      }}
+                    />
+                    <span style={{ fontSize: '0.75rem', color: '#6a6d70' }}>{space.color}</span>
+                  </div>
+                </td>
+                <td style={{ padding: '1rem' }}>{space.direction.toUpperCase()}</td>
+                <td style={{ padding: '1rem' }}>
+                  {space.is_active ? (
+                    <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
+                  ) : (
+                    <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
+                  )}
+                </td>
+                <td style={{ padding: '1rem' }}>
+                  <FlexBox style={{ gap: '0.25rem' }}>
+                    <Button
+                      icon="edit"
+                      design="Transparent"
+                      onClick={() => handleOpenDialog(space)}
+                    />
+                    <Button
+                      icon="delete"
+                      design="Transparent"
+                      onClick={() => openDeleteDialog(space)}
+                    />
+                  </FlexBox>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Create/Edit Dialog */}

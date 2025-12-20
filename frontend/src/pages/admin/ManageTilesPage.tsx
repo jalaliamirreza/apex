@@ -3,10 +3,6 @@ import {
   FlexBox,
   Button,
   Icon,
-  Table,
-  TableColumn,
-  TableRow,
-  TableCell,
   Dialog,
   Bar,
   Input,
@@ -303,85 +299,72 @@ function ManageTilesPage() {
             <BusyIndicator active size="M" />
           </FlexBox>
         ) : (
-          <Table>
-            <TableColumn style={{ width: '60px' }}>
-              <Label>Order</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '50px' }}>
-              <Label>Icon</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Name (EN)</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Name (FA)</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Slug</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '80px' }}>
-              <Label>Type</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Section</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '70px' }}>
-              <Label>Active</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '120px' }}>
-              <Label>Actions</Label>
-            </TableColumn>
-
-            {tiles.map(tile => (
-              <TableRow key={tile.id}>
-                <TableCell>{tile.order_index}</TableCell>
-                <TableCell>
-                  <Icon name={tile.icon} style={{ color: tile.color, fontSize: '1.25rem' }} />
-                </TableCell>
-                <TableCell>{tile.name}</TableCell>
-                <TableCell>{tile.name_fa}</TableCell>
-                <TableCell>
-                  <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{tile.slug}</code>
-                </TableCell>
-                <TableCell>
-                  <span
-                    style={{
-                      padding: '0.25rem 0.5rem',
-                      borderRadius: '4px',
-                      fontSize: '0.75rem',
-                      fontWeight: 500,
-                      background: TYPE_BADGES[tile.type].bg,
-                      color: TYPE_BADGES[tile.type].color
-                    }}
-                  >
-                    {tile.type}
-                  </span>
-                </TableCell>
-                <TableCell>{getSectionName(tile.section_id)}</TableCell>
-                <TableCell>
-                  {tile.is_active ? (
-                    <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
-                  ) : (
-                    <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <FlexBox style={{ gap: '0.25rem' }}>
-                    <Button
-                      icon="edit"
-                      design="Transparent"
-                      onClick={() => handleOpenDialog(tile)}
-                    />
-                    <Button
-                      icon="delete"
-                      design="Transparent"
-                      onClick={() => openDeleteDialog(tile)}
-                    />
-                  </FlexBox>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #e5e5e5' }}>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '60px' }}>Order</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '50px' }}>Icon</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (EN)</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (FA)</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Slug</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Type</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Section</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '70px' }}>Active</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tiles.map(tile => (
+                <tr key={tile.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                  <td style={{ padding: '1rem' }}>{tile.order_index}</td>
+                  <td style={{ padding: '1rem' }}>
+                    <Icon name={tile.icon} style={{ color: tile.color, fontSize: '1.25rem' }} />
+                  </td>
+                  <td style={{ padding: '1rem' }}>{tile.name}</td>
+                  <td style={{ padding: '1rem' }}>{tile.name_fa}</td>
+                  <td style={{ padding: '1rem' }}>
+                    <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{tile.slug}</code>
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    <span
+                      style={{
+                        padding: '0.25rem 0.5rem',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 500,
+                        background: TYPE_BADGES[tile.type].bg,
+                        color: TYPE_BADGES[tile.type].color
+                      }}
+                    >
+                      {tile.type}
+                    </span>
+                  </td>
+                  <td style={{ padding: '1rem' }}>{getSectionName(tile.section_id)}</td>
+                  <td style={{ padding: '1rem' }}>
+                    {tile.is_active ? (
+                      <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
+                    ) : (
+                      <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    <FlexBox style={{ gap: '0.25rem' }}>
+                      <Button
+                        icon="edit"
+                        design="Transparent"
+                        onClick={() => handleOpenDialog(tile)}
+                      />
+                      <Button
+                        icon="delete"
+                        design="Transparent"
+                        onClick={() => openDeleteDialog(tile)}
+                      />
+                    </FlexBox>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 

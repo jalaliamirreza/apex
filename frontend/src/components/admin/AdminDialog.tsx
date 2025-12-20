@@ -24,7 +24,6 @@ export function AdminDialog({
   return (
     <Dialog
       open={open}
-      onAfterClose={onCancel}
       headerText={title}
       footer={
         <Bar

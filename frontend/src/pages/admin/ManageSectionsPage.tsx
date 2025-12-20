@@ -2,10 +2,6 @@ import { useState, useEffect } from 'react';
 import {
   FlexBox,
   Button,
-  Table,
-  TableColumn,
-  TableRow,
-  TableCell,
   Dialog,
   Bar,
   Input,
@@ -230,60 +226,51 @@ function ManageSectionsPage() {
             <BusyIndicator active size="M" />
           </FlexBox>
         ) : (
-          <Table>
-            <TableColumn style={{ width: '80px' }}>
-              <Label>Order</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Space</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Page</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Name (EN)</Label>
-            </TableColumn>
-            <TableColumn>
-              <Label>Name (FA)</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '80px' }}>
-              <Label>Active</Label>
-            </TableColumn>
-            <TableColumn style={{ width: '120px' }}>
-              <Label>Actions</Label>
-            </TableColumn>
-
-            {sections.map(section => (
-              <TableRow key={section.id}>
-                <TableCell>{section.order_index}</TableCell>
-                <TableCell>{getSpaceName(section.page_id)}</TableCell>
-                <TableCell>{getPageName(section.page_id)}</TableCell>
-                <TableCell>{section.name}</TableCell>
-                <TableCell>{section.name_fa}</TableCell>
-                <TableCell>
-                  {section.is_active ? (
-                    <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
-                  ) : (
-                    <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <FlexBox style={{ gap: '0.25rem' }}>
-                    <Button
-                      icon="edit"
-                      design="Transparent"
-                      onClick={() => handleOpenDialog(section)}
-                    />
-                    <Button
-                      icon="delete"
-                      design="Transparent"
-                      onClick={() => openDeleteDialog(section)}
-                    />
-                  </FlexBox>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #e5e5e5' }}>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Order</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Space</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Page</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (EN)</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (FA)</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Active</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sections.map(section => (
+                <tr key={section.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                  <td style={{ padding: '1rem' }}>{section.order_index}</td>
+                  <td style={{ padding: '1rem' }}>{getSpaceName(section.page_id)}</td>
+                  <td style={{ padding: '1rem' }}>{getPageName(section.page_id)}</td>
+                  <td style={{ padding: '1rem' }}>{section.name}</td>
+                  <td style={{ padding: '1rem' }}>{section.name_fa}</td>
+                  <td style={{ padding: '1rem' }}>
+                    {section.is_active ? (
+                      <span style={{ color: '#10b981', fontWeight: 500 }}>✓</span>
+                    ) : (
+                      <span style={{ color: '#ef4444', fontWeight: 500 }}>✗</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    <FlexBox style={{ gap: '0.25rem' }}>
+                      <Button
+                        icon="edit"
+                        design="Transparent"
+                        onClick={() => handleOpenDialog(section)}
+                      />
+                      <Button
+                        icon="delete"
+                        design="Transparent"
+                        onClick={() => openDeleteDialog(section)}
+                      />
+                    </FlexBox>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
