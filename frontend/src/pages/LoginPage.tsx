@@ -81,11 +81,20 @@ function LoginPage() {
         }
 
         @keyframes blink-caret {
-          from, to {
+          0%, 49% {
+            border-color: #4169E1;
+          }
+          50%, 100% {
             border-color: transparent;
           }
-          50% {
-            border-color: #4169E1;
+        }
+
+        @keyframes hide-caret {
+          0%, 99% {
+            border-color: inherit;
+          }
+          100% {
+            border-color: transparent;
           }
         }
 
@@ -97,7 +106,8 @@ function LoginPage() {
           letter-spacing: 1px;
           animation:
             typing 3s steps(30, end) forwards,
-            blink-caret 0.75s step-end infinite;
+            blink-caret 0.75s step-end 0s 4,
+            hide-caret 3s forwards;
         }
 
         .dotted-background {
