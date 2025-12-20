@@ -1,4 +1,4 @@
-# APEX Project Status - December 17, 2025
+# APEX/SYNCRO Project Status - December 20, 2025
 
 ## ✅ Completed Phases
 
@@ -11,6 +11,34 @@
 | Phase 5 | ✅ Complete | Testing & Verification |
 | Phase 6 | ✅ Complete | SAP Fiori UI Polish |
 | Phase 7 | ✅ Complete | Native UI5 Form Renderer |
+| Phase 8 | ✅ Complete | SurveyJS Forms + Vazirmatn Font + RTL Support |
+| Phase 9 | ✅ Complete | User Portal Launchpad (Spaces, Pages, Tiles) |
+| Phase 9.5 | 🔄 In Progress | Visual Polish (SAP Fiori Match) |
+
+---
+
+## Phase 9.5 Status (Current Work)
+
+### ✅ Done
+- Square tiles (176x176px)
+- Two-area tile structure (content + icon)
+- Gray subtitle color
+- Tile layout (title top-left, icon bottom-left)
+- Disabled text selection on tiles
+- Shell bar with SYNCRO branding (gradient)
+- Space tabs with page dropdowns
+- Empty state illustrations
+
+### ❌ Still Fixing
+- Hover background color not working (UI5 Card Shadow DOM issue)
+- Icon size not changing properly
+- Global text selection disable (shell bar, tabs)
+
+### 🔧 Technical Notes
+- UI5 Card uses Shadow DOM - blocks external CSS hover
+- Need React useState for hover OR use plain div instead of Card
+- SAP Icons v5 = outline style (for Horizon theme)
+- SAP Icons v4 = filled style (for Fiori 3 theme)
 
 ---
 
@@ -27,120 +55,107 @@ apex-keycloak       8080        ✅ Running
 apex-minio          9000/9001   ✅ Running
 ```
 
-### Created Forms (8 total)
-1. Vacation Request (English)
-2. Daycare Allowance Request (Persian labels)
-3. درخواست کمک هزینه مهد کودک (Persian)
-4. درخواست تجهیزات IT (Persian)
-5. Equipment List in the Room (English)
-6. Family Members Information (Persian - 13 fields)
-7. Department Heads Information (Persian - with dropdowns)
-8. Branch Managers List (Persian - with 2 dropdowns)
+### Key URLs
+- **User Portal (Launchpad):** http://localhost:3000/launchpad
+- **Forms List:** http://localhost:3000/forms
+- **Backend Health:** http://localhost:3001/health
+- **SAP Fiori Reference:** https://vpn.besterun.com:44310/sap/bc/ui2/flp
 
-### Key Files
+---
+
+## SAP Fiori Tile Specifications (from official docs)
+
+| Property | Value |
+|----------|-------|
+| Standard Tile | 2x2 grid (176px × 176px) |
+| Flat Tile | 2x1 grid (176px × 88px) |
+| Wide Tile | 4x2 grid (352px × 176px) |
+| Border Radius | 16px |
+| Padding | 16px |
+| Title | 14px, bold, #1d2d3e |
+| Subtitle | 13px, gray #6a6d70 |
+| Icon | Bottom-left, gray #6a6d70 |
+| Hover | Background #f5f6f7 + shadow |
+
+---
+
+## Launchpad Structure
+
 ```
-D:\Worklab\SAP\AI\apex\
-├── SETUP.md                    # Project setup guide
-├── FIORI-POLISH.md            # Fiori design spec
-├── FORM-RENDERER-SPEC.md      # UI5 form renderer spec
-├── FRONTEND-REDESIGN.md       # Original redesign spec
-├── .gitignore                 # Git ignore rules
-├── docker-compose.yml         # Docker orchestration
-└── frontend/src/
-    ├── components/
-    │   └── FioriFormRenderer.tsx   # Native UI5 form renderer
-    └── utils/
-        └── schemaConverter.ts      # Formio to UI5 converter
+User Portal
+├── Shell Bar (SYNCRO branded, gradient)
+│   ├── Logo + Title
+│   ├── Search icon
+│   ├── Help icon
+│   ├── Notifications (with badge)
+│   └── Profile menu
+├── Space Tabs (with page dropdowns)
+│   ├── مالی و اعتبارات (Finance)
+│   ├── منابع انسانی (HR)
+│   ├── فناوری اطلاعات (IT)
+│   └── درخواست‌های من (My Requests)
+└── Page Content
+    ├── Sections
+    │   ├── Section Title
+    │   └── Tiles Grid
+    └── Empty State (IllustratedMessage)
 ```
 
 ---
 
-## What Works Now
+## Database Schema (Phase 9)
 
-✅ **Form Creation via Claude MCP**
-- Natural language → Form schema
-- Support for: text, email, number, date, select, textarea, checkbox
+```sql
+-- Spaces (top-level navigation)
+spaces: id, name, icon, order, is_active
 
-✅ **SAP Fiori UI**
-- ShellBar with icons
-- Launchpad-style tiles
-- Professional form styling
-- Persian/RTL support
+-- Pages (within spaces)  
+pages: id, space_id, name, is_default, order
 
-✅ **Form Features**
-- Dropdown fields with options
-- Required field validation
-- Date pickers
-- Number inputs
-- Cancel/Submit buttons
+-- Sections (within pages)
+sections: id, page_id, name, order
 
-✅ **Data Flow**
-- Form submissions stored in PostgreSQL
-- Full-text search via OpenSearch
-- View submissions per form
+-- Tiles (within sections)
+tiles: id, section_id, name, description, icon, type, slug, order
+```
 
 ---
 
-## Known Limitations (Future Work)
+## Next Phases (Not Started)
 
-| Feature | Status |
-|---------|--------|
-| Custom validation (regex patterns) | ❌ Not implemented |
-| Dynamic list fields (add/remove items) | ❌ Not implemented |
-| Form sections/groups | ❌ Not implemented |
-| Persian calendar (Jalali) | ❌ Not implemented |
-| File upload | ❌ Not implemented |
-| User authentication | ⚠️ Keycloak running but not enforced |
-| Visual form builder | ❌ Not implemented |
+| Phase | Description |
+|-------|-------------|
+| **10** | Admin Portal (Manage Spaces, Pages, Forms, Users) |
+| **11** | Authentication (Keycloak integration) |
+| **12** | Form Builder UI (drag-and-drop) |
+| **13** | Dashboards & Analytics |
+| **14** | Workflow Engine |
 
 ---
 
-## Quick Start (Tomorrow)
+## Quick Start
 
-### 1. Start Docker (in WSL)
+### 1. Start Docker (WSL)
 ```bash
 sudo dockerd &
-```
-
-### 2. Start All Services
-```bash
 cd /mnt/d/Worklab/SAP/AI/apex
 docker compose up -d
 ```
 
-### 3. Verify
-```bash
-docker ps
-curl http://localhost:3001/health
-```
+### 2. Access
+- Launchpad: http://localhost:3000/launchpad
+- Forms: http://localhost:3000/forms
 
-### 4. Access
-- Frontend: http://localhost:3000
-- Forms List: http://localhost:3000/forms
-
-### 5. MCP in Claude Desktop
-Already configured in `%APPDATA%\Claude\claude_desktop_config.json`
+### 3. MCP in Claude Desktop
+Config: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ---
 
-## Git Status
+## Git Info
 
 - **Repository:** https://github.com/jalaliamirreza/apex
-- **Branch:** claude/review-spec-docs-WKFjD
-- **Note:** There's a merge in progress, may need to commit/push changes
+- **Current Branch:** claude/syncro-fiori-ui-polish-XYeiy
 
 ---
 
-## Next Steps (Suggested)
-
-1. **Custom Validation** - Add regex patterns for phone numbers, personnel IDs
-2. **Form Sections** - Group related fields (e.g., Father info, Mother info)
-3. **Visual Form Builder** - Drag-and-drop form creation UI
-4. **Authentication** - Enable Keycloak login
-5. **Dashboard** - Analytics and reports
-
----
-
-**Last Updated:** 2025-12-17 06:30 CET
-**Session Duration:** ~3 hours
-**Forms Created This Session:** 4 new forms
+**Last Updated:** 2025-12-20 02:00 CET

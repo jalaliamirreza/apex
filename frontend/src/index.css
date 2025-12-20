@@ -57,17 +57,24 @@ body {
   padding: 0;
 }
 
-/* Tile styling - SAP Fiori Horizon style */
+/* SAP Fiori Tile Styling */
 .tile-card {
-  cursor: pointer !important;
-  background: white !important;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
+  background: #ffffff !important;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
+  user-select: none !important;
 }
 
-/* SAP Fiori Horizon hover effect - light gray background + shadow */
 .tile-card:hover {
   background-color: #f5f6f7 !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* Force icon size in tiles */
+.tile-icon {
+  --sapContent_IconHeight: 2rem !important;
+  --sapContent_IconWidth: 2rem !important;
+  width: 2rem !important;
+  height: 2rem !important;
 }
 
 /* All elements inside tile show pointer cursor */
@@ -113,25 +120,19 @@ ui5-card.tile-card::after,
   outline: none !important;
 }
 
-/* Disable text selection on UI elements - SAP Fiori style */
-.tile-card,
-[ui5-tab],
-[ui5-tabcontainer],
-[ui5-card],
-[ui5-title],
-[ui5-text],
-[ui5-button],
-[ui5-shellbar],
-.space-tabs,
-.shell-bar,
-.section-title {
+/* ========================================
+   DISABLE TEXT SELECTION GLOBALLY
+   ======================================== */
+
+/* Disable text selection globally */
+* {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-/* Allow text selection only in form inputs */
+/* Re-enable for inputs only */
 input,
 textarea,
 [contenteditable="true"] {
@@ -149,4 +150,28 @@ textarea,
 /* Target UI5 elements specifically */
 [ui5-tab], [ui5-card], [ui5-title], [ui5-text], [ui5-label], [ui5-button], [ui5-list-item] {
   font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
+}
+
+/* Section Title - SAP Fiori style (no underline) */
+.section-title,
+[ui5-title].section-title {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #1F2937 !important;
+  border-bottom: none !important;
+  margin-bottom: 1rem !important;
+  text-decoration: none !important;
+}
+
+/* Space tabs - SAP Fiori style with blue underline on active */
+.space-tab {
+  padding: 0.75rem 1rem;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.space-tab.active,
+.space-tab[aria-selected="true"] {
+  color: #0070f2 !important;
+  border-bottom: 3px solid #0070f2 !important;
 }
