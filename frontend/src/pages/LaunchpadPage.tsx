@@ -134,7 +134,7 @@ function LaunchpadPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '48px',
+        height: '72px',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
       }}>
         {/* Logo and Title */}
