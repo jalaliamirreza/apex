@@ -360,7 +360,7 @@ function LaunchpadPage() {
         alignItems: 'stretch'
       }}>
         {spaces.map(space => (
-          <div key={space.id} style={{ position: 'relative', display: 'flex', alignItems: 'stretch' }}>
+          <div key={space.id} style={{ position: 'relative', display: 'flex' }}>
             <div
               ref={el => spaceDropdownRefs.current[space.id] = el}
               className={activeSpace?.id === space.id ? 'space-tab active' : 'space-tab'}
@@ -371,11 +371,13 @@ function LaunchpadPage() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                transition: 'color 0.2s, border-bottom 0.2s',
+                transition: 'color 0.2s',
                 fontWeight: activeSpace?.id === space.id ? 600 : 400,
                 color: activeSpace?.id === space.id ? '#0070f2' : '#32363a',
                 cursor: 'pointer',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                minHeight: '48px',
+                boxSizing: 'border-box'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#0070f2';
