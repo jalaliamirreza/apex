@@ -4,10 +4,14 @@ import FormPage from './pages/FormPage';
 import SubmissionsPage from './pages/SubmissionsPage';
 import SearchPage from './pages/SearchPage';
 import AdminAppPage from './pages/AdminAppPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
     <Routes>
+      {/* Login */}
+      <Route path="/login" element={<LoginPage />} />
+
       {/* User Portal - Launchpad */}
       <Route path="/" element={<Navigate to="/launchpad" replace />} />
       <Route path="/launchpad" element={<LaunchpadPage />} />
