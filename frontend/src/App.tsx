@@ -11,8 +11,8 @@ function App() {
       {/* User Portal - Launchpad */}
       <Route path="/" element={<Navigate to="/launchpad" replace />} />
       <Route path="/launchpad" element={<LaunchpadPage />} />
-      <Route path="/launchpad/:spaceId" element={<LaunchpadPage />} />
-      <Route path="/launchpad/:spaceId/:pageId" element={<LaunchpadPage />} />
+      <Route path="/launchpad/:spaceSlug" element={<LaunchpadPage />} />
+      <Route path="/launchpad/:spaceSlug/:pageSlug" element={<LaunchpadPage />} />
 
       {/* Form Pages */}
       <Route path="/forms/:slug" element={<FormPage />} />

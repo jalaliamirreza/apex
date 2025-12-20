@@ -56,6 +56,17 @@ export const launchpadApi = {
   getDefaultPage: async (spaceId: string) => {
     const { data } = await api.get(`/launchpad/spaces/${spaceId}/default-page`);
     return data;
+  },
+
+  // Slug-based APIs
+  getPageContentBySlug: async (spaceSlug: string, pageSlug: string) => {
+    const { data } = await api.get(`/launchpad/pages/by-slug/${spaceSlug}/${pageSlug}/content`);
+    return data;
+  },
+
+  getDefaultPageSlug: async (spaceSlug: string) => {
+    const { data } = await api.get(`/launchpad/spaces/${spaceSlug}/default-page-slug`);
+    return data;
   }
 };
 
