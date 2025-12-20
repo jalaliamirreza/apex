@@ -356,23 +356,26 @@ function LaunchpadPage() {
         background: 'white',
         borderBottom: '1px solid #e5e5e5',
         padding: '0',
-        display: 'flex'
+        display: 'flex',
+        alignItems: 'stretch'
       }}>
         {spaces.map(space => (
-          <div key={space.id} style={{ position: 'relative' }}>
+          <div key={space.id} style={{ position: 'relative', display: 'flex', alignItems: 'stretch' }}>
             <div
               ref={el => spaceDropdownRefs.current[space.id] = el}
               className={activeSpace?.id === space.id ? 'space-tab active' : 'space-tab'}
               style={{
                 padding: '0.75rem 1rem',
                 borderBottom: activeSpace?.id === space.id ? '3px solid #0070f2' : '3px solid transparent',
-                background: 'transparent',
+                background: activeSpace?.id === space.id ? 'transparent' : 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                transition: 'all 0.2s',
+                transition: 'background 0.2s',
                 fontWeight: activeSpace?.id === space.id ? 600 : 400,
-                color: activeSpace?.id === space.id ? '#0070f2' : '#32363a'
+                color: activeSpace?.id === space.id ? '#0070f2' : '#32363a',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
               }}
               onMouseEnter={(e) => {
                 if (activeSpace?.id !== space.id) {
