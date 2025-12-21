@@ -1,0 +1,106 @@
+/* ============================================
+   SurveyJS Minimal Custom Overrides
+   Only for things not covered by CSS variables
+   ============================================ */
+
+/* RTL text alignment */
+[dir="rtl"] .sd-question__title,
+[dir="rtl"] .sd-input,
+[dir="rtl"] .sd-dropdown,
+[dir="rtl"] .sd-comment,
+[dir="rtl"] .sv-string-viewer {
+  text-align: right;
+}
+
+[dir="ltr"] .sd-question__title,
+[dir="ltr"] .sd-input,
+[dir="ltr"] .sd-dropdown,
+[dir="ltr"] .sd-comment,
+[dir="ltr"] .sv-string-viewer {
+  text-align: left;
+}
+
+/* Panel section styling - card effect */
+.sd-panel {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.sd-panel__header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(10, 110, 209, 0.15);
+}
+
+.sd-panel__title {
+  color: #0a6ed1;
+  font-weight: 600;
+}
+
+/* Submit button gradient */
+.sd-btn--action,
+.sd-navigation__complete-btn {
+  background: linear-gradient(135deg, #0a6ed1 0%, #085cad 100%) !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(10, 110, 209, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.sd-btn--action:hover,
+.sd-navigation__complete-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(10, 110, 209, 0.4);
+}
+
+/* Input focus glow */
+.sd-input:focus,
+.sd-dropdown:focus,
+.sd-comment:focus {
+  box-shadow: 0 0 0 3px rgba(10, 110, 209, 0.1);
+}
+
+/* Required asterisk color */
+.sd-question__required-text {
+  color: #bb0000;
+}
+
+/* Footer spacing */
+.sd-footer {
+  padding-top: 1.25rem;
+  margin-top: 1.25rem;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Hide default progress bar top margin issue */
+.sd-progress {
+  margin-bottom: 1rem;
+}
+
+/* Dropdown popup styling */
+.sv-popup__container {
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+/* Smoother animations */
+.sd-question {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Remove extra body background */
+.sd-body {
+  background: transparent !important;
+}
+
+.sd-root-modern {
+  background: transparent !important;
+}
