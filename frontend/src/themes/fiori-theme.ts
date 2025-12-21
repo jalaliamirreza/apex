@@ -121,7 +121,7 @@ export const fioriTheme = {
 
   // Header configuration
   header: {
-    height: 256,
+    height: 0,
     inheritWidthFrom: "container" as const,
     textAreaWidth: 512,
     overlapEnabled: false,
