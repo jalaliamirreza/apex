@@ -47,7 +47,25 @@ export interface Tile {
   order_index: number;
   direction?: 'ltr' | 'rtl';
   config?: Record<string, any>;
+  form_id?: string | null;
   is_active: boolean;
+  // Joined fields from forms table
+  form_name?: string;
+  form_slug?: string;
+}
+
+export interface Form {
+  id: string;
+  name: string;
+  name_fa: string;
+  slug: string;
+  description: string | null;
+  status: string;
+  icon: string;
+  color: string;
+  schema?: object;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // Create DTOs
@@ -57,8 +75,10 @@ export type CreatePageDto = Omit<Page, 'id'>;
 export type UpdatePageDto = Partial<Omit<Page, 'id'>>;
 export type CreateSectionDto = Omit<Section, 'id'>;
 export type UpdateSectionDto = Partial<Omit<Section, 'id'>>;
-export type CreateTileDto = Omit<Tile, 'id'>;
-export type UpdateTileDto = Partial<Omit<Tile, 'id'>>;
+export type CreateTileDto = Omit<Tile, 'id' | 'form_name' | 'form_slug'>;
+export type UpdateTileDto = Partial<Omit<Tile, 'id' | 'form_name' | 'form_slug'>>;
+export type CreateFormDto = Omit<Form, 'id' | 'created_at' | 'updated_at'>;
+export type UpdateFormDto = Partial<Omit<Form, 'id' | 'created_at' | 'updated_at'>>;
 
 // ==================== SPACES ====================
 export const spacesApi = {
@@ -103,4 +123,13 @@ export const tilesApi = {
   create: (data: CreateTileDto) => api.post('/admin/tiles', data).then(r => r.data as Tile),
   update: (id: string, data: UpdateTileDto) => api.put(`/admin/tiles/${id}`, data).then(r => r.data as Tile),
   delete: (id: string) => api.delete(`/admin/tiles/${id}`)
+};
+
+// ==================== FORMS ====================
+export const formsApi = {
+  getAll: () => api.get('/admin/forms').then(r => r.data.forms as Form[]),
+  getById: (id: string) => api.get(`/admin/forms/${id}`).then(r => r.data as Form),
+  create: (data: CreateFormDto) => api.post('/admin/forms', data).then(r => r.data as Form),
+  update: (id: string, data: UpdateFormDto) => api.put(`/admin/forms/${id}`, data).then(r => r.data as Form),
+  delete: (id: string) => api.delete(`/admin/forms/${id}`)
 };

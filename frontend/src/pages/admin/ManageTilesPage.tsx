@@ -15,7 +15,7 @@ import {
   TextArea
 } from '@ui5/webcomponents-react';
 import AdminLayout from '../../components/AdminLayout';
-import { tilesApi, sectionsApi, pagesApi, spacesApi, Tile, Section, Page, Space, CreateTileDto, UpdateTileDto } from '../../services/adminApi';
+import { tilesApi, sectionsApi, pagesApi, spacesApi, formsApi, Tile, Section, Page, Space, Form, CreateTileDto, UpdateTileDto } from '../../services/adminApi';
 import '@ui5/webcomponents-icons/dist/AllIcons';
 
 const ICONS = ['folder', 'money-bills', 'employee', 'it-host', 'outbox', 'settings', 'home', 'factory', 'customer', 'document', 'list', 'form', 'chart-axis', 'create'];
@@ -33,6 +33,7 @@ function ManageTilesPage() {
   const [sections, setSections] = useState<Section[]>([]);
   const [pages, setPages] = useState<Page[]>([]);
   const [spaces, setSpaces] = useState<Space[]>([]);
+  const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterSectionId, setFilterSectionId] = useState<string>('');
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -55,6 +56,7 @@ function ManageTilesPage() {
     order_index: 0,
     direction: 'ltr',
     config: undefined,
+    form_id: null,
     is_active: true
   });
 
@@ -70,14 +72,16 @@ function ManageTilesPage() {
 
   const loadData = async () => {
     try {
-      const [spacesData, pagesData, sectionsData] = await Promise.all([
+      const [spacesData, pagesData, sectionsData, formsData] = await Promise.all([
         spacesApi.getAll(),
         pagesApi.getAll(),
-        sectionsApi.getAll()
+        sectionsApi.getAll(),
+        formsApi.getAll()
       ]);
       setSpaces(spacesData);
       setPages(pagesData);
       setSections(sectionsData);
+      setForms(formsData);
     } catch (err: any) {
       setError(err.message || 'Failed to load data');
     }
@@ -308,6 +312,7 @@ function ManageTilesPage() {
                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (FA)</th>
                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Slug</th>
                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '80px' }}>Type</th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Form</th>
                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Section</th>
                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '70px' }}>Active</th>
                 <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Actions</th>
@@ -338,6 +343,13 @@ function ManageTilesPage() {
                     >
                       {tile.type}
                     </span>
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    {tile.form_name ? (
+                      <span style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{tile.form_name}</span>
+                    ) : (
+                      <span style={{ fontSize: '0.875rem', color: '#d1d5db' }}>—</span>
+                    )}
                   </td>
                   <td style={{ padding: '1rem' }}>{getSectionName(tile.section_id)}</td>
                   <td style={{ padding: '1rem' }}>
@@ -503,6 +515,23 @@ function ManageTilesPage() {
                 </Select>
               </div>
             </FlexBox>
+
+            {formData.type === 'form' && (
+              <div>
+                <Label required>Form</Label>
+                <Select
+                  onChange={(e: any) => setFormData({ ...formData, form_id: e.detail.selectedOption.value || null })}
+                  style={{ width: '100%' }}
+                >
+                  <Option value="" selected={!formData.form_id}>-- Select Form --</Option>
+                  {forms.map(form => (
+                    <Option key={form.id} value={form.id} selected={formData.form_id === form.id}>
+                      {form.name} ({form.name_fa})
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+            )}
 
             <div>
               <Label>Order Index</Label>

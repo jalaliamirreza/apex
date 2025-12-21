@@ -9,6 +9,7 @@ import ManageSpacesPage from './pages/admin/ManageSpacesPage';
 import ManagePagesPage from './pages/admin/ManagePagesPage';
 import ManageSectionsPage from './pages/admin/ManageSectionsPage';
 import ManageTilesPage from './pages/admin/ManageTilesPage';
+import ManageFormsPage from './pages/admin/ManageFormsPage';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
       <Route path="/app/manage-pages" element={<ManagePagesPage />} />
       <Route path="/app/manage-sections" element={<ManageSectionsPage />} />
       <Route path="/app/manage-tiles" element={<ManageTilesPage />} />
+      <Route path="/app/manage-forms" element={<ManageFormsPage />} />
 
       {/* Admin Apps (fallback for other apps) */}
       <Route path="/app/:slug" element={<AdminAppPage />} />

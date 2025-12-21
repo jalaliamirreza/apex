@@ -56,7 +56,7 @@ export async function getPageBySlug(spaceSlug: string, pageSlug: string) {
   return result.rows[0] || null;
 }
 
-// Get page content with sections and tiles (FORMS + TILES)
+// Get page content - ONLY from tiles table
 export async function getPageContent(pageId: string): Promise<Page | null> {
   // Get page
   const pageResult = await query(
@@ -67,46 +67,29 @@ export async function getPageContent(pageId: string): Promise<Page | null> {
   if (pageResult.rows.length === 0) return null;
   const page = pageResult.rows[0];
 
-  // Get sections with BOTH forms AND tiles
+  // Get sections with tiles (join form data when type='form')
   const sectionsResult = await query(`
     SELECT sec.*,
       COALESCE((
-        SELECT json_agg(t ORDER BY t.order_index)
-        FROM (
-          -- Forms
-          SELECT
-            f.id,
-            f.name,
-            f.name_fa,
-            f.description,
-            COALESCE(f.icon, 'document') as icon,
-            COALESCE(f.color, '#0a6ed1') as color,
-            f.slug,
-            'form' as type,
-            COALESCE(f.order_index, 0) as order_index,
-            f.direction,
-            NULL as config
-          FROM forms f
-          WHERE f.section_id = sec.id AND f.status = 'active'
-
-          UNION ALL
-
-          -- Tiles
-          SELECT
-            t.id,
-            t.name,
-            t.name_fa,
-            t.description,
-            COALESCE(t.icon, 'document') as icon,
-            COALESCE(t.color, '#0a6ed1') as color,
-            t.slug,
-            t.type,
-            COALESCE(t.order_index, 0) as order_index,
-            t.direction,
-            t.config
-          FROM tiles t
-          WHERE t.section_id = sec.id AND t.is_active = true
-        ) t
+        SELECT json_agg(
+          json_build_object(
+            'id', t.id,
+            'name', t.name,
+            'name_fa', t.name_fa,
+            'description', t.description,
+            'icon', COALESCE(t.icon, 'document'),
+            'color', COALESCE(t.color, '#0a6ed1'),
+            'slug', CASE WHEN t.type = 'form' AND f.slug IS NOT NULL THEN f.slug ELSE t.slug END,
+            'type', t.type,
+            'order_index', COALESCE(t.order_index, 0),
+            'direction', t.direction,
+            'config', t.config,
+            'form_id', t.form_id
+          ) ORDER BY t.order_index
+        )
+        FROM tiles t
+        LEFT JOIN forms f ON t.form_id = f.id
+        WHERE t.section_id = sec.id AND t.is_active = true
       ), '[]') as tiles
     FROM sections sec
     WHERE sec.page_id = $1 AND sec.is_active = true

@@ -74,6 +74,7 @@ export interface CreateTileDto {
   order_index: number;
   direction?: 'ltr' | 'rtl';
   config?: Record<string, any>;
+  form_id?: string;
   is_active: boolean;
 }
 
@@ -89,6 +90,7 @@ export interface UpdateTileDto {
   order_index?: number;
   direction?: 'ltr' | 'rtl';
   config?: Record<string, any>;
+  form_id?: string;
   is_active?: boolean;
 }
 
@@ -498,15 +500,19 @@ export async function deleteSection(id: string): Promise<void> {
 // ==================== TILES ====================
 
 export async function getAllTiles(sectionId?: string): Promise<Tile[]> {
-  let sql = 'SELECT * FROM tiles';
+  let sql = `
+    SELECT t.*, f.name as form_name, f.slug as form_slug
+    FROM tiles t
+    LEFT JOIN forms f ON t.form_id = f.id
+  `;
   const params: any[] = [];
 
   if (sectionId) {
-    sql += ' WHERE section_id = $1';
+    sql += ' WHERE t.section_id = $1';
     params.push(sectionId);
   }
 
-  sql += ' ORDER BY order_index';
+  sql += ' ORDER BY t.order_index';
 
   const result = await query(sql, params);
 
@@ -523,12 +529,20 @@ export async function getAllTiles(sectionId?: string): Promise<Tile[]> {
     order_index: row.order_index,
     direction: row.direction,
     config: row.config,
-    is_active: row.is_active
+    form_id: row.form_id,
+    is_active: row.is_active,
+    form_name: row.form_name,
+    form_slug: row.form_slug
   }));
 }
 
 export async function getTileById(id: string): Promise<Tile | null> {
-  const result = await query('SELECT * FROM tiles WHERE id = $1', [id]);
+  const result = await query(`
+    SELECT t.*, f.name as form_name, f.slug as form_slug
+    FROM tiles t
+    LEFT JOIN forms f ON t.form_id = f.id
+    WHERE t.id = $1
+  `, [id]);
 
   if (result.rows.length === 0) return null;
 
@@ -546,14 +560,17 @@ export async function getTileById(id: string): Promise<Tile | null> {
     order_index: row.order_index,
     direction: row.direction,
     config: row.config,
-    is_active: row.is_active
+    form_id: row.form_id,
+    is_active: row.is_active,
+    form_name: row.form_name,
+    form_slug: row.form_slug
   };
 }
 
 export async function createTile(data: CreateTileDto): Promise<Tile> {
   const result = await query(`
-    INSERT INTO tiles (section_id, name, name_fa, description, icon, color, slug, type, order_index, direction, config, is_active)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    INSERT INTO tiles (section_id, name, name_fa, description, icon, color, slug, type, order_index, direction, config, form_id, is_active)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     RETURNING *
   `, [
     data.section_id,
@@ -567,6 +584,7 @@ export async function createTile(data: CreateTileDto): Promise<Tile> {
     data.order_index,
     data.direction,
     data.config ? JSON.stringify(data.config) : null,
+    data.form_id || null,
     data.is_active
   ]);
 
@@ -584,6 +602,7 @@ export async function createTile(data: CreateTileDto): Promise<Tile> {
     order_index: row.order_index,
     direction: row.direction,
     config: row.config,
+    form_id: row.form_id,
     is_active: row.is_active
   };
 }
@@ -637,6 +656,10 @@ export async function updateTile(id: string, data: UpdateTileDto): Promise<Tile 
     fields.push(`config = $${paramIndex++}`);
     values.push(data.config ? JSON.stringify(data.config) : null);
   }
+  if (data.form_id !== undefined) {
+    fields.push(`form_id = $${paramIndex++}`);
+    values.push(data.form_id);
+  }
   if (data.is_active !== undefined) {
     fields.push(`is_active = $${paramIndex++}`);
     values.push(data.is_active);
@@ -669,6 +692,7 @@ export async function updateTile(id: string, data: UpdateTileDto): Promise<Tile 
     order_index: row.order_index,
     direction: row.direction,
     config: row.config,
+    form_id: row.form_id,
     is_active: row.is_active
   };
 }

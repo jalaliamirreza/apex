@@ -47,5 +47,8 @@ export interface Tile {
   order_index: number;
   direction?: 'ltr' | 'rtl';
   config?: Record<string, any>;
+  form_id?: string | null;
   is_active?: boolean;
+  form_name?: string;  // Joined field from forms table
+  form_slug?: string;  // Joined field from forms table
 }
