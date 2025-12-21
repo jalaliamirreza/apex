@@ -1,30 +1,44 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
+  ShellBar,
   FlexBox,
-  Title,
-  Text,
-  Label,
-  Tag,
+  Card,
+  CardHeader,
+  Breadcrumbs,
+  BreadcrumbsItem,
   Button,
   BusyIndicator,
-  MessageStrip
+  MessageStrip,
+  Icon,
+  Title,
+  Text
 } from '@ui5/webcomponents-react';
-import "@ui5/webcomponents-icons/dist/response.js";
+import "@ui5/webcomponents-icons/dist/document.js";
 import "@ui5/webcomponents-icons/dist/nav-back.js";
+import "@ui5/webcomponents-icons/dist/accept.js";
+import "@ui5/webcomponents-icons/dist/home.js";
 import { SurveyFormRenderer } from '../components/SurveyFormRenderer';
-import { convertFormioToSurveyJS } from '../utils/schemaConverter';
+import { FormSuccessScreen } from '../components/FormSuccessScreen';
+import { FormLoadingSkeleton } from '../components/FormLoadingSkeleton';
 import { formsApi } from '../services/api';
 import { Form } from '../types';
 
 function FormPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [form, setForm] = useState<Form | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Get return path from location state or default to launchpad
+  const returnPath = location.state?.returnPath || '/launchpad';
+  const spaceName = location.state?.spaceName || 'Home';
+  const pageName = location.state?.pageName || '';
 
   useEffect(() => {
     if (slug) loadForm();
@@ -53,86 +67,130 @@ function FormPage() {
     }
   };
 
+  const handleBack = () => {
+    navigate(returnPath);
+  };
+
+  // Loading state
   if (loading) {
-    return (
-      <FlexBox justifyContent="Center" alignItems="Center" style={{ height: '300px' }}>
-        <BusyIndicator active size="L" />
-      </FlexBox>
-    );
+    return <FormLoadingSkeleton />;
   }
 
+  // Error state
   if (error || !form) {
     return (
-      <FlexBox direction="Column" style={{ padding: '1rem', gap: '1rem' }}>
-        <MessageStrip design="Negative">{error || 'Form not found'}</MessageStrip>
-        <Button icon="nav-back" onClick={() => navigate('/forms')}>Back to Forms</Button>
-      </FlexBox>
+      <div style={{ minHeight: '100vh', background: '#f5f6f7' }}>
+        <ShellBar
+          logo={<img src="/logo.svg" alt="SYNCRO" style={{ height: '32px' }} />}
+          primaryTitle="SYNCRO"
+        />
+        <FlexBox
+          direction="Column"
+          alignItems="Center"
+          justifyContent="Center"
+          style={{ padding: '3rem', gap: '1rem' }}
+        >
+          <MessageStrip design="Negative" hideCloseButton>
+            {error || 'Form not found'}
+          </MessageStrip>
+          <Button icon="nav-back" onClick={handleBack}>
+            Back
+          </Button>
+        </FlexBox>
+      </div>
     );
   }
 
+  // Success state
   if (submitted) {
     return (
-      <FlexBox
-        direction="Column"
-        alignItems="Center"
-        justifyContent="Center"
-        style={{ height: '300px', gap: '1rem' }}
-      >
-        <MessageStrip design="Positive" hideCloseButton>
-          Form submitted successfully!
-        </MessageStrip>
-        <FlexBox style={{ gap: '0.5rem' }}>
-          <Button design="Emphasized" onClick={() => navigate('/forms')}>
-            Back to Forms
-          </Button>
-          <Button design="Transparent" onClick={() => setSubmitted(false)}>
-            Submit Another
-          </Button>
-        </FlexBox>
-      </FlexBox>
+      <div style={{ minHeight: '100vh', background: '#f5f6f7' }}>
+        <ShellBar
+          logo={<img src="/logo.svg" alt="SYNCRO" style={{ height: '32px' }} />}
+          primaryTitle="SYNCRO"
+          secondaryTitle={form.name_fa || form.name}
+        />
+        <FormSuccessScreen
+          formName={form.name_fa || form.name}
+          onBackToLaunchpad={handleBack}
+          onSubmitAnother={() => setSubmitted(false)}
+          direction={form.direction || 'ltr'}
+        />
+      </div>
     );
   }
 
-  // Convert Formio schema to SurveyJS
-  const surveySchema = convertFormioToSurveyJS(form.schema);
-  surveySchema.title = form.name;
-  surveySchema.description = form.description;
-
+  // Form state
   return (
-    <FlexBox direction="Column" style={{ gap: '1rem', padding: '1rem' }}>
-      {/* Header - Always LTR */}
-      <FlexBox justifyContent="SpaceBetween" alignItems="Center">
-        <FlexBox alignItems="Center" style={{ gap: '1rem' }}>
-          <Button icon="nav-back" design="Transparent" onClick={() => navigate('/forms')} />
-          <FlexBox direction="Column">
-            <Title level="H2">{form.name}</Title>
-            <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
-              <Text>{form.description || ''}</Text>
-              <Tag colorScheme={form.direction === 'rtl' ? '6' : '8'}>
-                {form.direction === 'rtl' ? 'فارسی' : 'English'}
-              </Tag>
-              <Label>{form.status}</Label>
-            </FlexBox>
-          </FlexBox>
-        </FlexBox>
-        <Button
-          icon="response"
-          design="Transparent"
-          onClick={() => navigate(`/forms/${slug}/submissions`)}
-        >
-          View Submissions
-        </Button>
-      </FlexBox>
-
-      {/* Form Content - Respects form direction */}
-      <SurveyFormRenderer
-        schema={surveySchema}
-        onSubmit={handleSubmit}
-        onCancel={() => navigate('/forms')}
-        loading={submitting}
-        direction={form.direction || 'ltr'}
+    <div style={{ minHeight: '100vh', background: '#f5f6f7' }}>
+      {/* Shell Bar */}
+      <ShellBar
+        logo={<img src="/logo.svg" alt="SYNCRO" style={{ height: '32px' }} />}
+        primaryTitle="SYNCRO"
+        secondaryTitle={form.name_fa || form.name}
+        startButton={
+          <Button icon="nav-back" design="Transparent" onClick={handleBack} />
+        }
       />
-    </FlexBox>
+
+      {/* Breadcrumb Bar */}
+      <div style={{
+        padding: '0.75rem 1.5rem',
+        background: '#fff',
+        borderBottom: '1px solid #e5e5e5',
+        direction: form.direction || 'ltr'
+      }}>
+        <Breadcrumbs>
+          <BreadcrumbsItem onClick={() => navigate('/launchpad')}>
+            {form.direction === 'rtl' ? 'خانه' : 'Home'}
+          </BreadcrumbsItem>
+          {spaceName && (
+            <BreadcrumbsItem onClick={handleBack}>
+              {spaceName}
+            </BreadcrumbsItem>
+          )}
+          <BreadcrumbsItem>
+            {form.name_fa || form.name}
+          </BreadcrumbsItem>
+        </Breadcrumbs>
+      </div>
+
+      {/* Main Content */}
+      <div style={{
+        padding: '1.5rem',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        direction: form.direction || 'ltr'
+      }}>
+        <Card style={{
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          borderRadius: '12px',
+          overflow: 'hidden'
+        }}>
+          {/* Card Header */}
+          <CardHeader
+            titleText={form.name_fa || form.name}
+            subtitleText={form.description || ''}
+            avatar={<Icon name={form.icon || 'document'} />}
+            style={{
+              borderBottom: '1px solid #e5e5e5',
+              background: '#fafbfc'
+            }}
+          />
+
+          {/* Form Content */}
+          <div style={{ padding: '1.5rem' }}>
+            <SurveyFormRenderer
+              schema={form.schema}
+              onSubmit={handleSubmit}
+              onCancel={handleBack}
+              loading={submitting}
+              direction={form.direction || 'ltr'}
+            />
+          </div>
+        </Card>
+      </div>
+    </div>
   );
 }
 

@@ -2,12 +2,15 @@ export interface Form {
   id: string;
   slug: string;
   name: string;
+  name_fa?: string;
   description?: string;
-  schema: { components: any[] };
+  icon?: string;
+  color?: string;
+  schema: any;
   status: string;
-  direction: 'ltr' | 'rtl';
-  createdAt: string;
-  updatedAt: string;
+  direction?: 'ltr' | 'rtl';
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Submission {

@@ -3,15 +3,13 @@ import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
 import 'survey-core/survey-core.min.css';
 import '../styles/surveyjs-fiori-theme.css';
-
-// Set RTL and Persian locale
 import { surveyLocalization } from 'survey-core';
 
 // Persian translations
 surveyLocalization.locales['fa'] = {
   pagePrevText: 'قبلی',
   pageNextText: 'بعدی',
-  completeText: 'ثبت',
+  completeText: 'ثبت فرم',
   requiredError: 'این فیلد الزامی است',
   loadingFile: 'در حال بارگذاری...',
   chooseFileCaption: 'انتخاب فایل',
@@ -26,7 +24,7 @@ interface SurveyFormRendererProps {
   loading?: boolean;
   readOnly?: boolean;
   initialData?: Record<string, any>;
-  direction?: 'ltr' | 'rtl';  // NEW: Direction prop
+  direction?: 'ltr' | 'rtl';
 }
 
 export function SurveyFormRenderer({
@@ -36,19 +34,19 @@ export function SurveyFormRenderer({
   loading,
   readOnly,
   initialData,
-  direction = 'ltr',  // Default LTR
+  direction = 'ltr',
 }: SurveyFormRendererProps) {
   const survey = new Model(schema);
 
-  // Set locale based on direction
+  // Set locale
   survey.locale = direction === 'rtl' ? 'fa' : 'en';
 
-  // Apply initial data if provided
+  // Apply initial data
   if (initialData) {
     survey.data = initialData;
   }
 
-  // Set read-only mode
+  // Read-only mode
   if (readOnly) {
     survey.mode = 'display';
   }
@@ -65,30 +63,15 @@ export function SurveyFormRenderer({
   return (
     <div
       dir={direction}
+      className="survey-container"
       style={{
-        fontFamily: 'var(--font-family)',
-        background: 'white',
-        borderRadius: '8px',
-        padding: '1rem'
+        fontFamily: 'var(--survey-font)',
+        opacity: loading ? 0.6 : 1,
+        pointerEvents: loading ? 'none' : 'auto',
+        transition: 'opacity 0.2s'
       }}
     >
       <Survey model={survey} />
-      {onCancel && (
-        <div style={{ marginTop: '1rem', textAlign: direction === 'rtl' ? 'right' : 'left' }}>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'transparent',
-              border: '1px solid #e5e5e5',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            {direction === 'rtl' ? 'انصراف' : 'Cancel'}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
