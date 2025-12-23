@@ -186,6 +186,7 @@ function FormPage() {
               onCancel={handleBack}
               loading={submitting}
               direction={form.direction || 'ltr'}
+              navigationType={form.navigation_type}
             />
           </div>
         </Card>

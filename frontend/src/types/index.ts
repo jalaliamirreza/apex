@@ -9,6 +9,7 @@ export interface Form {
   schema: any;
   status: string;
   direction?: 'ltr' | 'rtl';
+  navigation_type?: 'default' | 'toc-left' | 'toc-right' | 'progress-buttons';
   createdAt?: string;
   updatedAt?: string;
 }

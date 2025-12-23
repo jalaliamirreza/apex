@@ -30,6 +30,7 @@ interface SurveyFormRendererProps {
   readOnly?: boolean;
   initialData?: Record<string, any>;
   direction?: 'ltr' | 'rtl';
+  navigationType?: 'default' | 'toc-left' | 'toc-right' | 'progress-buttons';
 }
 
 export function SurveyFormRenderer({
@@ -40,6 +41,7 @@ export function SurveyFormRenderer({
   readOnly,
   initialData,
   direction = 'ltr',
+  navigationType = 'default',
 }: SurveyFormRendererProps) {
   const survey = new Model(schema);
 
@@ -48,6 +50,28 @@ export function SurveyFormRenderer({
 
   // Set locale based on direction
   survey.locale = direction === 'rtl' ? 'fa' : 'en';
+
+  // Apply navigation settings based on navigationType
+  switch (navigationType) {
+    case 'toc-left':
+      survey.showTOC = true;
+      survey.tocLocation = 'left';
+      break;
+    case 'toc-right':
+      survey.showTOC = true;
+      survey.tocLocation = 'right';
+      break;
+    case 'progress-buttons':
+      survey.showProgressBar = 'top';
+      survey.progressBarType = 'buttons';
+      survey.showTOC = false;
+      break;
+    case 'default':
+    default:
+      // Keep default behavior (Next/Previous only)
+      survey.showTOC = false;
+      break;
+  }
 
   // Configure survey options
   survey.showQuestionNumbers = 'off';
