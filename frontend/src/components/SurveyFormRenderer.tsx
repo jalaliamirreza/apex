@@ -56,10 +56,12 @@ export function SurveyFormRenderer({
     case 'toc-left':
       survey.showTOC = true;
       survey.tocLocation = 'left';
+      survey.showProgressBar = 'off';
       break;
     case 'toc-right':
       survey.showTOC = true;
       survey.tocLocation = 'right';
+      survey.showProgressBar = 'off';
       break;
     case 'progress-buttons':
       survey.showProgressBar = 'top';
@@ -70,6 +72,7 @@ export function SurveyFormRenderer({
     default:
       // Keep default behavior (Next/Previous only)
       survey.showTOC = false;
+      survey.showProgressBar = 'off';
       break;
   }
 
