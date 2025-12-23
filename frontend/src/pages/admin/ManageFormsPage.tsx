@@ -89,22 +89,29 @@ function ManageFormsPage() {
     }
   };
 
-  const handleOpenDialog = (form?: Form) => {
+  const handleOpenDialog = async (form?: Form) => {
     if (form) {
-      setEditingForm(form);
-      setFormData({
-        name: form.name,
-        name_fa: form.name_fa,
-        slug: form.slug,
-        description: form.description || '',
-        status: form.status,
-        icon: form.icon,
-        color: form.color,
-        direction: form.direction || 'ltr',
-        navigation_type: form.navigation_type || 'default',
-        schema: form.schema || {}
-      });
-      setSchemaText(JSON.stringify(form.schema || {}, null, 2));
+      // Fetch full form data including schema from database
+      try {
+        const fullForm = await formsApi.getById(form.id);
+        setEditingForm(fullForm);
+        setFormData({
+          name: fullForm.name,
+          name_fa: fullForm.name_fa,
+          slug: fullForm.slug,
+          description: fullForm.description || '',
+          status: fullForm.status,
+          icon: fullForm.icon,
+          color: fullForm.color,
+          direction: fullForm.direction || 'ltr',
+          navigation_type: fullForm.navigation_type || 'default',
+          schema: fullForm.schema || {}
+        });
+        setSchemaText(JSON.stringify(fullForm.schema || {}, null, 2));
+      } catch (err: any) {
+        setError(err.message || 'Failed to load form details');
+        return;
+      }
     } else {
       setEditingForm(null);
       setFormData({
