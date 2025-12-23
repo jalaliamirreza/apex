@@ -81,7 +81,10 @@ export function AdminForm({ fields, data, onChange }: AdminFormProps) {
   return (
     <Form style={{ padding: '1rem' }}>
       {fields.map((field) => (
-        <FormItem key={field.key} label={`${field.label}${field.required ? ' *' : ''}`}>
+        <FormItem key={field.key}>
+          <div style={{ marginBottom: '0.5rem', fontWeight: 500 }}>
+            {field.label}{field.required ? ' *' : ''}
+          </div>
           {renderField(field)}
         </FormItem>
       ))}

@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import {
-  Table,
-  TableColumn,
-  TableRow,
-  TableCell,
   Button,
   Icon,
   Input,
@@ -85,42 +81,47 @@ export function AdminTable({
       </Toolbar>
 
       <div style={{ flex: 1, overflow: 'auto', background: 'white' }}>
-        <Table>
-          {columns.map((col) => (
-            <TableColumn key={col.key} slot="columns" style={{ width: col.width }}>
-              {col.label}
-            </TableColumn>
-          ))}
-          <TableColumn slot="columns" style={{ width: '100px' }}>
-            Actions
-          </TableColumn>
-
-          {filteredData.map((item, index) => (
-            <TableRow key={item.id || index}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ borderBottom: '2px solid #e5e5e5' }}>
               {columns.map((col) => (
-                <TableCell key={col.key}>{renderCell(item, col)}</TableCell>
+                <th key={col.key} style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: col.width }}>
+                  {col.label}
+                </th>
               ))}
-              <TableCell>
-                <FlexBox style={{ gap: '0.25rem' }}>
-                  {canEdit && (
-                    <Button
-                      icon="edit"
-                      design="Transparent"
-                      onClick={() => onEdit?.(item)}
-                    />
-                  )}
-                  {canDelete && (
-                    <Button
-                      icon="delete"
-                      design="Transparent"
-                      onClick={() => onDelete?.(item)}
-                    />
-                  )}
-                </FlexBox>
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '100px' }}>
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.map((item, index) => (
+              <tr key={item.id || index} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                {columns.map((col) => (
+                  <td key={col.key} style={{ padding: '1rem' }}>{renderCell(item, col)}</td>
+                ))}
+                <td style={{ padding: '1rem' }}>
+                  <FlexBox style={{ gap: '0.25rem' }}>
+                    {canEdit && (
+                      <Button
+                        icon="edit"
+                        design="Transparent"
+                        onClick={() => onEdit?.(item)}
+                      />
+                    )}
+                    {canDelete && (
+                      <Button
+                        icon="delete"
+                        design="Transparent"
+                        onClick={() => onDelete?.(item)}
+                      />
+                    )}
+                  </FlexBox>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </FlexBox>
   );

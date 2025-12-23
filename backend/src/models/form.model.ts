@@ -23,10 +23,14 @@ export interface Form {
   id: string;
   slug: string;
   name: string;
+  name_fa: string;
   description?: string;
   schema: FormSchema;
   status: 'active' | 'archived';
+  icon?: string;
+  color?: string;
   direction: 'ltr' | 'rtl';
+  navigation_type: 'default' | 'toc-left' | 'toc-right' | 'progress-buttons';
   createdBy?: string;
   createdAt: Date;
   updatedAt: Date;

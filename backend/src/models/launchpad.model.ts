@@ -1,49 +1,54 @@
 export interface Space {
   id: string;
   name: string;        // English
-  nameFa?: string;     // Persian (Farsi)
+  name_fa?: string;     // Persian (Farsi)
   slug: string;        // URL slug
   icon: string;
   color: string;
-  orderIndex: number;
+  order_index: number;
   direction: 'ltr' | 'rtl';
-  isActive: boolean;
+  is_active: boolean;
   pages?: Page[];
 }
 
 export interface Page {
   id: string;
-  spaceId: string;
+  space_id: string;
   name: string;        // English
-  nameFa?: string;     // Persian (Farsi)
+  name_fa?: string;     // Persian (Farsi)
   slug: string;        // URL slug
   icon: string;
-  orderIndex: number;
-  isDefault: boolean;
-  isActive: boolean;
+  order_index: number;
+  is_default: boolean;
+  is_active: boolean;
   sections?: Section[];
 }
 
 export interface Section {
   id: string;
-  pageId: string;
+  page_id: string;
   name: string;        // English
-  nameFa?: string;     // Persian (Farsi)
-  orderIndex: number;
-  isActive: boolean;
+  name_fa?: string;     // Persian (Farsi)
+  order_index: number;
+  is_active: boolean;
   tiles?: Tile[];
 }
 
 export interface Tile {
   id: string;
+  section_id?: string;
   name: string;        // English
-  nameFa?: string;     // Persian (Farsi)
+  name_fa?: string;     // Persian (Farsi)
   description?: string;
   icon: string;
   color: string;
   slug: string;
   type: 'form' | 'link' | 'kpi' | 'app';
-  orderIndex: number;
+  order_index: number;
   direction?: 'ltr' | 'rtl';
   config?: Record<string, any>;
+  form_id?: string | null;
+  is_active?: boolean;
+  form_name?: string;  // Joined field from forms table
+  form_slug?: string;  // Joined field from forms table
 }

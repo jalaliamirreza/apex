@@ -1,22 +1,25 @@
 import { useCallback } from 'react';
-import { Model } from 'survey-core';
+import { Model, surveyLocalization } from 'survey-core';
 import { Survey } from 'survey-react-ui';
-import 'survey-core/survey-core.min.css';
-import '../styles/surveyjs-fiori-theme.css';
 
-// Set RTL and Persian locale
-import { surveyLocalization } from 'survey-core';
+// Import ONLY the base CSS - no custom CSS
+import 'survey-core/survey-core.min.css';
+
+// Import theme
+import { fioriTheme } from '../themes/fiori-theme';
 
 // Persian translations
 surveyLocalization.locales['fa'] = {
   pagePrevText: 'قبلی',
   pageNextText: 'بعدی',
-  completeText: 'ثبت',
+  completeText: 'ثبت فرم',
   requiredError: 'این فیلد الزامی است',
   loadingFile: 'در حال بارگذاری...',
   chooseFileCaption: 'انتخاب فایل',
   removeFileCaption: 'حذف',
   emptyMessage: 'داده‌ای موجود نیست',
+  noEntriesText: 'هنوز ورودی وجود ندارد',
+  more: 'بیشتر',
 };
 
 interface SurveyFormRendererProps {
@@ -26,7 +29,8 @@ interface SurveyFormRendererProps {
   loading?: boolean;
   readOnly?: boolean;
   initialData?: Record<string, any>;
-  direction?: 'ltr' | 'rtl';  // NEW: Direction prop
+  direction?: 'ltr' | 'rtl';
+  navigationType?: 'default' | 'toc-left' | 'toc-right' | 'progress-buttons';
 }
 
 export function SurveyFormRenderer({
@@ -36,19 +40,54 @@ export function SurveyFormRenderer({
   loading,
   readOnly,
   initialData,
-  direction = 'ltr',  // Default LTR
+  direction = 'ltr',
+  navigationType = 'default',
 }: SurveyFormRendererProps) {
   const survey = new Model(schema);
+
+  // Apply official theme
+  survey.applyTheme(fioriTheme);
 
   // Set locale based on direction
   survey.locale = direction === 'rtl' ? 'fa' : 'en';
 
-  // Apply initial data if provided
+  // Apply navigation settings based on navigationType
+  switch (navigationType) {
+    case 'toc-left':
+      survey.showTOC = true;
+      survey.tocLocation = 'left';
+      break;
+    case 'toc-right':
+      survey.showTOC = true;
+      survey.tocLocation = 'right';
+      break;
+    case 'progress-buttons':
+      survey.showProgressBar = 'top';
+      survey.progressBarType = 'buttons';
+      survey.showTOC = false;
+      break;
+    case 'default':
+    default:
+      // Keep default behavior (Next/Previous only)
+      survey.showTOC = false;
+      break;
+  }
+
+  // Configure survey options
+  survey.showQuestionNumbers = 'off';
+  survey.questionTitleLocation = 'top';
+  survey.questionDescriptionLocation = 'underTitle';
+  survey.questionErrorLocation = 'bottom';
+  survey.focusFirstQuestionAutomatic = false;
+  survey.widthMode = 'static'; // or 'responsive'
+  survey.width = '100%';
+
+  // Apply initial data
   if (initialData) {
     survey.data = initialData;
   }
 
-  // Set read-only mode
+  // Read-only mode
   if (readOnly) {
     survey.mode = 'display';
   }
@@ -66,29 +105,12 @@ export function SurveyFormRenderer({
     <div
       dir={direction}
       style={{
-        fontFamily: 'var(--font-family)',
-        background: 'white',
-        borderRadius: '8px',
-        padding: '1rem'
+        opacity: loading ? 0.6 : 1,
+        pointerEvents: loading ? 'none' : 'auto',
+        transition: 'opacity 0.2s',
       }}
     >
       <Survey model={survey} />
-      {onCancel && (
-        <div style={{ marginTop: '1rem', textAlign: direction === 'rtl' ? 'right' : 'left' }}>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'transparent',
-              border: '1px solid #e5e5e5',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            {direction === 'rtl' ? 'انصراف' : 'Cancel'}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

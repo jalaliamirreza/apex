@@ -113,11 +113,17 @@ function LaunchpadPage() {
 
   const handleTileClick = (tile: Tile) => {
     if (tile.type === 'form') {
-      navigate(`/forms/${tile.slug}`);
-    } else if (tile.type === 'app') {
-      // Use route from config if available, otherwise fallback to /app/:slug
-      const route = tile.config?.route || `/app/${tile.slug}`;
-      navigate(route);
+      navigate(`/forms/${tile.slug}`, {
+        state: {
+          returnPath: `/launchpad/${activeSpace?.slug}/${activePage?.slug}`,
+          spaceName: activeSpace?.nameFa || activeSpace?.name,
+          pageName: activePage?.nameFa || activePage?.name
+        }
+      });
+    } else if (tile.type === 'app' && tile.config?.route) {
+      navigate(tile.config.route);
+    } else if (tile.type === 'link' && tile.config?.url) {
+      window.open(tile.config.url, '_blank');
     }
   };
 
