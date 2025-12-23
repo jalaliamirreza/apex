@@ -9,6 +9,8 @@ export interface FormListItem {
   status: string;
   icon: string;
   color: string;
+  direction: string;
+  navigation_type: string;
   created_at: string;
   updated_at: string;
 }
@@ -33,12 +35,14 @@ export interface UpdateFormDto {
   status?: string;
   icon?: string;
   color?: string;
+  direction?: string;
+  navigation_type?: string;
 }
 
 // Get all forms (for listing and for tile form selector)
 export async function getAllForms(): Promise<FormListItem[]> {
   const result = await query(`
-    SELECT id, name, name_fa, slug, description, status, icon, color, created_at, updated_at
+    SELECT id, name, name_fa, slug, description, status, icon, color, direction, navigation_type, created_at, updated_at
     FROM forms
     ORDER BY name
   `);
@@ -107,6 +111,14 @@ export async function updateForm(id: string, data: UpdateFormDto) {
   if (data.color !== undefined) {
     fields.push(`color = $${paramIndex++}`);
     values.push(data.color);
+  }
+  if (data.direction !== undefined) {
+    fields.push(`direction = $${paramIndex++}`);
+    values.push(data.direction);
+  }
+  if (data.navigation_type !== undefined) {
+    fields.push(`navigation_type = $${paramIndex++}`);
+    values.push(data.navigation_type);
   }
 
   if (fields.length === 0) {

@@ -63,6 +63,8 @@ export interface Form {
   status: string;
   icon: string;
   color: string;
+  direction: string;
+  navigation_type: string;
   schema?: object;
   created_at?: string;
   updated_at?: string;

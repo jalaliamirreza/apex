@@ -27,6 +27,26 @@ const STATUS_BADGES = {
   archived: { bg: '#f3f4f6', color: '#6b7280' }
 };
 
+const getNavigationLabel = (type: string): string => {
+  switch (type) {
+    case 'toc-left': return 'Sidebar Left';
+    case 'toc-right': return 'Sidebar Right';
+    case 'progress-buttons': return 'Top Tabs';
+    case 'default':
+    default: return 'Default';
+  }
+};
+
+const getNavigationBadgeColor = (type: string): { bg: string; text: string } => {
+  switch (type) {
+    case 'toc-left': return { bg: '#dbeafe', text: '#1e40af' };      // Blue
+    case 'toc-right': return { bg: '#e0e7ff', text: '#3730a3' };     // Indigo
+    case 'progress-buttons': return { bg: '#dcfce7', text: '#166534' }; // Green
+    case 'default':
+    default: return { bg: '#f3f4f6', text: '#374151' };              // Gray
+  }
+};
+
 function ManageFormsPage() {
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,6 +66,8 @@ function ManageFormsPage() {
     status: 'draft',
     icon: 'document',
     color: '#0a6ed1',
+    direction: 'ltr',
+    navigation_type: 'default',
     schema: {}
   });
 
@@ -78,6 +100,8 @@ function ManageFormsPage() {
         status: form.status,
         icon: form.icon,
         color: form.color,
+        direction: form.direction || 'ltr',
+        navigation_type: form.navigation_type || 'default',
         schema: form.schema || {}
       });
       setSchemaText(JSON.stringify(form.schema || {}, null, 2));
@@ -91,6 +115,8 @@ function ManageFormsPage() {
         status: 'draft',
         icon: 'document',
         color: '#0a6ed1',
+        direction: 'ltr',
+        navigation_type: 'default',
         schema: {}
       });
       setSchemaText('{}');
@@ -209,6 +235,7 @@ function ManageFormsPage() {
               <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Name (FA)</th>
               <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600' }}>Slug</th>
               <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '100px' }}>Status</th>
+              <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Navigation</th>
               <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', width: '120px' }}>Actions</th>
             </tr>
           </thead>
@@ -235,6 +262,19 @@ function ManageFormsPage() {
                     }}
                   >
                     {form.status}
+                  </span>
+                </td>
+                <td style={{ padding: '1rem' }}>
+                  <span
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      background: getNavigationBadgeColor(form.navigation_type).bg,
+                      color: getNavigationBadgeColor(form.navigation_type).text
+                    }}
+                  >
+                    {getNavigationLabel(form.navigation_type)}
                   </span>
                 </td>
                 <td style={{ padding: '1rem' }}>
@@ -370,6 +410,44 @@ function ManageFormsPage() {
               ))}
             </FlexBox>
           </div>
+
+          <FlexBox style={{ gap: '1rem' }}>
+            <div style={{ flex: 1 }}>
+              <Label>Direction</Label>
+              <Select
+                onChange={(e: any) => setFormData({ ...formData, direction: e.detail.selectedOption.value })}
+                style={{ width: '100%' }}
+              >
+                <Option value="ltr" selected={formData.direction === 'ltr'}>
+                  Left to Right (LTR)
+                </Option>
+                <Option value="rtl" selected={formData.direction === 'rtl'}>
+                  Right to Left (RTL)
+                </Option>
+              </Select>
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <Label>Navigation Style</Label>
+              <Select
+                onChange={(e: any) => setFormData({ ...formData, navigation_type: e.detail.selectedOption.value })}
+                style={{ width: '100%' }}
+              >
+                <Option value="default" selected={formData.navigation_type === 'default'}>
+                  Default (Next/Previous)
+                </Option>
+                <Option value="toc-left" selected={formData.navigation_type === 'toc-left'}>
+                  Sidebar Left
+                </Option>
+                <Option value="toc-right" selected={formData.navigation_type === 'toc-right'}>
+                  Sidebar Right
+                </Option>
+                <Option value="progress-buttons" selected={formData.navigation_type === 'progress-buttons'}>
+                  Top Tabs (Progress Buttons)
+                </Option>
+              </Select>
+            </div>
+          </FlexBox>
 
           <div>
             <Label>Schema (JSON)</Label>
