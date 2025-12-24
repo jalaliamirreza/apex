@@ -149,7 +149,7 @@ function LaunchpadPage() {
           }
         }
       `}</style>
-      <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
+      <FlexBox direction="Column" style={{ height: '100vh' }}>
         {/* SYNCRO Shell Bar */}
       <div style={{
         background: 'white',

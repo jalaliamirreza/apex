@@ -185,6 +185,13 @@ function FormBuilderPage() {
     setSelectedField(null);
   };
 
+  const renamePanel = (panelIndex: number, title: string) => {
+    const newPages = [...pages];
+    const panel = newPages[selectedPageIndex].elements[panelIndex] as PanelDef;
+    panel.title = title;
+    setPages(newPages);
+  };
+
   const moveElement = (path: FieldPath, direction: 'up' | 'down') => {
     const newPages = [...pages];
     const pageElements = newPages[path.pageIndex].elements;
@@ -545,6 +552,7 @@ function FormBuilderPage() {
           onRemoveField={removeElement}
           onMovePanel={movePanel}
           onRemovePanel={removePanel}
+          onRenamePanel={renamePanel}
           onAddFieldToPanel={(panelIndex) => {
             setAddingFieldToPanelIndex(panelIndex);
           }}

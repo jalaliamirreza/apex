@@ -12,6 +12,7 @@ interface FieldListProps {
   onRemoveField: (path: FieldPath) => void;
   onMovePanel: (panelIndex: number, direction: 'up' | 'down') => void;
   onRemovePanel: (panelIndex: number) => void;
+  onRenamePanel: (panelIndex: number, title: string) => void;
   onAddFieldToPanel: (panelIndex: number) => void;
 }
 
@@ -24,6 +25,7 @@ export function FieldList({
   onRemoveField,
   onMovePanel,
   onRemovePanel,
+  onRenamePanel,
   onAddFieldToPanel
 }: FieldListProps) {
   const isFieldSelected = (path: FieldPath): boolean => {
@@ -72,6 +74,7 @@ export function FieldList({
                   onSelectField={onSelectField}
                   onMovePanel={(direction) => onMovePanel(index, direction)}
                   onRemovePanel={() => onRemovePanel(index)}
+                  onRenamePanel={(title) => onRenamePanel(index, title)}
                   onMoveField={onMoveField}
                   onRemoveField={onRemoveField}
                   onAddFieldToPanel={() => onAddFieldToPanel(index)}

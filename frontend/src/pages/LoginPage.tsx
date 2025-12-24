@@ -70,8 +70,7 @@ function LoginPage() {
     <div style={{
       minHeight: '100vh',
       backgroundColor: '#f5f6f7',
-      display: 'flex',
-      fontFamily: 'Vazirmatn, Roboto, sans-serif'
+      display: 'flex'
     }}>
       {/* CSS Animations */}
       <style>{`
