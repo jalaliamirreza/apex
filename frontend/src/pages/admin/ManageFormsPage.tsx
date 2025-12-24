@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   FlexBox,
   Button,
@@ -48,6 +49,7 @@ const getNavigationBadgeColor = (type: string): { bg: string; text: string } => 
 };
 
 function ManageFormsPage() {
+  const navigate = useNavigate();
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -208,7 +210,7 @@ function ManageFormsPage() {
       titleFa="مدیریت فرم‌ها"
       icon="form"
       actions={
-        <Button icon="add" design="Emphasized" onClick={() => handleOpenDialog()}>
+        <Button icon="add" design="Emphasized" onClick={() => navigate('/app/form-builder/new')}>
           Create Form
         </Button>
       }
@@ -289,7 +291,7 @@ function ManageFormsPage() {
                     <Button
                       icon="edit"
                       design="Transparent"
-                      onClick={() => handleOpenDialog(form)}
+                      onClick={() => navigate(`/app/form-builder/${form.id}`)}
                     />
                     <Button
                       icon="delete"
