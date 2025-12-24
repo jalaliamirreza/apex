@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  ShellBar, FlexBox, Button, Input, Label, Select, Option,
+  Bar, Title, FlexBox, Button, Input, Label, Select, Option,
   MessageStrip, BusyIndicator
 } from '@ui5/webcomponents-react';
 import { PageDef, PanelDef, FieldDef, FieldPath } from '../../types/form-builder';
@@ -417,22 +417,25 @@ function FormBuilderPage() {
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Shell Bar */}
-      <ShellBar
-        primaryTitle={isNew ? 'Create Form' : 'Edit Form'}
-        logo={<img alt="Logo" src="https://sap.github.io/ui5-webcomponents/assets/images/sap-logo-svg.svg" />}
-        startButton={
-          <Button icon="nav-back" design="Transparent" onClick={() => navigate('/app/manage-forms')} />
+      {/* Header Bar */}
+      <Bar
+        design="Header"
+        startContent={
+          <>
+            <Button icon="nav-back" design="Transparent" onClick={() => navigate('/app/manage-forms')} />
+            <Title level="H4" style={{ marginLeft: '1rem' }}>{isNew ? 'Create Form' : 'Edit Form'}</Title>
+          </>
         }
-      >
-        <Button design="Transparent" onClick={() => setShowPreview(true)}>
-          Preview
-        </Button>
-        <Button onClick={() => navigate('/app/manage-forms')}>Cancel</Button>
-        <Button design="Emphasized" onClick={handleSave} disabled={saving}>
-          {saving ? 'Saving...' : 'Save'}
-        </Button>
-      </ShellBar>
+        endContent={
+          <>
+            <Button icon="show" design="Transparent" onClick={() => setShowPreview(true)}>Preview</Button>
+            <Button onClick={() => navigate('/app/manage-forms')}>Cancel</Button>
+            <Button design="Emphasized" onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving...' : 'Save'}
+            </Button>
+          </>
+        }
+      />
 
       {/* Error Message */}
       {error && (
