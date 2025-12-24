@@ -10,6 +10,11 @@ import './index.css';
 // Set SAP Horizon theme for outline icons (Icons v5)
 setTheme("sap_horizon");
 
+// Set Vazirmatn font for UI5 components (must be before render)
+const rootEl = document.documentElement;
+rootEl.style.setProperty('--sapFontFamily', "'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif");
+rootEl.style.setProperty('--sapFontHeaderFamily', "'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif");
+
 // LTR by default - individual forms control their own direction
 document.documentElement.dir = 'ltr';
 document.documentElement.lang = 'en';
