@@ -500,6 +500,17 @@ function FormBuilderPage() {
               <Option value="rtl" selected={formMeta.direction === 'rtl'}>RTL</Option>
             </Select>
           </div>
+
+          <div style={{ flex: '1 1 150px' }}>
+            <Label>Status</Label>
+            <Select
+              onChange={(e: any) => setFormMeta({ ...formMeta, status: e.detail.selectedOption.value })}
+              style={{ width: '100%' }}
+            >
+              <Option value="draft" selected={formMeta.status === 'draft'}>Draft</Option>
+              <Option value="active" selected={formMeta.status === 'active'}>Active</Option>
+            </Select>
+          </div>
         </FlexBox>
       </div>
 

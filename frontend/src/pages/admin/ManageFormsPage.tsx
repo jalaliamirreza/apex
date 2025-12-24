@@ -187,6 +187,17 @@ function ManageFormsPage() {
     }
   };
 
+  const handleToggleStatus = async (form: Form) => {
+    const newStatus = form.status === 'active' ? 'draft' : 'active';
+    try {
+      await formsApi.update(form.id, { status: newStatus });
+      setSuccess(`Form status changed to ${newStatus}`);
+      loadForms();
+    } catch (err: any) {
+      setError(err.message || 'Failed to update form status');
+    }
+  };
+
   const generateSlug = () => {
     const slug = formData.name?.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -260,18 +271,27 @@ function ManageFormsPage() {
                   <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{form.slug}</code>
                 </td>
                 <td style={{ padding: '1rem' }}>
-                  <span
-                    style={{
-                      padding: '0.25rem 0.5rem',
-                      borderRadius: '4px',
-                      fontSize: '0.75rem',
-                      fontWeight: 500,
-                      background: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.bg || '#f3f4f6',
-                      color: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.color || '#6b7280'
-                    }}
-                  >
-                    {form.status}
-                  </span>
+                  <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
+                    <span
+                      style={{
+                        padding: '0.25rem 0.5rem',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 500,
+                        background: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.bg || '#f3f4f6',
+                        color: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.color || '#6b7280'
+                      }}
+                    >
+                      {form.status}
+                    </span>
+                    <Button
+                      icon="switch-views"
+                      design="Transparent"
+                      onClick={() => handleToggleStatus(form)}
+                      tooltip={`Switch to ${form.status === 'active' ? 'draft' : 'active'}`}
+                      style={{ minWidth: '2rem', padding: '0.25rem' }}
+                    />
+                  </FlexBox>
                 </td>
                 <td style={{ padding: '1rem' }}>
                   <span
