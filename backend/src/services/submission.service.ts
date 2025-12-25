@@ -3,6 +3,7 @@ import { Submission, CreateSubmissionInput } from '../models/submission.model';
 import { getOpenSearchClient, SUBMISSIONS_INDEX } from '../config/opensearch';
 import { getFormById } from './form.service';
 import { zeebeService } from './zeebe.service';
+import { getUserByEmail, getManagerOf } from '../data/mockUsers';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '../utils/logger';
 
@@ -38,14 +39,20 @@ async function getFormWithWorkflow(formId: string): Promise<FormWorkflowConfig |
 /**
  * Create initial approval steps for a submission
  */
-async function createApprovalSteps(submissionId: string, processId: string, client: any): Promise<void> {
-  // For now, create a simple single-step approval
-  // Later this can be configured per form/process
+async function createApprovalSteps(submissionId: string, processId: string, submittedBy: string, client: any): Promise<void> {
+  // Find the submitter's manager from mock users
+  const submitter = getUserByEmail(submittedBy);
+  const manager = submitter ? getManagerOf(submitter) : null;
+
+  const assignedTo = manager?.email || 'unassigned';
+
   await client.query(
     `INSERT INTO approval_steps (submission_id, step_name, step_order, status, assigned_to)
-     VALUES ($1, 'manager_review', 1, 'pending', 'managers')`,
-    [submissionId]
+     VALUES ($1, 'manager_review', 1, 'pending', $2)`,
+    [submissionId, assignedTo]
   );
+
+  logger.info(`Created approval step for submission ${submissionId}, assigned to: ${assignedTo}`);
 }
 
 /**
@@ -98,7 +105,7 @@ export async function createSubmission(formId: string, input: CreateSubmissionIn
         );
 
         // 5. Create approval steps
-        await createApprovalSteps(id, formConfig.workflow_process_id, client);
+        await createApprovalSteps(id, formConfig.workflow_process_id, submittedBy || 'anonymous', client);
 
         row.workflow_status = 'in_progress';
         row.current_step = 'manager_review';

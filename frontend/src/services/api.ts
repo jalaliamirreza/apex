@@ -5,6 +5,15 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1'
 });
 
+// Add interceptor to include X-Mock-User header
+api.interceptors.request.use((config) => {
+  const savedUsername = localStorage.getItem('syncro_mock_user');
+  if (savedUsername) {
+    config.headers['X-Mock-User'] = savedUsername;
+  }
+  return config;
+});
+
 export async function getForms(): Promise<Form[]> {
   const { data } = await api.get('/forms');
   return data.forms;

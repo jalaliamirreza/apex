@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import LaunchpadPage from './pages/LaunchpadPage';
 import FormPage from './pages/FormPage';
 import SubmissionsPage from './pages/SubmissionsPage';
@@ -15,7 +16,8 @@ import ManageFormsWorkflowPage from './pages/admin/ManageFormsWorkflowPage';
 
 function App() {
   return (
-    <Routes>
+    <AuthProvider>
+      <Routes>
       {/* Login */}
       <Route path="/login" element={<LoginPage />} />
 
@@ -48,6 +50,7 @@ function App() {
       {/* Legacy routes (redirect to launchpad) */}
       <Route path="/forms" element={<Navigate to="/launchpad" replace />} />
     </Routes>
+    </AuthProvider>
   );
 }
 

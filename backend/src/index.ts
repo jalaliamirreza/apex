@@ -7,6 +7,7 @@ import { initOpenSearch } from './config/opensearch';
 import { initMinio } from './config/minio';
 import routes from './routes';
 import { errorMiddleware } from './middleware/error.middleware';
+import { mockAuthMiddleware } from './middleware/auth.middleware';
 import { logger } from './utils/logger';
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(morgan('combined'));
+app.use(mockAuthMiddleware);
 app.use('/api/v1', routes);
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use(errorMiddleware);

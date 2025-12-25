@@ -12,7 +12,9 @@ router.post('/:slug/submissions', async (req: AuthRequest, res: Response) => {
     if (!form) { res.status(404).json({ error: 'Form not found' }); return; }
     const { data, files } = req.body;
     if (!data || typeof data !== 'object') { res.status(400).json({ error: 'Data is required' }); return; }
-    const submission = await submissionService.createSubmission(form.id, { data, files }, req.user?.preferred_username);
+    // Use req.user.email from mock auth middleware
+    const submittedBy = req.user?.email || req.user?.preferred_username || 'anonymous';
+    const submission = await submissionService.createSubmission(form.id, { data, files }, submittedBy);
     res.status(201).json(submission);
   } catch (error) {
     logger.error('Create submission error:', error);

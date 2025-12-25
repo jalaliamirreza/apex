@@ -6,6 +6,7 @@ import launchpadRoutes from './launchpad.routes';
 import adminRoutes from './admin.routes';
 import adminFormsRoutes from './admin-forms.routes';
 import workflowRoutes from './workflow.routes';
+import authRoutes from './auth.routes';
 
 const router = Router();
 router.use('/forms', formRoutes);
@@ -15,4 +16,5 @@ router.use('/launchpad', launchpadRoutes);
 router.use('/admin', adminRoutes);
 router.use('/admin/forms', adminFormsRoutes);
 router.use('/workflow', workflowRoutes);
+router.use('/auth', authRoutes);
 export default router;

@@ -14,6 +14,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { launchpadApi } from '../services/api';
 import { Space, Page, Section, Tile } from '../types/launchpad';
+import { UserSelector } from '../components/UserSelector';
 import '@ui5/webcomponents-icons/dist/AllIcons';
 import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js";
 
@@ -26,10 +27,8 @@ function LaunchpadPage() {
   const [activePage, setActivePage] = useState<Page | null>(null);
   const [loading, setLoading] = useState(true);
   const [openSpaceDropdown, setOpenSpaceDropdown] = useState<string | null>(null);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const spaceDropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const profileButtonRef = useRef<HTMLDivElement | null>(null);
   const notificationsButtonRef = useRef<HTMLDivElement | null>(null);
 
   // Load spaces on mount
@@ -236,35 +235,8 @@ function LaunchpadPage() {
             }}>3</div>
           </div>
 
-          {/* Profile */}
-          <div
-            ref={profileButtonRef}
-            onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              cursor: 'pointer',
-              padding: '0.25rem 0.75rem',
-              borderRadius: '24px',
-              transition: 'background 0.2s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            <span style={{ color: '#32363a', fontWeight: 500, fontSize: '0.875rem' }}>Ali Ahmadi</span>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              background: '#e5e5e5',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Icon name="person-placeholder" style={{ color: '#6a6d70', fontSize: '1.125rem' }} />
-            </div>
-          </div>
+          {/* User Selector */}
+          <UserSelector />
         </div>
       </div>
 
@@ -331,46 +303,6 @@ function LaunchpadPage() {
               </div>
             ))}
           </div>
-        </div>
-      </Popover>
-
-      {/* Profile Menu Popover */}
-      <Popover
-        opener={profileButtonRef.current || undefined}
-        open={profileMenuOpen}
-        placement="Bottom"
-      >
-        <div style={{ width: '200px' }}>
-          {[
-            { icon: 'person-placeholder', label: 'Profile' },
-            { icon: 'action-settings', label: 'Settings' },
-            { icon: 'hint', label: 'About' },
-            { icon: 'log', label: 'Sign Out', color: '#EF4444' }
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                setProfileMenuOpen(false);
-                if (item.label === 'Sign Out') {
-                  navigate('/login');
-                }
-              }}
-              style={{
-                padding: '0.75rem 1rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'background 0.2s',
-                borderBottom: idx < 3 ? '1px solid #e5e5e5' : 'none'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-            >
-              <Icon name={item.icon} style={{ color: item.color || '#6a6d70', fontSize: '1rem' }} />
-              <span style={{ color: item.color || '#32363a', fontSize: '0.875rem' }}>{item.label}</span>
-            </div>
-          ))}
         </div>
       </Popover>
 
