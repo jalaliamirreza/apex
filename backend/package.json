@@ -15,7 +15,8 @@
     "morgan": "^1.10.0",
     "pg": "^8.11.3",
     "uuid": "^9.0.1",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "zeebe-node": "^8.3.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

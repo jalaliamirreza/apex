@@ -35,7 +35,13 @@ export async function createForm(input: CreateFormInput, createdBy?: string): Pr
 }
 
 export async function getFormBySlug(slug: string): Promise<Form | null> {
-  const result = await query('SELECT * FROM forms WHERE slug = $1 AND status = $2', [slug, 'active']);
+  const result = await query(
+    `SELECT id, slug, name, name_fa, description, schema, status,
+            section_id, icon, color, order_index, direction, navigation_type,
+            workflow_enabled, workflow_process_id, created_by, created_at, updated_at
+     FROM forms WHERE slug = $1 AND status = $2`,
+    [slug, 'active']
+  );
   return result.rows.length ? mapRowToForm(result.rows[0]) : null;
 }
 
@@ -72,3 +78,32 @@ function mapRowToForm(row: any): Form {
     updatedAt: new Date(row.updated_at)
   };
 }
+
+/**
+ * Update workflow settings for a form
+ */
+export async function updateFormWorkflow(
+  formId: string,
+  workflowEnabled: boolean,
+  workflowProcessId: string | null
+): Promise<void> {
+  await query(
+    `UPDATE forms
+     SET workflow_enabled = $1, workflow_process_id = $2
+     WHERE id = $3`,
+    [workflowEnabled, workflowProcessId, formId]
+  );
+}
+
+/**
+ * Get all forms with workflow info (for admin)
+ */
+export async function getAllFormsWithWorkflow(): Promise<any[]> {
+  const result = await query(
+    `SELECT id, slug, name, name_fa, status,
+            workflow_enabled, workflow_process_id
+     FROM forms ORDER BY name`
+  );
+  return result.rows;
+}
+

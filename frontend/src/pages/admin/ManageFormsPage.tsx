@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   FlexBox,
   Button,
@@ -48,6 +49,7 @@ const getNavigationBadgeColor = (type: string): { bg: string; text: string } => 
 };
 
 function ManageFormsPage() {
+  const navigate = useNavigate();
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -89,22 +91,29 @@ function ManageFormsPage() {
     }
   };
 
-  const handleOpenDialog = (form?: Form) => {
+  const handleOpenDialog = async (form?: Form) => {
     if (form) {
-      setEditingForm(form);
-      setFormData({
-        name: form.name,
-        name_fa: form.name_fa,
-        slug: form.slug,
-        description: form.description || '',
-        status: form.status,
-        icon: form.icon,
-        color: form.color,
-        direction: form.direction || 'ltr',
-        navigation_type: form.navigation_type || 'default',
-        schema: form.schema || {}
-      });
-      setSchemaText(JSON.stringify(form.schema || {}, null, 2));
+      // Fetch full form data including schema from database
+      try {
+        const fullForm = await formsApi.getById(form.id);
+        setEditingForm(fullForm);
+        setFormData({
+          name: fullForm.name,
+          name_fa: fullForm.name_fa,
+          slug: fullForm.slug,
+          description: fullForm.description || '',
+          status: fullForm.status,
+          icon: fullForm.icon,
+          color: fullForm.color,
+          direction: fullForm.direction || 'ltr',
+          navigation_type: fullForm.navigation_type || 'default',
+          schema: fullForm.schema || {}
+        });
+        setSchemaText(JSON.stringify(fullForm.schema || {}, null, 2));
+      } catch (err: any) {
+        setError(err.message || 'Failed to load form details');
+        return;
+      }
     } else {
       setEditingForm(null);
       setFormData({
@@ -178,6 +187,17 @@ function ManageFormsPage() {
     }
   };
 
+  const handleToggleStatus = async (form: Form) => {
+    const newStatus = form.status === 'active' ? 'draft' : 'active';
+    try {
+      await formsApi.update(form.id, { status: newStatus });
+      setSuccess(`Form status changed to ${newStatus}`);
+      loadForms();
+    } catch (err: any) {
+      setError(err.message || 'Failed to update form status');
+    }
+  };
+
   const generateSlug = () => {
     const slug = formData.name?.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -201,7 +221,7 @@ function ManageFormsPage() {
       titleFa="مدیریت فرم‌ها"
       icon="form"
       actions={
-        <Button icon="add" design="Emphasized" onClick={() => handleOpenDialog()}>
+        <Button icon="add" design="Emphasized" onClick={() => navigate('/app/form-builder/new')}>
           Create Form
         </Button>
       }
@@ -251,18 +271,27 @@ function ManageFormsPage() {
                   <code style={{ fontSize: '0.875rem', color: '#6a6d70' }}>{form.slug}</code>
                 </td>
                 <td style={{ padding: '1rem' }}>
-                  <span
-                    style={{
-                      padding: '0.25rem 0.5rem',
-                      borderRadius: '4px',
-                      fontSize: '0.75rem',
-                      fontWeight: 500,
-                      background: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.bg || '#f3f4f6',
-                      color: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.color || '#6b7280'
-                    }}
-                  >
-                    {form.status}
-                  </span>
+                  <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
+                    <span
+                      style={{
+                        padding: '0.25rem 0.5rem',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 500,
+                        background: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.bg || '#f3f4f6',
+                        color: STATUS_BADGES[form.status as keyof typeof STATUS_BADGES]?.color || '#6b7280'
+                      }}
+                    >
+                      {form.status}
+                    </span>
+                    <Button
+                      icon="switch-views"
+                      design="Transparent"
+                      onClick={() => handleToggleStatus(form)}
+                      tooltip={`Switch to ${form.status === 'active' ? 'draft' : 'active'}`}
+                      style={{ minWidth: '2rem', padding: '0.25rem' }}
+                    />
+                  </FlexBox>
                 </td>
                 <td style={{ padding: '1rem' }}>
                   <span
@@ -282,7 +311,7 @@ function ManageFormsPage() {
                     <Button
                       icon="edit"
                       design="Transparent"
-                      onClick={() => handleOpenDialog(form)}
+                      onClick={() => navigate(`/app/form-builder/${form.id}`)}
                     />
                     <Button
                       icon="delete"

@@ -1,17 +1,20 @@
+/* Import Vazirmatn Font */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Global Font Stack - Vazirmatn for all languages */
 :root {
-  --font-family: 'Vazirmatn', 'Roboto', sans-serif;
+  --font-family: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* UI5 WebComponents font override */
-  --sapFontFamily: 'Vazirmatn', 'Roboto', sans-serif;
+  --sapFontFamily: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --sapFontSize: 14px;
   --sapFontLargeSize: 16px;
   --sapFontSmallSize: 12px;
-  --sapFontHeaderFamily: 'Vazirmatn', 'Roboto', sans-serif;
+  --sapFontHeaderFamily: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* SYNCRO Brand Color Palette */
   --syncro-royal-blue: #4169E1;
@@ -47,14 +50,28 @@ html {
   direction: ltr;
 }
 
+/* Force Vazirmatn font globally with !important */
+*, *::before, *::after {
+  font-family: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
 body {
-  font-family: var(--font-family);
+  font-family: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 14px;
   line-height: 1.5;
   color: var(--text-primary);
   background: var(--background);
   margin: 0;
   padding: 0;
+}
+
+/* Override UI5 Web Components */
+[ui5-button], [ui5-title], [ui5-label], [ui5-input], [ui5-text],
+[ui5-select], [ui5-option], [ui5-table], [ui5-shellbar],
+ui5-button, ui5-title, ui5-label, ui5-input, ui5-text,
+ui5-select, ui5-option, ui5-table, ui5-shellbar,
+.ui5-title-root, .ui5-label-root, .ui5-button-root {
+  font-family: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
 /* SAP Fiori Tile Styling */
@@ -140,16 +157,6 @@ textarea,
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
-}
-
-/* Force font on all elements */
-* {
-  font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
-}
-
-/* Target UI5 elements specifically */
-[ui5-tab], [ui5-card], [ui5-title], [ui5-text], [ui5-label], [ui5-button], [ui5-list-item] {
-  font-family: 'Vazirmatn', 'Roboto', sans-serif !important;
 }
 
 /* Section Title - SAP Fiori style (no underline) */

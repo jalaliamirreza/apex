@@ -37,7 +37,7 @@ function AdminAppPage() {
   };
 
   return (
-    <FlexBox direction="Column" style={{ height: '100vh', fontFamily: 'Vazirmatn, sans-serif' }}>
+    <FlexBox direction="Column" style={{ height: '100vh' }}>
       {/* Header */}
       <div style={{
         background: 'white',
