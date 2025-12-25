@@ -61,7 +61,7 @@ export async function createSubmission(formId: string, input: CreateSubmissionIn
 
     // 1. Insert submission with initial status
     const insertResult = await client.query(
-      `INSERT INTO submissions (id, form_id, data, files, submitted_by, workflow_status, created_at)
+      `INSERT INTO submissions (id, form_id, data, files, submitted_by, workflow_status, submitted_at)
        VALUES ($1, $2, $3, $4, $5, 'draft', NOW())
        RETURNING *`,
       [id, formId, JSON.stringify(input.data), JSON.stringify(input.files || []), submittedBy || 'anonymous']
