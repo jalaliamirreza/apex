@@ -1,0 +1,11 @@
+{
+  "name": "zeebe-deploy",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "deploy": "node deploy.js"
+  },
+  "dependencies": {
+    "@camunda8/sdk": "^8.5.0"
+  }
+}
