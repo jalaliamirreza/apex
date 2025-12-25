@@ -486,7 +486,7 @@ When Keycloak is integrated:
 ## Claude Code Prompt
 
 ```
-Read PHASE18B-MOCK-AUTHENTICATION.md and implement in order:
+Read PHASE19A-MOCK-AUTHENTICATION.md and implement in order:
 
 1. Create frontend/src/data/mockUsers.ts - mock user data with 8 users
 2. Create backend/src/data/mockUsers.ts - copy same file
