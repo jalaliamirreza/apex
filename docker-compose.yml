@@ -126,6 +126,88 @@ services:
     networks:
       - apex-network
 
+  # ============================================
+  # CAMUNDA 8 WORKFLOW ENGINE
+  # ============================================
+  
+  elasticsearch-camunda:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.2
+    container_name: apex-elasticsearch-camunda
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_camunda_data:/usr/share/elasticsearch/data
+    ports:
+      - "9201:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+    networks:
+      - apex-network
+
+  zeebe:
+    image: camunda/zeebe:8.5.0
+    container_name: apex-zeebe
+    environment:
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.camunda.zeebe.exporter.ElasticsearchExporter
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch-camunda:9200
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_BULK_SIZE=1
+    ports:
+      - "26500:26500"
+      - "9600:9600"
+    depends_on:
+      elasticsearch-camunda:
+        condition: service_healthy
+    networks:
+      - apex-network
+
+  tasklist:
+    image: camunda/tasklist:8.5.0
+    container_name: apex-tasklist
+    environment:
+      - CAMUNDA_TASKLIST_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_TASKLIST_ELASTICSEARCH_URL=http://elasticsearch-camunda:9200
+      - CAMUNDA_TASKLIST_ZEEBEELASTICSEARCH_URL=http://elasticsearch-camunda:9200
+    ports:
+      - "8082:8080"
+    depends_on:
+      - zeebe
+      - elasticsearch-camunda
+    networks:
+      - apex-network
+
+  operate:
+    image: camunda/operate:8.5.0
+    container_name: apex-operate
+    environment:
+      - CAMUNDA_OPERATE_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_OPERATE_ELASTICSEARCH_URL=http://elasticsearch-camunda:9200
+      - CAMUNDA_OPERATE_ZEEBEELASTICSEARCH_URL=http://elasticsearch-camunda:9200
+    ports:
+      - "8081:8080"
+    depends_on:
+      - zeebe
+      - elasticsearch-camunda
+    networks:
+      - apex-network
+
+  connectors:
+    image: camunda/connectors-bundle:8.5.0
+    container_name: apex-connectors
+    environment:
+      - ZEEBE_CLIENT_BROKER_GATEWAY-ADDRESS=zeebe:26500
+      - ZEEBE_CLIENT_SECURITY_PLAINTEXT=true
+    ports:
+      - "8085:8080"
+    depends_on:
+      - zeebe
+    networks:
+      - apex-network
+
 networks:
   apex-network:
     driver: bridge
@@ -134,3 +216,4 @@ volumes:
   postgres_data:
   opensearch_data:
   minio_data:
+  elasticsearch_camunda_data:
