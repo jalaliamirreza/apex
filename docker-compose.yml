@@ -88,6 +88,7 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_USER:-apex}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD:-apex_secret}
       APEX_API_KEY: ${APEX_API_KEY:-apex-internal-key}
+      ZEEBE_ADDRESS: zeebe:26500
     ports:
       - "3001:3001"
     depends_on:

@@ -85,13 +85,13 @@ router.get('/my-tasks', async (req: Request, res: Response) => {
         a.step_name,
         a.assigned_to,
         s.submitted_by,
-        s.created_at as submitted_at,
+        s.submitted_at,
         s.data
        FROM approval_steps a
        JOIN submissions s ON a.submission_id = s.id
        JOIN forms f ON s.form_id = f.id
        WHERE a.status = 'pending'
-       ORDER BY s.created_at DESC`
+       ORDER BY s.submitted_at DESC`
     );
 
     res.json({ tasks: result.rows });

@@ -1,4 +1,4 @@
-import { pool, query } from '../config/database';
+import { getPool, query } from '../config/database';
 import { Submission, CreateSubmissionInput } from '../models/submission.model';
 import { getOpenSearchClient, SUBMISSIONS_INDEX } from '../config/opensearch';
 import { getFormById } from './form.service';
@@ -52,7 +52,7 @@ async function createApprovalSteps(submissionId: string, processId: string, clie
  * Create a new submission and optionally start workflow
  */
 export async function createSubmission(formId: string, input: CreateSubmissionInput, submittedBy?: string): Promise<Submission> {
-  const client = await pool.connect();
+  const client = await getPool().connect();
 
   try {
     await client.query('BEGIN');
@@ -198,7 +198,7 @@ export async function completeApprovalStep(
   actedBy: string,
   comments?: string
 ): Promise<void> {
-  const client = await pool.connect();
+  const client = await getPool().connect();
 
   try {
     await client.query('BEGIN');

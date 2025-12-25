@@ -14,9 +14,7 @@ class ZeebeService {
    */
   private getClient(): ZBClient {
     if (!this.client) {
-      this.client = new ZBClient(this.gatewayAddress, {
-        usePlaintext: true,
-      });
+      this.client = new ZBClient(this.gatewayAddress);
       logger.info(`Zeebe client connected to ${this.gatewayAddress}`);
     }
     return this.client;
