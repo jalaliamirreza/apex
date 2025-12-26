@@ -6,6 +6,7 @@ import SubmissionsPage from './pages/SubmissionsPage';
 import SearchPage from './pages/SearchPage';
 import AdminAppPage from './pages/AdminAppPage';
 import LoginPage from './pages/LoginPage';
+import RequestCenterPage from './pages/RequestCenterPage';
 import ManageSpacesPage from './pages/admin/ManageSpacesPage';
 import ManagePagesPage from './pages/admin/ManagePagesPage';
 import ManageSectionsPage from './pages/admin/ManageSectionsPage';
@@ -33,6 +34,9 @@ function App() {
 
       {/* Search */}
       <Route path="/search" element={<SearchPage />} />
+
+      {/* User Apps */}
+      <Route path="/app/request-center" element={<RequestCenterPage />} />
 
       {/* Admin Management Pages */}
       <Route path="/app/manage-spaces" element={<ManageSpacesPage />} />

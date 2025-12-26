@@ -168,6 +168,44 @@ router.get('/my-submissions', async (req: Request, res: Response) => {
 });
 
 /**
+ * GET /api/v1/workflow/my-history
+ * Get completed tasks (tasks acted upon by current user)
+ */
+router.get('/my-history', async (req: Request, res: Response) => {
+  try {
+    const userEmail = req.user?.email;
+
+    if (!userEmail) {
+      return res.json({ tasks: [] });
+    }
+
+    const result = await query(
+      `SELECT
+        s.id as submission_id,
+        f.name as form_name,
+        f.name_fa as form_name_fa,
+        s.submitted_by,
+        s.submitted_at,
+        a.step_name,
+        a.status,
+        a.acted_at,
+        a.comments
+       FROM approval_steps a
+       JOIN submissions s ON a.submission_id = s.id
+       JOIN forms f ON s.form_id = f.id
+       WHERE a.acted_by = $1 AND a.status IN ('approved', 'rejected')
+       ORDER BY a.acted_at DESC`,
+      [userEmail]
+    );
+
+    res.json({ tasks: result.rows });
+  } catch (error) {
+    logger.error('Failed to get history:', error);
+    res.status(500).json({ error: 'Failed to get history' });
+  }
+});
+
+/**
  * GET /api/v1/workflow/submissions/:id
  * Get submission with full details for workflow view
  */
