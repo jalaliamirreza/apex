@@ -6,7 +6,6 @@ import {
   Button,
   TabContainer,
   Tab,
-  Badge,
   Icon,
   MessageStrip,
   BusyIndicator
@@ -91,8 +90,8 @@ export default function RequestCenterPage() {
     setError(null);
 
     try {
-      const { submission } = await workflowApi.getSubmissionDetail(id);
-      setSelectedDetail(submission);
+      const detail = await workflowApi.getSubmissionDetail(id);
+      setSelectedDetail(detail);
     } catch (err: any) {
       console.error('Failed to load detail:', err);
       setError('Failed to load request details.');
@@ -241,12 +240,7 @@ export default function RequestCenterPage() {
         style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
       >
         <Tab
-          text={
-            <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
-              <span>Inbox</span>
-              {inboxItems.length > 0 && <Badge colorScheme="8">{inboxItems.length}</Badge>}
-            </FlexBox>
-          }
+          text={`Inbox${inboxItems.length > 0 ? ` (${inboxItems.length})` : ''}`}
           additionalText="کارتابل"
           data-tab-name="inbox"
         >
@@ -297,12 +291,7 @@ export default function RequestCenterPage() {
         </Tab>
 
         <Tab
-          text={
-            <FlexBox alignItems="Center" style={{ gap: '0.5rem' }}>
-              <span>My Requests</span>
-              {mySubmissions.length > 0 && <Badge colorScheme="8">{mySubmissions.length}</Badge>}
-            </FlexBox>
-          }
+          text={`My Requests${mySubmissions.length > 0 ? ` (${mySubmissions.length})` : ''}`}
           additionalText="درخواست‌های من"
           data-tab-name="my-requests"
         >

@@ -1,4 +1,4 @@
-import { List, StandardListItem, ObjectStatus, Icon, FlexBox, Text } from '@ui5/webcomponents-react';
+import { List, ListItemStandard, ObjectStatus, Icon, FlexBox, Text } from '@ui5/webcomponents-react';
 import { Task, Submission, CompletedTask } from '../../types/workflow';
 
 interface RequestListProps {
@@ -57,7 +57,7 @@ export function RequestList({ items, selectedId, onSelect, type }: RequestListPr
       minute: '2-digit'
     });
 
-    if (type === 'history' && 'acted_at' in item) {
+    if (type === 'history' && 'acted_at' in item && item.acted_at) {
       const actedDate = new Date(item.acted_at).toLocaleString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -72,22 +72,22 @@ export function RequestList({ items, selectedId, onSelect, type }: RequestListPr
 
   const getItemStatus = (item: Task | Submission | CompletedTask) => {
     if (type === 'inbox') {
-      return <ObjectStatus state="Warning">Pending</ObjectStatus>;
+      return <ObjectStatus state="Critical">Pending</ObjectStatus>;
     }
 
     if (type === 'my-requests' && 'workflow_status' in item) {
       const statusMap: Record<string, { text: string; state: any }> = {
-        'pending': { text: 'Pending', state: 'Warning' },
+        'pending': { text: 'Pending', state: 'Critical' },
         'in_progress': { text: 'In Progress', state: 'Information' },
-        'approved': { text: 'Approved', state: 'Success' },
-        'rejected': { text: 'Rejected', state: 'Error' }
+        'approved': { text: 'Approved', state: 'Positive' },
+        'rejected': { text: 'Rejected', state: 'Negative' }
       };
       const status = statusMap[item.workflow_status] || { text: item.workflow_status, state: 'None' };
       return <ObjectStatus state={status.state}>{status.text}</ObjectStatus>;
     }
 
     if (type === 'history' && 'status' in item) {
-      const state = item.status === 'approved' ? 'Success' : 'Error';
+      const state = item.status === 'approved' ? 'Positive' : 'Negative';
       const text = item.status === 'approved' ? 'Approved' : 'Rejected';
       return <ObjectStatus state={state}>{text}</ObjectStatus>;
     }
@@ -112,7 +112,7 @@ export function RequestList({ items, selectedId, onSelect, type }: RequestListPr
               transition: 'all 0.2s'
             }}
           >
-            <StandardListItem
+            <ListItemStandard
               additionalText={getItemDescription(item)}
               additionalTextState="None"
             >
@@ -122,7 +122,7 @@ export function RequestList({ items, selectedId, onSelect, type }: RequestListPr
                 </Text>
                 {getItemStatus(item)}
               </div>
-            </StandardListItem>
+            </ListItemStandard>
           </div>
         );
       })}

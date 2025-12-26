@@ -57,23 +57,14 @@ export function WorkflowTimeline({ submission }: WorkflowTimelineProps) {
           const isCurrent = step.status === 'pending';
           const isCompleted = step.status === 'approved' || step.status === 'rejected';
 
+          const stepTitle = step.step_name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          const stepTitleWithMarker = isCurrent ? `${stepTitle} ← current` : stepTitle;
+
           return (
             <TimelineItem
               key={index}
               icon={getStatusIcon(step.status)}
-              titleText={
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Text style={{ fontWeight: isCurrent ? 600 : 400 }}>
-                    {step.step_name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </Text>
-                  {isCurrent && (
-                    <Icon
-                      name="arrow-right"
-                      style={{ color: '#0070f2', fontSize: '0.875rem' }}
-                    />
-                  )}
-                </div>
-              }
+              titleText={stepTitleWithMarker}
               subtitleText={
                 step.assigned_to
                   ? `Assigned to: ${step.assigned_to.split('@')[0]}`
