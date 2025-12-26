@@ -1,18 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { getUserByUsername, MockUser } from '../data/mockUsers';
 
-export interface AuthRequest extends Request {
-  user?: { sub: string; email: string; preferred_username: string; roles: string[] };
-}
-
-export function internalAuthMiddleware(req: AuthRequest, res: Response, next: NextFunction): void {
-  const apiKey = req.headers['x-api-key'];
-  if (apiKey === process.env.APEX_API_KEY) {
-    req.user = { sub: 'internal', email: 'system@apex.local', preferred_username: 'system', roles: ['admin'] };
-  }
-  next();
-}
-
 // Extend Express Request type for mock authentication
 declare global {
   namespace Express {
@@ -20,6 +8,30 @@ declare global {
       user?: MockUser | null;
     }
   }
+}
+
+// Backwards compatibility - AuthRequest is just Request now
+export type AuthRequest = Request;
+
+// Internal API key authentication (for system-to-system calls)
+export function internalAuthMiddleware(req: Request, res: Response, next: NextFunction): void {
+  const apiKey = req.headers['x-api-key'];
+  if (apiKey === process.env.APEX_API_KEY) {
+    // Create a system user with MockUser-compatible shape
+    req.user = {
+      id: 'system',
+      username: 'system',
+      displayName: 'System',
+      displayName_fa: 'سیستم',
+      email: 'system@apex.local',
+      roles: ['admin'],
+      department: null,
+      managerId: null,
+      sub: 'system',
+      preferred_username: 'system',
+    };
+  }
+  next();
 }
 
 export const mockAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {

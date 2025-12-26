@@ -70,18 +70,39 @@ router.put('/forms/:id', async (req: Request, res: Response) => {
 
 /**
  * GET /api/v1/workflow/my-tasks
- * Get pending tasks (for current user/role)
+ * Get pending tasks assigned to current user
  */
 router.get('/my-tasks', async (req: Request, res: Response) => {
   try {
-    // For now, return all pending tasks
-    // Later: filter by user/role from auth
+    const userEmail = req.user?.email;
+    const userRoles = req.user?.roles || [];
+    
+    // Build WHERE clause based on user
+    // - Directors see all tasks
+    // - Managers see tasks assigned to them
+    // - Others see nothing (or tasks assigned to them specifically)
+    let whereClause = `a.status = 'pending'`;
+    const params: string[] = [];
+    
+    if (userRoles.includes('director')) {
+      // Director sees all pending tasks
+      // No additional filter
+    } else if (userEmail) {
+      // User sees only tasks assigned to them
+      whereClause += ` AND a.assigned_to = $1`;
+      params.push(userEmail);
+    } else {
+      // Anonymous - no tasks
+      return res.json({ tasks: [] });
+    }
+
     const result = await query(
       `SELECT
         s.id as submission_id,
         f.name as form_name,
         f.name_fa as form_name_fa,
         f.slug as form_slug,
+        a.id as step_id,
         a.step_name,
         a.assigned_to,
         s.submitted_by,
@@ -90,14 +111,59 @@ router.get('/my-tasks', async (req: Request, res: Response) => {
        FROM approval_steps a
        JOIN submissions s ON a.submission_id = s.id
        JOIN forms f ON s.form_id = f.id
-       WHERE a.status = 'pending'
-       ORDER BY s.submitted_at DESC`
+       WHERE ${whereClause}
+       ORDER BY s.submitted_at DESC`,
+      params
     );
 
     res.json({ tasks: result.rows });
   } catch (error) {
     logger.error('Failed to get tasks:', error);
     res.status(500).json({ error: 'Failed to get tasks' });
+  }
+});
+
+/**
+ * GET /api/v1/workflow/my-submissions
+ * Get submissions created by current user (outbox)
+ */
+router.get('/my-submissions', async (req: Request, res: Response) => {
+  try {
+    const userEmail = req.user?.email;
+    
+    if (!userEmail) {
+      return res.json({ submissions: [] });
+    }
+
+    const result = await query(
+      `SELECT
+        s.id,
+        s.form_id,
+        f.name as form_name,
+        f.name_fa as form_name_fa,
+        f.slug as form_slug,
+        s.data,
+        s.submitted_by,
+        s.submitted_at,
+        s.workflow_status,
+        s.current_step,
+        a.assigned_to,
+        a.status as step_status,
+        a.acted_by,
+        a.acted_at,
+        a.comments as step_comments
+       FROM submissions s
+       JOIN forms f ON s.form_id = f.id
+       LEFT JOIN approval_steps a ON s.id = a.submission_id
+       WHERE s.submitted_by = $1
+       ORDER BY s.submitted_at DESC`,
+      [userEmail]
+    );
+
+    res.json({ submissions: result.rows });
+  } catch (error) {
+    logger.error('Failed to get my submissions:', error);
+    res.status(500).json({ error: 'Failed to get submissions' });
   }
 });
 
@@ -134,14 +200,19 @@ router.post('/submissions/:id/steps/:stepName/complete', async (req: Request, re
       return res.status(400).json({ error: 'Action must be approve or reject' });
     }
 
-    // TODO: Get actual user from auth
-    const actedBy = req.body.acted_by || 'admin@company.com';
+    // Use authenticated user from mock auth middleware
+    const actedBy = req.user?.email || 'anonymous';
 
     await completeApprovalStep(id, stepName, action, actedBy, comments);
 
+    // TODO: Complete Zeebe job to sync with Camunda
+    // Currently only PostgreSQL is updated. Zeebe process instance remains active.
+    // Need to implement: store jobKey in approval_steps, then call zeebeService.completeJob()
+
+    const actionPastTense = action === 'approve' ? 'approved' : 'rejected';
     res.json({
       success: true,
-      message: `Step ${stepName} ${action}ed`,
+      message: `Step ${stepName} ${actionPastTense}`,
     });
   } catch (error) {
     logger.error('Failed to complete step:', error);

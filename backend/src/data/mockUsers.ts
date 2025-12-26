@@ -7,6 +7,9 @@ export interface MockUser {
   roles: string[];
   department: string | null;
   managerId: string | null;
+  // Compatibility with Keycloak JWT claims
+  sub: string;              // alias for id
+  preferred_username: string; // alias for username
 }
 
 export const MOCK_USERS: MockUser[] = [
@@ -20,6 +23,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee'],
     department: 'HR',
     managerId: 'mgr-hr',
+    sub: 'emp-hr-1',
+    preferred_username: 'hr-employee',
   },
   {
     id: 'emp-it-1',
@@ -30,6 +35,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee'],
     department: 'IT',
     managerId: 'mgr-it',
+    sub: 'emp-it-1',
+    preferred_username: 'it-employee',
   },
   {
     id: 'emp-fin-1',
@@ -40,6 +47,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee'],
     department: 'Finance',
     managerId: 'mgr-fin',
+    sub: 'emp-fin-1',
+    preferred_username: 'finance-employee',
   },
 
   // ============ MANAGERS ============
@@ -52,6 +61,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee', 'manager'],
     department: 'HR',
     managerId: 'dir-1',
+    sub: 'mgr-hr',
+    preferred_username: 'hr-manager',
   },
   {
     id: 'mgr-it',
@@ -62,6 +73,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee', 'manager'],
     department: 'IT',
     managerId: 'dir-1',
+    sub: 'mgr-it',
+    preferred_username: 'it-manager',
   },
   {
     id: 'mgr-fin',
@@ -72,6 +85,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee', 'manager'],
     department: 'Finance',
     managerId: 'dir-1',
+    sub: 'mgr-fin',
+    preferred_username: 'finance-manager',
   },
 
   // ============ DIRECTOR ============
@@ -84,6 +99,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['employee', 'manager', 'director'],
     department: 'Executive',
     managerId: null,
+    sub: 'dir-1',
+    preferred_username: 'director',
   },
 
   // ============ SYSTEM ADMIN ============
@@ -96,6 +113,8 @@ export const MOCK_USERS: MockUser[] = [
     roles: ['admin'],
     department: null,
     managerId: null,
+    sub: 'admin-1',
+    preferred_username: 'admin',
   },
 ];
 

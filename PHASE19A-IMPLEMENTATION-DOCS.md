@@ -267,43 +267,19 @@ curl -H "X-Mock-User: hr-employee" http://localhost:3001/api/v1/auth/me
 ## Database Verification Commands
 
 ### Check Recent Submissions
-```sql
-SELECT 
-  s.id,
-  s.submitted_by,
-  s.workflow_status,
-  s.current_step,
-  s.submitted_at
-FROM submissions s
-ORDER BY s.submitted_at DESC
-LIMIT 5;
+```bash
+docker exec apex-postgres psql -U apex -d apex -c "SELECT id, submitted_by, workflow_status, current_step, submitted_at FROM submissions ORDER BY submitted_at DESC LIMIT 5;"
 ```
 
 ### Check Approval Steps with Manager Assignment
-```sql
-SELECT 
-  a.submission_id,
-  a.step_name,
-  a.assigned_to,
-  a.status,
-  s.submitted_by
-FROM approval_steps a
-JOIN submissions s ON a.submission_id = s.id
-ORDER BY a.created_at DESC
-LIMIT 5;
+```bash
+docker exec apex-postgres psql -U apex -d apex -c "SELECT a.submission_id, a.step_name, a.assigned_to, a.status, s.submitted_by FROM approval_steps a JOIN submissions s ON a.submission_id = s.id ORDER BY a.created_at DESC LIMIT 5;"
 ```
 
 ### Verify Manager Assignment Logic
-```sql
--- Should show: hr-employee → hr-manager
-SELECT 
-  s.submitted_by,
-  a.assigned_to
-FROM submissions s
-JOIN approval_steps a ON s.id = a.submission_id
-WHERE s.submitted_by = 'hr-employee@company.com'
-ORDER BY s.submitted_at DESC
-LIMIT 1;
+```bash
+# Should show: hr-employee@company.com → hr-manager@company.com
+docker exec apex-postgres psql -U apex -d apex -c "SELECT s.submitted_by, a.assigned_to FROM submissions s JOIN approval_steps a ON s.id = a.submission_id WHERE s.submitted_by = 'hr-employee@company.com' ORDER BY s.submitted_at DESC LIMIT 1;"
 ```
 
 ---
@@ -347,33 +323,45 @@ LIMIT 1;
 
 ## Screenshots / Testing Evidence
 
-### cURL Test Example
+### Actual Test Results (Verified 2025-12-26)
+
+**Test 1: /me endpoint**
 ```bash
-# Test /me endpoint
-curl -H "X-Mock-User: hr-employee" http://localhost:3001/api/v1/auth/me
-
-# Test submission as hr-employee
-curl -X POST http://localhost:3001/api/v1/forms/emp-loan/submissions \
-  -H "Content-Type: application/json" \
-  -H "X-Mock-User: hr-employee" \
-  -d '{
-    "data": {
-      "amount": "5000",
-      "purpose": "Emergency expense"
-    }
-  }'
-
-# Verify database
-docker exec -it apex-db-1 psql -U postgres -d apex -c \
-  "SELECT submitted_by, workflow_status FROM submissions ORDER BY submitted_at DESC LIMIT 1;"
-
-docker exec -it apex-db-1 psql -U postgres -d apex -c \
-  "SELECT assigned_to FROM approval_steps WHERE submission_id IN (SELECT id FROM submissions ORDER BY submitted_at DESC LIMIT 1);"
+$ curl.exe -s -H "X-Mock-User: hr-employee" http://localhost:3001/api/v1/auth/me
+{"user":{"id":"emp-hr-1","username":"hr-employee","displayName":"HR Employee",
+"displayName_fa":"کارمند منابع انسانی","email":"hr-employee@company.com",
+"roles":["employee"],"department":"HR","managerId":"mgr-hr"}}
 ```
+✅ PASSED
 
-Expected Results:
-- First query: `submitted_by = hr-employee@company.com`
-- Second query: `assigned_to = hr-manager@company.com`
+**Test 2: Form Submission as hr-employee**
+```bash
+$ curl.exe -s -X POST http://localhost:3001/api/v1/forms/emp-loan/submissions \
+  -H "Content-Type: application/json" -H "X-Mock-User: hr-employee" \
+  -d '{"data": {"full_name": "Test HR User", "loan_type": "personal"}}'
+{"id":"fdc43fc6-a77c-4704-b930-37b55b5c879c","formId":"d93abc16-9453-4fdf-9f55-dad4dbedda38",
+"submittedBy":"hr-employee@company.com","submittedAt":"2025-12-25T23:07:02.509Z"}
+```
+✅ PASSED - submitted_by = hr-employee@company.com
+
+**Test 3: Manager Assignment Verification**
+```sql
+SELECT submission_id, step_name, assigned_to, status 
+FROM approval_steps ORDER BY created_at DESC LIMIT 3;
+
+            submission_id             |   step_name    |      assigned_to       | status  
+--------------------------------------+----------------+------------------------+---------
+ fdc43fc6-a77c-4704-b930-37b55b5c879c | manager_review | hr-manager@company.com | pending  ← NEW
+ 5a8c4b47-b8a8-4330-b009-202226449dad | manager_review | managers               | pending  ← OLD
+```
+✅ PASSED - New submissions assigned to specific manager (hr-manager@company.com)
+
+**Test 4: UI UserSelector**
+- ShellBar shows "Select User" initially
+- Dropdown opens with grouped users (Employees/Managers/Directors/Admin)
+- Selecting "HR Employee" updates ShellBar display
+- User persists after page refresh (localStorage working)
+✅ PASSED
 
 ---
 
